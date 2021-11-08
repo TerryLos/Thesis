@@ -1,15 +1,8 @@
 SECTIONS
-
 {
-
-. = 0x10000;
-
+. = 0x10CB8;
 .text : { *(.text) }
-
-. = 0x8000000;
-
+. = 0x7FFF538;
 .data : { *(.data) }
-
 .bss : { *(.bss) }
-
 }
