@@ -19,18 +19,40 @@ def main(openFile,debug):
 	
 	if debug:
 		printSymTable(table)
-	#For now randomizes current address (. = 0x....) but doesn't swap regions
+	
+	index = 0
+	lastFixedAdd = -1;
+	#For now randomizes current address (. = 0x....) and swap the regions (not subregions)
+	#Swap the regions between the fixed addresses (can we swap with the others ?) 
 	for element in table:
-		
-		if(element[0] == "curAdd"):
+		if(element[0] == "curAdd" and not element[0].startswith('ALIGN')):
+			#Swap memory regions
+			swapRegions(lastFixedAdd,index,table)
+				
 			element[1] = '0x'+''.join('{:02X}'.format(int(element[1],16)+(8*random.randint(-500,500))))
-	if debug:
-		printSymTable(table)
-		
+			lastFixedAdd = index
+		index += 1
+	#Swap the last memory regions
+	swapRegions(lastFixedAdd,index,table)
+	
 	printBack(openFile,table)
 	
 	return 0
 
+def swapRegions(indexStart,indexEnd,table):
+
+	#if there's only one element there's no point swapping it.
+	if(indexStart != -1 and indexEnd-indexStart > 1):
+
+		secRand = random.SystemRandom()
+		tmpArray = table.copy()[indexStart+1:indexEnd]
+		
+		iterations = len(tmpArray)
+		for index in range(iterations):
+			tmpElement = secRand.choice(tmpArray)
+			table[indexStart+index+1] = tmpElement
+			tmpArray.remove(tmpElement)
+	
 def printBack(openFile,table):
 
 	#clears the file
