@@ -4,55 +4,66 @@
 # 2021
 
 from Analyzer import Analyzer
-import sys
 from argparse import ArgumentParser
+import sys
 import random
 
 def printSymTable(table):
 	for element in table:
-		print( element[0] + " | " + element[1])
+		print( element[0] + " | " + element[1]+ " | " + str(element[2]))
 
 def main(openFile,debug):
 	
 	analyzer = Analyzer(openFile)
 	table = analyzer.analyze()
+	regionTable = []
 	
-	if debug:
+	if debug == 'True':
 		printSymTable(table)
 	
 	index = 0
+	lastFixedAssign = -1;
 	lastFixedAdd = -1;
 	#For now randomizes current address (. = 0x....) and swap the regions (not subregions)
 	#Swap the regions between the fixed addresses (can we swap with the others ?) 
 	for element in table:
-		if(element[0] == "curAdd" and not element[0].startswith('ALIGN')):
+		if(element[0]=="assign"):
+			if lastFixedAssign != -1:
+				regionTable.append([lastFixedAssign,index])
+				lastFixedAssign = -1
+			else:
+				lastFixedAssign = index
+		elif(element[0] == "curAdd" and not element[1].startswith('ALIGN')):
 			#Swap memory regions
-			swapRegions(lastFixedAdd,index,table)
-				
+
+			swapRegions(table,regionTable)
+			#Resets the table after the swaping
+			regionTable = []
+			
 			element[1] = '0x'+''.join('{:02X}'.format(int(element[1],16)+(8*random.randint(-500,500))))
 			lastFixedAdd = index
 		index += 1
 	#Swap the last memory regions
-	swapRegions(lastFixedAdd,index,table)
+	swapRegions(table,regionTable)
 	
 	printBack(openFile,table)
 	
 	return 0
 
-def swapRegions(indexStart,indexEnd,table):
-
-	#if there's only one element there's no point swapping it.
-	if(indexStart != -1 and indexEnd-indexStart > 1):
-
-		secRand = random.SystemRandom()
-		tmpArray = table.copy()[indexStart+1:indexEnd]
-		
-		iterations = len(tmpArray)
-		for index in range(iterations):
-			tmpElement = secRand.choice(tmpArray)
-			table[indexStart+index+1] = tmpElement
-			tmpArray.remove(tmpElement)
+def swapRegions(table,regionTable):
+	iterations = len(regionTable)
 	
+	#if there's only one element there's no point swapping it.
+	if iterations > 0:
+		secRand = random.SystemRandom()
+		#Copies the regions to assign
+		tmpArray = table.copy()[regionTable[0][0]:regionTable[iterations-1][1]]
+		
+		for index in range(iterations):
+			tmpRegion = secRand.choice(regionTable)
+			table[tmpRegion[0]:tmpRegion[1]+1] = tmpArray[tmpRegion[0]-1:tmpRegion[1]]
+			regionTable.remove(tmpRegion)
+
 def printBack(openFile,table):
 
 	#clears the file
@@ -64,6 +75,8 @@ def printBack(openFile,table):
 	for element in table:
 		if element[0] == "curAdd":
 			openFile.write(". = "+element[1]+";\n")
+		elif element[0] == "assign":
+			openFile.write(element[1]+"= .;\n")
 		else:
 			openFile.write("."+element[0]+":"+element[1]+"\n")
 	

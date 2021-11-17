@@ -1,11 +1,11 @@
 SECTIONS
 {
-. = 0x10920;
+. = 0x11678;
 .adummymem : { *(.adummymem) }
 .text : { *(.text) }
-. = 0x7FFD9F0;
+. = 0x7FFF1A8;
 .bss : { *(.bss) }
-.heap : { *(.heap) }
 .stack : { *(.stack) }
 .data : { *(.data) }
+.heap : { *(.heap) }
 }
