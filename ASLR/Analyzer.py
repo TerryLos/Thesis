@@ -14,7 +14,7 @@ class Analyzer:
 		self.buffer = '';
 		self.braceCounter = 0
 		self.address = re.compile("\.\s*=\s*(.*)\s*;")
-		self.assign = re.compile("(.*)=\s*\.\s*;")
+		self.assign = re.compile("(.*)=\s*\.(.*);")
 		self.region = re.compile("\.\s*(.*)\s*:\s*")
 		self.skippedBraces = 0
 		self.openedRegion = False
@@ -31,7 +31,10 @@ class Analyzer:
 			#They are usually around memoryblocks
 			secSplit = re.split(self.assign, self.buffer)[1:]
 			if len(secSplit) > 0 and self.braceCounter==0:
-				self.symbolTable.append(["assign",secSplit[0],0])
+				if(secSplit[1] != ''):
+					self.symbolTable.append(["assign",secSplit[0],0,secSplit[1]])
+				else:
+					self.symbolTable.append(["assign",secSplit[0],0])
 				self.buffer = ''
 				self.openedRegion = not self.openedRegion
 			
