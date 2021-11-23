@@ -34,17 +34,16 @@ def main(openFile,debug):
 			else:
 				lastFixedAssign = index
 		elif(element[0] == "curAdd" and not element[1].startswith('ALIGN')):
-			#Swap memory regions
-
-			swapRegions(table,regionTable)
-			#Resets the table after the swaping
-			regionTable = []
 			
 			element[1] = '0x'+''.join('{:02X}'.format(int(element[1],16)+(8*random.randint(-500,500))))
 			lastFixedAdd = index
+		#it's a {....} section
+		else:
+			if(element[2] == 1):
+				regionTable.append([index,index])
 		index += 1
-	#Swap the last memory regions
-	swapRegions(table,regionTable)
+	#Swap memory regions
+	table = swapRegions(table,regionTable)
 	
 	printBack(openFile,table)
 	
@@ -52,17 +51,30 @@ def main(openFile,debug):
 
 def swapRegions(table,regionTable):
 	iterations = len(regionTable)
-	
+	regionCopy = regionTable.copy()
+	regionTableIndex = 0
+	newTable = []
+	secRand = random.SystemRandom()
+	index = 0
+	maxInter = len(table)
 	#if there's only one element there's no point swapping it.
+
 	if iterations > 0:
-		secRand = random.SystemRandom()
-		#Copies the regions to assign
-		tmpArray = table.copy()[regionTable[0][0]:regionTable[iterations-1][1]]
-		
-		for index in range(iterations):
-			tmpRegion = secRand.choice(regionTable)
-			table[tmpRegion[0]:tmpRegion[1]+1] = tmpArray[tmpRegion[0]-1:tmpRegion[1]]
-			regionTable.remove(tmpRegion)
+		while index < maxInter:
+
+			if regionTableIndex < iterations and index == regionCopy[regionTableIndex][0]:
+				tmpRegion = secRand.choice(regionTable)
+				print("Set "+str(tmpRegion))
+				index = regionCopy[regionTableIndex][1]
+				newTable += table[tmpRegion[0]:tmpRegion[1]+1]
+				print(table[tmpRegion[0]:tmpRegion[1]+1])
+				regionTable.remove(tmpRegion)
+				regionTableIndex += 1
+			else:
+				newTable.append(table[index])
+			index += 1
+		return newTable
+	return table
 
 def printBack(openFile,table):
 

@@ -17,11 +17,10 @@ class Analyzer:
 		self.assign = re.compile("(.*)=\s*\.\s*;")
 		self.region = re.compile("\.\s*(.*)\s*:\s*")
 		self.skippedBraces = 0
+		self.openedRegion = False
 	
 	def __handlesLine(self,string):
-	
 		strLen = len(string)
-		changed = False
 		string = re.sub(self.keywords,'',string)
 		if(len(string) != strLen):
 			self.skippedBraces += 1
@@ -31,15 +30,16 @@ class Analyzer:
 			#Checks for current address assignement for outside pointers
 			#They are usually around memoryblocks
 			secSplit = re.split(self.assign, self.buffer)[1:]
-			if len(secSplit) > 0:
+			if len(secSplit) > 0 and self.braceCounter==0:
 				self.symbolTable.append(["assign",secSplit[0],0])
 				self.buffer = ''
+				self.openedRegion = not self.openedRegion
 			
 			#Checks for fixed addresses
 			secSplit = re.split(self.address, self.buffer)[1:]
-			if len(secSplit) > 0:
-				self.buffer = ''
+			if len(secSplit) > 0 and self.braceCounter==0:
 				self.symbolTable.append(["curAdd",secSplit[0],0])
+				self.buffer = ''
 			
 			match letter:
 				case '{':
@@ -58,8 +58,15 @@ class Analyzer:
 						secSplit = re.split(self.region, self.buffer)[1:]
 
 						if len(secSplit) > 0:
-							self.symbolTable.append([secSplit[0],secSplit[1],0])
+							if not self.openedRegion:
+								#independent piece of code
+								self.symbolTable.append([secSplit[0],secSplit[1],1])
+							else:
+								self.symbolTable.append([secSplit[0],secSplit[1],0])
 							self.buffer = ''
+				#Wildcard
+				case _:
+					continue
 			
 	def analyze(self):
 		
