@@ -15,7 +15,10 @@ import random
 
 def printSymTable(table):
 	for element in table:
-		print( element[0] + " | " + element[1]+ " | " + str(element[2]))
+		if len(element) == 3:
+			print( element[0] + " | " + element[1]+ " | " + str(element[2]))
+		else:
+			print( element[0] + " | " + element[1])
 
 #Takes 2 string and returns the longest prefix/suffix between them
 def alike(s1,s2):
@@ -63,10 +66,6 @@ def primaryRegionHandler(table):
 		elif(element[0] == "curAdd" and not element[1].startswith('ALIGN')):
 			element[1] = '0x'+''.join('{:02X}'.format(int(element[1],16)+(8*random.randint(-500,500))))
 
-		#it's a {....} section
-		else:
-			if(element[2] == 1):
-				regionTable.append([index,index])
 		index += 1
 	return regionTable
 	
@@ -82,6 +81,8 @@ def secondaryRegionHandler(table):
 		maxCompatIndex = 0
 		maxCompat = 0
 		compat = 0
+		atEnd = False
+		tableSize = len(regionTable)
 		if table[i][0] == "assign":
 			for j in range(i+1,tableLen):
 				if table[j][0] != "assign":
@@ -92,8 +93,19 @@ def secondaryRegionHandler(table):
 					maxCompat = compat
 					maxCompatIndex = j
 					
-			print(i,table[i][1],maxCompatIndex,table[maxCompatIndex][1])
-
+			#Checks if the elements that starts the region closes already another one
+			for j in range(tableSize):
+				if regionTable[tableSize-1-j][1] == i or i < regionTable[tableSize-1-j][1]:
+					atEnd = True
+					break
+			if (tableSize == 0 or not atEnd) and i <= maxCompatIndex:
+				regionTable.append([i,maxCompatIndex])
+		#if not assign or curAdd -> independant section
+		if table[i][0] != "assign" and table[i][0] != "curAdd" and tableSize>0 and \
+			not (regionTable[tableSize-1][0]< i and i <regionTable[tableSize-1][1]):
+				regionTable.append([i,i])
+		
+	return regionTable
 def main(openFile,debug):
 	
 	analyzer = Analyzer(openFile)
@@ -103,10 +115,13 @@ def main(openFile,debug):
 	if debug == 'True':
 		printSymTable(table)
 	
-	primaryRegionHandler(table)
-	regionTable = secondaryRegionHandler(table)
+	regionTable1 = primaryRegionHandler(table)
+	regionTable2 = secondaryRegionHandler(table)
+	
+	print(regionTable1)
+	print(regionTable2)
 	#Swap memory regions
-	table = swapRegions(table,regionTable)
+	table = swapRegions(table,regionTable2)
 	
 	printBack(openFile,table)
 	
@@ -143,18 +158,20 @@ def swapRegions(table,regionTable):
 
 def printBack(openFile,table):
 
-	#clears the file
+	#clears the file and save headers
+	openFile.seek(0)
+	header = openFile.read().split("SECTIONS\n{\n")
 	openFile.seek(0)
 	openFile.truncate()
 	
 	#Writes back
-	openFile.write("SECTIONS\n{\n")
+	openFile.write(header[0]+"SECTIONS\n{\n")
 	for element in table:
 		if element[0] == "curAdd":
 			openFile.write(". = "+element[1]+";\n")
 		elif element[0] == "assign":
-			if len(element) == 4:
-				openFile.write(element[1]+"= ."+element[3]+";\n")
+			if len(element) == 3:
+				openFile.write(element[1]+"= ."+element[2]+";\n")
 			else:
 				openFile.write(element[1]+"= .;\n")
 		else:
