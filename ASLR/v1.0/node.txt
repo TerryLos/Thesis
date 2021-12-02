@@ -1,0 +1,4 @@
+This version didn't work on qemu because it does some hypothesis on how memory should
+be layered and configured.
+
+However it worked on typical C applications.

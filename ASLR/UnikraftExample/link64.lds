@@ -2,15 +2,6 @@ ENTRY(_libkvmplat_entry)
 SECTIONS
 {
  . = 0x100000;
- _text = .;
- .text :
- {
-  KEEP (*(.data.boot))
-  *(.text.boot)
-  *(.text)
-  *(.text.*)
- }
- _etext = .;
  . = ALIGN((1 << 12)); __eh_frame_start = .; .eh_frame : { *(.eh_frame) *(.eh_frame.*) } __eh_frame_end = .; __eh_frame_hdr_start = .; .eh_frame_hdr : { *(.eh_frame_hdr) *(.eh_frame_hdr.*) } __eh_frame_hdr_end = .;
  . = ALIGN((1 << 12)); uk_ctortab_start = .; .uk_ctortab : { KEEP(*(SORT_BY_NAME(.uk_ctortab[0-9]))) } uk_ctortab_end = .;
  uk_inittab_start = .; .uk_inittab : { KEEP(*(SORT_BY_NAME(.uk_inittab[1-6][0-9]))) } uk_inittab_end = .;
@@ -22,6 +13,15 @@ SECTIONS
   *(.rodata.*)
  }
  _erodata = .;
+  _text = .;
+ .text :
+ {
+  KEEP (*(.data.boot))
+  *(.text.boot)
+  *(.text)
+  *(.text.*)
+ }
+ _etext = .;
  . = ALIGN(0x8);
  _ctors = .;
  .preinit_array : {

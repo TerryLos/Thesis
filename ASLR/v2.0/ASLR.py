@@ -74,12 +74,10 @@ def primaryRegionHandler(table):
 	return regionTable
 	
 # Tries to pair the xxx = .; elements which share the longuest prefix
-#TODO ajouter un poids décroissant quand on avance loin dans le script
-#Pas très concluant pour l'instant
 def secondaryRegionHandler(table):
 	tableLen = len(table)
 	regionTable = []
-	
+	textRegion = None
 	#For now randomizes current address (. = 0x....) and swap the regions (not subregions)
 	for i in range(tableLen): 
 		maxCompatIndex = 0
@@ -89,6 +87,14 @@ def secondaryRegionHandler(table):
 		tableSize = len(regionTable)
 		if table[i][0] == "assign":
 			for j in range(i+1,tableLen):
+			
+				#Qemu expects text to be the first region
+				#so we don't swap it
+				#Breaks a second time not to take the ending pointer 
+				#for another region
+				if table[j][0] == "text " or table[j-2][0] == "text " :
+					textRegion = j
+					break
 				if table[j][0] != "assign":
 					continue
 
@@ -103,7 +109,19 @@ def secondaryRegionHandler(table):
 					atEnd = True
 					break
 			if (tableSize == 0 or not atEnd) and i <= maxCompatIndex:
-				regionTable.append([i,maxCompatIndex])
+				#Tries to drag pre-configured memory layout with it
+				if i-1 >= 0 and table[i-1][0] == "curAdd" and table[i-1][1].startswith('ALIGN'):
+					print("larger")
+					regionTable.append([i-1,maxCompatIndex])
+				else:
+					regionTable.append([i,maxCompatIndex])
+		
+		#Randomizes static addresses
+		elif(table[i][0] == "curAdd" and not table[i][1].startswith('ALIGN')):
+			#doesn't modify 0x100000 to respect qemu assumptions
+			if int(table[i][1],16) != int("0x100000",16): 
+				table[i][1] = '0x'+''.join('{:02X}'.format(int(table[i][1],16)+(8*random.randint(-500,500))))
+
 		#if not assign or curAdd -> independant section
 		""""
 		Causes error with the linker and colliding memory
@@ -112,7 +130,7 @@ def secondaryRegionHandler(table):
 				regionTable.append([i,i])
 		"""
 		
-	return regionTable
+	return regionTable,textRegion
 def main(openFile,debug):
 	
 	analyzer = Analyzer(openFile)
@@ -122,13 +140,13 @@ def main(openFile,debug):
 	if debug == 'True':
 		printSymTable(table)
 	
-	regionTable1 = primaryRegionHandler(table)
-	regionTable2 = secondaryRegionHandler(table)
+	#regionTable1 = primaryRegionHandler(table)
+	regionTable, textRegion = secondaryRegionHandler(table)
 	
-	print(regionTable1)
-	print(regionTable2)
+	#print(regionTable1)
+	print(regionTable)
 	#Swap memory regions
-	table = swapRegions(table,regionTable2)
+	table = swapRegions(table,regionTable)
 	
 	printBack(openFile,table)
 	
