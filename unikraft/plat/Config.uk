@@ -1,0 +1,48 @@
+menu "Platform Interface Options"
+config UKPLAT_MEMRNAME
+	bool "Memory region names"
+	default n
+	help
+		Enable name field in memory region descriptors
+
+config UKPLAT_LCPU_MAXCOUNT
+        int "Maximum number of supported logical CPUs"
+        range 1 256
+        default 1
+
+config HAVE_SMP
+        bool
+        default y if UKPLAT_LCPU_MAXCOUNT > 1
+        default n
+endmenu
+
+config HZ
+	int
+	prompt "Timer frequency (Hz)"
+	default 100
+	help
+		Configure the timer interrupt frequency.
+		Only change this if you know what you're doing.
+
+config FPSIMD
+	bool "floating point & simd support in application"
+	default n
+	depends on ARCH_ARM_64
+	help
+		Enable support FPU usage in application
+
+menuconfig LIBGIC
+	bool "Arm GIC (generic interrupt controller) support"
+	select LIBOFW
+	default y if ARCH_ARM_64
+	depends on ARCH_ARM_64
+	depends on PLAT_KVM
+if LIBGIC
+config LIBGICV2
+	bool "Version 2"
+	default y
+
+config LIBGICV3
+	bool "Version 3"
+	default y
+endif
