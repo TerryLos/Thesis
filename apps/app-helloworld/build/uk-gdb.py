@@ -35,7 +35,7 @@ import pickle
 import os, sys
 import tempfile, shutil
 
-scripts_dir = "/home/terrylos/thesis/unikraft/support/scripts"
+scripts_dir = "/home/terrylos/Thesis/unikraft/support/scripts"
 sys.path.append(scripts_dir)
 
 import uk_trace.parse as parse

@@ -1,1 +1,1 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.c := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.c := 

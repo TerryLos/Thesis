@@ -1,8 +1,8 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/symbol.o := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o := 
 
-source_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/symbol.o := symbol.c
+source_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o := symbol.c
 
-deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/symbol.o := \
+deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o := \
   /usr/include/stdc-predef.h \
   /usr/include/ctype.h \
   /usr/include/features.h \
@@ -70,6 +70,6 @@ deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/symbol.o := \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
   lkc_proto.h \
 
-/home/terrylos/thesis/apps/app-helloworld/build/kconfig/symbol.o: $(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/symbol.o)
+/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o)
 
-$(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/symbol.o):
+$(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o):

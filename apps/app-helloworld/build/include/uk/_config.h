@@ -1,7 +1,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Unikraft/0.7.0~594b73c Configuration
+ * Unikraft/0.7.0~f8749e4-custom Configuration
  *
  */
 #define CONFIG_LIBNOLIBC_UKDEBUG_ASSERT 1
@@ -17,7 +17,7 @@
 #define CONFIG_APPHELLOWORLD_DEPENDENCIES 1
 #define CONFIG_LIBUKTIME 1
 #define CONFIG_LIBNOLIBC 1
-#define CONFIG_UK_FULLVERSION "0.7.0~594b73c"
+#define CONFIG_UK_FULLVERSION "0.7.0~f8749e4-custom"
 #define CONFIG_UK_NAME "app-helloworld"
 #define CONFIG_LIBUKBOOT 1
 #define CONFIG_APPHELLOWORLD_PRINTARGS 1
@@ -41,7 +41,7 @@
 #define CONFIG_UK_ARCH "x86_64"
 #define CONFIG_LIBUKBOOT_INITBBUDDY 1
 #define CONFIG_STACK_SIZE_PAGE_ORDER 4
-#define CONFIG_UK_BASE "/home/terrylos/thesis/unikraft"
+#define CONFIG_UK_BASE "/home/terrylos/Thesis/unikraft"
 #define CONFIG_KVM_SERIAL_BAUD_115200 1
 #define CONFIG_HZ 100
 #define CONFIG_LIBUKDEBUG_PRINT_SRCNAME 1
@@ -52,7 +52,7 @@
 #define CONFIG_LIBUKTIMECONV 1
 #define CONFIG_UK_CODENAME "Mimas"
 #define CONFIG_KVM_DEBUG_SERIAL_CONSOLE 1
-#define CONFIG_UK_APP "/home/terrylos/thesis/apps/app-helloworld"
+#define CONFIG_UK_APP "/home/terrylos/Thesis/apps/app-helloworld"
 #define CONFIG_CROSS_COMPILE ""
 #define CONFIG_LLVM_TARGET_ARCH ""
 #define CONFIG_ARCH_X86_64 1

@@ -1,8 +1,8 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/expr.o := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/expr.o := 
 
-source_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/expr.o := expr.c
+source_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/expr.o := expr.c
 
-deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/expr.o := \
+deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/expr.o := \
   /usr/include/stdc-predef.h \
   /usr/include/ctype.h \
   /usr/include/features.h \
@@ -73,6 +73,6 @@ deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/expr.o := \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
   lkc_proto.h \
 
-/home/terrylos/thesis/apps/app-helloworld/build/kconfig/expr.o: $(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/expr.o)
+/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/expr.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/expr.o)
 
-$(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/expr.o):
+$(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/expr.o):

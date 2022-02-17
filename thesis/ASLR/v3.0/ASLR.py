@@ -50,7 +50,7 @@ def alike(s1,s2):
 	else :
 		return lettersSuf
 # Tries to pair the xxx = .; elements which share the longuest prefix
-def regionHandler(table,sysRand,libList):
+def regionHandler(table,sysRand,libList,debug):
 	tableLen = len(table)
 	regionTable = []
 	textRegion = None
@@ -86,7 +86,7 @@ def regionHandler(table,sysRand,libList):
 			if (tableSize == 0 or not atEnd) and i <= maxCompatIndex:
 				#Modifies the lib position
 				if table[i][1] == ' _text ' :
-					table[i+1] = libraryRegion(table[i+1],sysRand,libList)
+					table[i+1] = libraryRegion(table[i+1],sysRand,libList,debug)
 				
 				#Tries to drag pre-configured memory layout with it
 				if i-1 >= 0 and table[i-1][0] == "curAdd" and table[i-1][1].startswith('ALIGN'):
@@ -102,18 +102,43 @@ def regionHandler(table,sysRand,libList):
 	
 	return regionTable, table
 
-def libraryRegion(textRegion,sysRand,libList):
-	index = textRegion[1].find("*(.text.*)")
-	padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
-	modfiedRegion = textRegion[1][0:54] + padding
-	modfiedRegion += "  *(.text."+libList.pop(0)+")\n"
-	while len(libList) != 0:
-		nextLib = sysRand.choice(libList)
-		libList.remove(nextLib)
-		modfiedRegion += "  *(.text."+nextLib+")\n"
-	
-	textRegion[1] = modfiedRegion+"}"
-	return textRegion
+def libraryRegion(textRegion,sysRand,libList,debug):
+	#Allows to see memory modifications in readelf
+	#Left temporary to readers to test the program
+	if debug == 'True':
+		index = textRegion[1].find("*(.text)")
+		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
+		modfiedRegion = textRegion[1][0:index] + padding +"}"
+		nextLib = libList.pop(0)
+		modfiedRegion += "  .text."+nextLib+" . :{ "+nextLib+".o (.text);}\n"
+		while len(libList) != 0:
+			padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
+			nextLib = sysRand.choice(libList)
+			libList.remove(nextLib)
+			modfiedRegion += "  .text."+nextLib+" . :{ "
+			if sysRand.randint(0,4) == 1:
+				modfiedRegion += padding+"  "
+			modfiedRegion += nextLib+".o (.text);}\n"
+		
+		textRegion[1] = modfiedRegion
+		return textRegion
+	else:
+		index = textRegion[1].find("*(.text)")
+		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
+		modfiedRegion = textRegion[1][0:index] + padding
+		nextLib = libList.pop(0)
+		modfiedRegion += "  "+nextLib+".o (.text);\n"
+		while len(libList) != 0:
+			padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
+			nextLib = sysRand.choice(libList)
+			libList.remove(nextLib)
+			modfiedRegion += "  "
+			if sysRand.randint(0,4) == 1:
+				modfiedRegion += padding
+			modfiedRegion += nextLib+".o (.text);\n"
+		
+		textRegion[1] = modfiedRegion+textRegion[1][index-2:]
+		return textRegion
 
 def main(openFile,debug,libList):
 	
@@ -124,13 +149,13 @@ def main(openFile,debug,libList):
 	if debug == 'True':
 		printSymTable(table)
 	
-	regionTable, table = regionHandler(table,sysRand,libList)
+	regionTable, table = regionHandler(table,sysRand,libList,debug)
 	#Swap memory regions
 	table = swapRegions(table,regionTable,sysRand)
 	if table == None:
 		return -1
 	
-	printBack(openFile,table)
+	printBack(openFile,table,debug)
 	
 	return 0
 
@@ -195,7 +220,7 @@ def swapRegions(table,regionTable,sysRand):
 		return newTable
 	return table
 
-def printBack(openFile,table):
+def printBack(openFile,table,debug):
 
 	#clears the file and save headers
 	openFile.seek(0)
@@ -205,7 +230,12 @@ def printBack(openFile,table):
 	
 	#Writes back
 	previous = ""
-	openFile.write(header[0]+"SECTIONS\n{\n")
+	if debug:
+		#Doesn't set ENTRY in debug mode otherwise causes double import
+		openFile.write("SECTIONS\n{\n")
+	else :
+		openFile.write(header[0]+"SECTIONS\n{\n")
+	
 	for element in table:
 		if element[0] == "curAdd":
 			#Avoid having ALIGN cascade

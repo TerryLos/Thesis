@@ -1,8 +1,8 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.o := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.o := 
 
-source_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.o := /home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.c
+source_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.o := /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.c
 
-deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.o := \
+deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.o := \
   /usr/include/stdc-predef.h \
   /usr/include/ctype.h \
   /usr/include/features.h \
@@ -70,6 +70,6 @@ deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.o := \
   lkc.h \
   menu.c \
 
-/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.o: $(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.o)
+/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.o)
 
-$(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.o):
+$(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.o):

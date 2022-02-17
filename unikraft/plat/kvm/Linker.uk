@@ -1,7 +1,7 @@
 ifeq (x86_64,$(CONFIG_UK_ARCH))
 KVM_LDFLAGS-y += -Wl,-m,elf_x86_64
 else ifeq (arm64,$(CONFIG_UK_ARCH))
-KVM_LDFLAGS-y	 += -Wl,-m,aarch64elf
+KVM_LDFLAGS-y	 += -Wl,-m,aarch64elf,-L
 KVM_LINK_LIBGCC_FLAG	:= -lgcc
 endif
 
@@ -27,31 +27,34 @@ ASLR_LIBS += $(foreach P,$(UK_PLATS) $(UK_PLATS-y),\
 ifeq (y,$(CONFIG_LINK_ASLR))
 $(KVM_DEBUG_IMAGE): $(KVM_ALIBS) $(KVM_ALIBS-y) $(KVM_OLIBS) $(KVM_OLIBS-y) \
 		    $(UK_ALIBS) $(UK_ALIBS-y) $(UK_OLIBS) $(UK_OLIBS-y)
+
+	$(call build_cmd,ASLR,,$@,\
+		$(SCRIPTS_DIR)/ASLR/ASLR.py \
+			--file_path=$(UK_PLAT_KVM_DEF_LDS) \
+			--build_dir="$(ASLR_LIBS)") 
+
 	$(call build_cmd,LD,,$(KVM_IMAGE).ld.o,\
 	       $(LD) -r $(LIBLDFLAGS) $(LIBLDFLAGS-y) \
 			$(KVM_LDFLAGS) $(KVM_LDFLAGS-y) \
-			$(KVM_OLIBS) $(KVM_OLIBS-y) \
-			$(UK_OLIBS) $(UK_OLIBS-y) \
+			-T$(UK_PLAT_KVM_DEF_LDS)\
+		     	-L$(BUILD_DIR) \
 			-Wl$(comma)--start-group \
 			$(KVM_ALIBS) $(KVM_ALIBS-y) \
 			$(UK_ALIBS) $(UK_ALIBS-y) \
 			$(KVM_LINK_LIBGCC_FLAG) \
 			-Wl$(comma)--end-group \
 			-o $(KVM_IMAGE).ld.o)
+			
 	$(call build_cmd,OBJCOPY,,$(KVM_IMAGE).o,\
 		$(OBJCOPY) -w -G kvmos_* -G _libkvmplat_entry \
 			$(KVM_IMAGE).ld.o $(KVM_IMAGE).o)
-
-	$(call build_cmd,ASLR,,$@,\
-		$(SCRIPTS_DIR)/ASLR/ASLR.py \
-			--file_path=$(UK_PLAT_KVM_DEF_LDS) \
-			--build_dir="$(ASLR_LIBS)")
 	
 	$(call build_cmd,LD,,$@,\
 	       $(LD) $(LDFLAGS) $(LDFLAGS-y) \
 		     $(KVM_LDFLAGS) $(KVM_LDFLAGS-y) \
-		     $(KVM_LD_SCRIPT_FLAGS) \
-		     $(KVM_IMAGE).o -o $@)
+		     -T$(UK_PLAT_KVM_DEF_LDS)\
+		     -L$(BUILD_DIR) \
+		      -o $@)
 else
 $(KVM_DEBUG_IMAGE): $(KVM_ALIBS) $(KVM_ALIBS-y) $(KVM_OLIBS) $(KVM_OLIBS-y) \
 		    $(UK_ALIBS) $(UK_ALIBS-y) $(UK_OLIBS) $(UK_OLIBS-y)

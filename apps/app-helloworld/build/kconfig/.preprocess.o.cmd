@@ -1,8 +1,8 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/preprocess.o := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/preprocess.o := 
 
-source_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/preprocess.o := preprocess.c
+source_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/preprocess.o := preprocess.c
 
-deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/preprocess.o := \
+deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/preprocess.o := \
   /usr/include/stdc-predef.h \
   /usr/include/ctype.h \
   /usr/include/features.h \
@@ -67,6 +67,6 @@ deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/preprocess.o := \
   /usr/include/assert.h \
   lkc_proto.h \
 
-/home/terrylos/thesis/apps/app-helloworld/build/kconfig/preprocess.o: $(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/preprocess.o)
+/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/preprocess.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/preprocess.o)
 
-$(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/preprocess.o):
+$(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/preprocess.o):

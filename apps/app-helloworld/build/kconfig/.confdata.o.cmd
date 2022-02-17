@@ -1,8 +1,8 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/confdata.o := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := 
 
-source_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/confdata.o := confdata.c
+source_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := confdata.c
 
-deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/confdata.o := \
+deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := \
     $(wildcard include/config/foo.h) \
   /usr/include/stdc-predef.h \
   /usr/include/x86_64-linux-gnu/sys/mman.h \
@@ -102,6 +102,6 @@ deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/confdata.o := \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
   lkc_proto.h \
 
-/home/terrylos/thesis/apps/app-helloworld/build/kconfig/confdata.o: $(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/confdata.o)
+/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o)
 
-$(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/confdata.o):
+$(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o):

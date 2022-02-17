@@ -1,3 +1,4 @@
+ENTRY(_libkvmplat_entry)
 SECTIONS
 {
 . = 0x100000;
@@ -5,27 +6,25 @@ SECTIONS
 .text :{
   KEEP (*(.data.boot))
   *(.text.boot)
-  . = . + 0x1ED;
-}  .text.libkvmplat . :{ libkvmplat.o (.text);}
-  .text.libuktime . :{ libuktime.o (.text);}
-  .text.libukdebug . :{ libukdebug.o (.text);}
-  .text.libuktimeconv . :{ libuktimeconv.o (.text);}
-  .text.libukboot_main . :{ libukboot_main.o (.text);}
-  .text.libuksglist . :{ . = . + 0x289;
-  libuksglist.o (.text);}
-  .text.libx86_64arch . :{ libx86_64arch.o (.text);}
-  .text.libukbus . :{ libukbus.o (.text);}
-  .text.libukargparse . :{ libukargparse.o (.text);}
-  .text.apphelloworld . :{ apphelloworld.o (.text);}
-  .text.libukalloc . :{ . = . + 0x248;
-  libukalloc.o (.text);}
-  .text.libkvmpci . :{ libkvmpci.o (.text);}
-  .text.libukallocbbuddy . :{ libukallocbbuddy.o (.text);}
-  .text.libkvmvirtio . :{ libkvmvirtio.o (.text);}
-  .text.libnolibc . :{ libnolibc.o (.text);}
-  .text.libukboot . :{ . = . + 0x257;
-  libukboot.o (.text);}
-
+  . = . + 0x73;
+  *(.text.libkvmplat)
+  *(.text.libuktimeconv)
+  *(.text.apphelloworld)
+  *(.text.libukboot_main)
+  *(.text.libkvmpci)
+  *(.text.libx86_64arch)
+  *(.text.libukbus)
+  *(.text.libukalloc)
+  *(.text.libuksglist)
+  *(.text.libukboot)
+  *(.text.libukallocbbuddy)
+  *(.text.libukdebug)
+  *(.text.libuktime)
+  *(.text.libkvmvirtio)
+  *(.text.libnolibc)
+  *(.text.libukargparse)
+  *(.text)
+}
  _etext = .;
 . = ALIGN((1 << 12));
  uk_ctortab_start = .;
@@ -34,12 +33,6 @@ SECTIONS
  uk_inittab_start = .;
 .uk_inittab :{ KEEP(*(SORT_BY_NAME(.uk_inittab[1-6][0-9]))) }
  uk_inittab_end = .;
-. = ALIGN(0x20);
- _tls_start = .;
-.tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
- _etdata = .;
-.tbss :{ *(.tbss) *(.tbss.*) *(.gnu.linkonce.tb.*) . = ALIGN(0x20); }
- _tls_end = . + SIZEOF(.tbss);
 . = ALIGN((1 << 12));
  _rodata = .;
 .rodata :{
@@ -47,9 +40,13 @@ SECTIONS
   *(.rodata.*)
  }
  _erodata = .;
- __eh_frame_hdr_start = .;
-.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
- __eh_frame_hdr_end = .;
+. = ALIGN((1 << 12));
+ _data = .;
+.data :{
+  *(.data)
+  *(.data.*)
+ }
+ _edata = .;
 . = ALIGN(0x8);
  _ctors = .;
 .preinit_array :{
@@ -66,16 +63,18 @@ SECTIONS
  }
  _ectors = .;
 . = ALIGN((1 << 12));
- _data = .;
-.data :{
-  *(.data)
-  *(.data.*)
- }
- _edata = .;
-. = ALIGN((1 << 12));
  __eh_frame_start = .;
 .eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
  __eh_frame_end = .;
+. = ALIGN(0x20);
+ _tls_start = .;
+.tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
+ _etdata = .;
+.tbss :{ *(.tbss) *(.tbss.*) *(.gnu.linkonce.tb.*) . = ALIGN(0x20); }
+ _tls_end = . + SIZEOF(.tbss);
+ __eh_frame_hdr_start = .;
+.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
+ __eh_frame_hdr_end = .;
 . = ALIGN((1 << 12));
  __bss_start = .;
 .bss :{

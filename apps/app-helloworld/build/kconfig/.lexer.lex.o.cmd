@@ -1,8 +1,8 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := 
 
-source_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := /home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.c
+source_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.c
 
-deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := \
+deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := \
   /usr/include/stdc-predef.h \
   /usr/include/stdio.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -91,8 +91,8 @@ deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := \
   list.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
   lkc_proto.h \
-  /home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.h \
+  /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.h \
 
-/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.o: $(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.o)
+/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o)
 
-$(deps_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/lexer.lex.o):
+$(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o):

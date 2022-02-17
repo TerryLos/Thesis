@@ -1,4 +1,4 @@
-source "/home/terrylos/thesis/unikraft/plat//kvm/Config.uk"
-source "/home/terrylos/thesis/unikraft/plat//linuxu/Config.uk"
-source "/home/terrylos/thesis/unikraft/plat//xen/Config.uk"
-source "/home/terrylos/thesis/unikraft/plat/Config.uk"
+source "/home/terrylos/Thesis/unikraft/plat//kvm/Config.uk"
+source "/home/terrylos/Thesis/unikraft/plat//linuxu/Config.uk"
+source "/home/terrylos/Thesis/unikraft/plat//xen/Config.uk"
+source "/home/terrylos/Thesis/unikraft/plat/Config.uk"

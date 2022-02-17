@@ -1,1 +1,1 @@
-cmd_/home/terrylos/thesis/apps/app-helloworld/build/kconfig/parser.tab.h := 
+cmd_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.h := 
