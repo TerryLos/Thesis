@@ -120,7 +120,6 @@ void uk_swrand_init_r(struct uk_swrand *r, unsigned int seedc,
 		const __u32 seedv[])
 {
 	__u32 i;
-
 	UK_ASSERT(r);
 	/* Initialize chacha */
 	__u32 k[8], iv[2];

@@ -36,7 +36,7 @@
 __u32 uk_swrandr_gen_seed32(void)
 {
 	__u32 val;
-
+	
 #ifdef CONFIG_LIBUKSWRAND_INITIALSEED_TIME
 	val = (__u32)ukplat_wall_clock();
 #endif
@@ -92,5 +92,6 @@ static int _uk_swrand_init(void)
 
 	return seedc;
 }
+
 
 uk_early_initcall(_uk_swrand_init);

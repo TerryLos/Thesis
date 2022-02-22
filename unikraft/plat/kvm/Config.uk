@@ -80,11 +80,19 @@ endmenu
 menu "Memory security"
 
 config LINK_ASLR
-	bool "ASLR activation"
+	bool "Linking ASLR activation"
 	default n
 	help
-		Activates the ASLR, it consists in modifying the stack/heap/lib addresses during linking time in order
-		to have different memory layouts.
+		Activates the ASLR, it consists in modifying the lib addresses during linking time in order
+		to have different microlibs memory layouts.
+
+config RUNTIME_ASLR
+	bool "Booting ASLR activation"
+	default n
+	select LIBUKSWRAND
+	help
+		Activates the ASLR, it consists in modifying the heap/lib addresses when booting the kernel.
+		
 endmenu
 
 config KVM_PCI

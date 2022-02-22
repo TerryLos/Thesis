@@ -41,6 +41,7 @@
 #include <uk/assert.h>
 #include <uk/essentials.h>
 #include <x86/acpi/acpi.h>
+#include <uk/swrand.h>
 
 #define PLATFORM_MEM_START 0x100000
 #define PLATFORM_MAX_MEM_ADDR 0x40000000
@@ -106,7 +107,47 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	 */
 	if ((max_addr - m->addr) < __STACK_SIZE)
 		UK_CRASH("Not enough memory to allocate boot stack\n");
+	
+#ifdef CONFIG_RUNTIME_ASLR
+	int ASLR_offset;
+	int divisor = 1;
+	/*
+	 * Since we can't modify __STACK_SIZE which is a macro, we place first the 
+	 * stack and then the heap. 
+	 * //TODO Discuss and add a limiting factor to the offset
+	 */
+	ASLR_offset = uk_swrand_randr() % (max_addr/4);
+	_libkvmplat_cfg.bstack.end = ALIGN_UP(max_addr - ASLR_offset, __PAGE_SIZE);
+	_libkvmplat_cfg.bstack.start   = _libkvmplat_cfg.bstack.end-__STACK_SIZE;
+	_libkvmplat_cfg.bstack.len   = __STACK_SIZE;
 
+	uk_pr_info(" ASLR - Stack : s: %p e: %p\n",_libkvmplat_cfg.bstack.start,
+	_libkvmplat_cfg.bstack.end);
+	
+	do{
+	ASLR_offset = uk_swrand_randr() % (max_addr/(4*divisor));
+	_libkvmplat_cfg.heap.start = ALIGN_UP((uintptr_t) __END+ASLR_offset, __PAGE_SIZE);
+	divisor++;
+	}
+	while(_libkvmplat_cfg.heap.start >= _libkvmplat_cfg.bstack.start);
+	
+	divisor = 1;
+	
+	do{
+	ASLR_offset = uk_swrand_randr() % (max_addr/(8*divisor));
+	_libkvmplat_cfg.heap.end = (uintptr_t) _libkvmplat_cfg.bstack.start-ASLR_offset;
+	divisor++;
+	}
+	while(_libkvmplat_cfg.heap.end >= _libkvmplat_cfg.bstack.start);
+	
+	_libkvmplat_cfg.heap.len   = _libkvmplat_cfg.heap.end
+				     - _libkvmplat_cfg.heap.start;
+	uk_pr_info(" ASLR - Heap : s: %p e: %p len: %p\n",_libkvmplat_cfg.heap.start,
+	_libkvmplat_cfg.heap.end,_libkvmplat_cfg.heap.len );
+				 
+	
+	
+#else
 	_libkvmplat_cfg.heap.start = ALIGN_UP((uintptr_t) __END, __PAGE_SIZE);
 	_libkvmplat_cfg.heap.end   = (uintptr_t) max_addr - __STACK_SIZE;
 	_libkvmplat_cfg.heap.len   = _libkvmplat_cfg.heap.end
@@ -114,6 +155,7 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	_libkvmplat_cfg.bstack.start = _libkvmplat_cfg.heap.end;
 	_libkvmplat_cfg.bstack.end   = max_addr;
 	_libkvmplat_cfg.bstack.len   = __STACK_SIZE;
+#endif
 }
 
 static inline void _mb_init_initrd(struct multiboot_info *mi)
@@ -256,27 +298,56 @@ static void _libkvmplat_entry2(void *arg __attribute__((unused)))
 {
 	ukplat_entry_argp(NULL, cmdline, sizeof(cmdline));
 }
+__u32 _gen_seed32(){
+	__u32 low,high;
+	__asm__ __volatile__ ("rdtsc" : "=a" (low), "=d" (high));
+	return ((unsigned long long)high << 32) | low;
+}
+static int uk_swrand_init(void)
+{
+	unsigned int i;
+#ifdef CONFIG_LIBUKSWRAND_CHACHA
+	unsigned int seedc = 10;
+	__u32 seedv[10];
+#else
+	unsigned int seedc = 2;
+	__u32 seedv[2];
+#endif
+	uk_pr_info("Initialize random number generator...\n");
+
+	for (i = 0; i < seedc; i++)
+		seedv[i] = _gen_seed32();
+
+	uk_swrand_init_r(&uk_swrand_def, seedc, seedv);
+
+	return seedc;
+}
 
 void _libkvmplat_entry(void *arg)
 {
 	struct multiboot_info *mi = (struct multiboot_info *)arg;
-
+	
 	_init_cpufeatures();
 	_libkvmplat_init_console();
 	traps_init();
 	intctrl_init();
-
+	/*
+	 * ASLR, We need to rebuild stack and heap once they've been built.
+	 * This allows to call the randomization functions.
+	 */
+	uk_swrand_init();
+	
 	uk_pr_info("Entering from KVM (x86)...\n");
 	uk_pr_info("     multiboot: %p\n", mi);
-
 	/*
 	 * The multiboot structures may be anywhere in memory, so take a copy of
 	 * everything necessary before we initialise memory allocation.
 	 */
+	
 	_mb_get_cmdline(mi);
 	_mb_init_mem(mi);
 	_mb_init_initrd(mi);
-
+	
 	if (_libkvmplat_cfg.initrd.len)
 		uk_pr_info("        initrd: %p\n",
 			   (void *) _libkvmplat_cfg.initrd.start);
@@ -288,6 +359,7 @@ void _libkvmplat_entry(void *arg)
 	uk_pr_info("     stack top: %p\n",
 		   (void *) _libkvmplat_cfg.bstack.start);
 
+	
 #ifdef CONFIG_HAVE_SMP
 	acpi_init();
 #endif /* CONFIG_HAVE_SMP */
@@ -299,10 +371,11 @@ void _libkvmplat_entry(void *arg)
 #if CONFIG_HAVE_X86PKU
 	_check_ospke();
 #endif /* CONFIG_HAVE_X86PKU */
-
+	
 	/*
 	 * Switch away from the bootstrap stack as early as possible.
 	 */
+	
 	uk_pr_info("Switch from bootstrap stack to stack @%p\n",
 		   (void *) _libkvmplat_cfg.bstack.end);
 	_libkvmplat_newstack(_libkvmplat_cfg.bstack.end,

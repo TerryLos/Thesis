@@ -42,11 +42,11 @@ int main(int argc, char *argv[])
 	i = 0;
 	printf("\n\n\n");
 	for (;;) {
-		i %= (monkey3_frame_count * 3);
+		/*i %= (monkey3_frame_count * 3);
 		printf("\r\033[2A %s \n", monkey3[i++]);
 		printf(" %s \n",          monkey3[i++]);
 		printf(" %s ",            monkey3[i++]);
-		fflush(stdout);
+		fflush(stdout);*/
 		millisleep(250);
 	}
 #endif /* CONFIG_APPHELLOWORLD_SPINNER */

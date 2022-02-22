@@ -68,9 +68,7 @@ static inline __u32 uk_swrand_randr(void)
 
 	return ret;
 }
-
 ssize_t uk_swrand_fill_buffer(void *buf, size_t buflen);
-
 #ifdef __cplusplus
 }
 #endif
