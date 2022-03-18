@@ -81,6 +81,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/conf.o := \
   /usr/include/x86_64-linux-gnu/bits/getopt_ext.h \
   /usr/include/x86_64-linux-gnu/sys/stat.h \
   /usr/include/x86_64-linux-gnu/bits/stat.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
   /usr/include/x86_64-linux-gnu/sys/time.h \
   /usr/include/errno.h \
   /usr/include/x86_64-linux-gnu/bits/errno.h \

@@ -214,3 +214,4 @@ ifeq ($(findstring y,$(CONFIG_LIBGICV3)),y)
 LIBKVMGIC_SRCS-y += $(UK_PLAT_DRIVERS_BASE)/gic/gic-v3.c
 endif
 endif
+

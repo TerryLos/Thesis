@@ -1,8 +1,8 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Unikraft/0.7.0~73c67f2-custom Configuration
+# Unikraft/0.7.0~a59ab68-custom Configuration
 #
-CONFIG_UK_FULLVERSION="0.7.0~73c67f2-custom"
+CONFIG_UK_FULLVERSION="0.7.0~a59ab68-custom"
 CONFIG_UK_CODENAME="Mimas"
 CONFIG_UK_ARCH="x86_64"
 CONFIG_UK_BASE="/home/terrylos/Thesis/unikraft"
@@ -62,7 +62,7 @@ CONFIG_KVM_SERIAL_BAUD_115200=y
 #
 CONFIG_LINK_ASLR=y
 CONFIG_RUNTIME_ASLR=y
-CONFIG_RUNTIME_ASLR_MAX_PADDING=100000
+# CONFIG_MEMORY_DEDUP_ASLR is not set
 # end of Memory security
 
 CONFIG_KVM_PCI=y

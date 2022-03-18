@@ -1,3 +1,4 @@
+
 ################################################################################
 #
 # Global Unikraft definitions
@@ -44,7 +45,11 @@ else
 RUSTCFLAGS-y	+= -Cembed-bitcode=n -Clto=n
 endif
 
+ifeq ($(CONFIG_MEMORY_DEDUP_ASLR),y)
+LIBLDFLAGS  += -nostdlib -Wl,-d -Wl,--build-id=none -pie
+else
 LIBLDFLAGS  += -nostdlib -Wl,-r -Wl,-d -Wl,--build-id=none -no-pie
+endif
 LIBLDFLAGS-$(call have_gcc)	+= -nostdinc
 
 # Set the text and data sections to be readable and writable. Also,
@@ -88,8 +93,15 @@ M4FLAGS      += -DUK_VERSION=$(UK_VERSION).$(UK_SUBVERSION)
 # If GCC supports "-no-pie" flag, we will add this flag to link flags to
 # override "pie" option, because some distributions will set
 # "--enable-default-pie" by default.
+
+ifeq ($(CONFIG_MEMORY_DEDUP_ASLR),y)
+COMPFLAGS-$(call gcc_version_ge,6,1)	+= -fPIC
+LDFLAGS-$(call gcc_version_ge,6,1)	+= -pie
+else
 COMPFLAGS-$(call gcc_version_ge,6,1)	+= -fno-PIC
 LDFLAGS-$(call gcc_version_ge,6,1)	+= -no-pie
+endif
+
 ifeq ($(call gcc_version_ge,10,0),y)
 COMPFLAGS-y += -fhosted -ffreestanding -fno-tree-loop-distribute-patterns
 LIBLDFLAGS-$(CONFIG_OPTIMIZE_LTO) += -flinker-output=nolto-rel

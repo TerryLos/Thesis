@@ -80,18 +80,26 @@ endmenu
 menu "Memory security"
 
 config LINK_ASLR
-	bool "Linking ASLR activation"
+	bool "Libraries ASLR activation"
 	default n
 	help
 		Activates the ASLR, it consists in modifying the lib addresses during linking time in order
 		to have different microlibs memory layouts.
 
 config RUNTIME_ASLR
-	bool "Booting ASLR activation"
+	bool "Heap/stack ASLR activation"
 	default n
 	select LIBUKSWRAND
 	help
 		Activates the ASLR, it consists in modifying the heap/lib addresses when booting the kernel.
+config MEMORY_DEDUP_ASLR
+	bool "Allows to run memory deduplication and ASLR together"
+	default n
+	depends on (LINK_ASLR)
+	select LIBUKSWRAND
+	help
+		Allows to share library pages even though ASLR is activated, deceasing memory footprint.
+		It requires to activate both ASLR and memory deduplication.
 		
 endmenu
 
