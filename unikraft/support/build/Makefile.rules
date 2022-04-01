@@ -472,8 +472,9 @@ endef
 
 define buildrule_S_ =
 $(4): $(2) | preprocess
+	@echo $(COMPASSFLAGS)
 	$(call build_cmd_fixdep,AS,$(1),$(4),\
-		$(AS)  $$(COMPFLAGS) $$(COMPFLAGS-y) \
+		$(AS)  $$(COMPASSFLAGS) $$(COMPFLAGS-y) \
 		       $$($(call vprefix_lib,$(1),COMPFLAGS)) $$($(call vprefix_lib,$(1),COMPFLAGS-y)) \
 		       $$(ASINCLUDES) $$(ASINCLUDES-y) \
 		       $$($(call vprefix_lib,$(1),ASINCLUDES)) $$($(call vprefix_lib,$(1),ASINCLUDES-y)) \
@@ -499,8 +500,9 @@ buildrule_sx = $(call buildrule_S_,$(1),$(2),$(3),$(4))
 
 define buildrule_s =
 $(4): $(2) | preprocess
+	@echo $(COMPASSFLAGS)
 	$(call build_cmd,AS,$(1),$(4),\
-		$(AS)  $$(COMPFLAGS) $$(COMPFLAGS-y) \
+		$(AS)  $$(COMPASSFLAGS) $$(COMPFLAGS-y) \
 		       $$($(call vprefix_lib,$(1),COMPFLAGS)) $$($(call vprefix_lib,$(1),COMPFLAGS-y)) \
 		       $$(ASINCLUDES) $$(ASINCLUDES-y) \
 		       $$($(call vprefix_lib,$(1),ASINCLUDES)) $$($(call vprefix_lib,$(1),ASINCLUDES-y)) \

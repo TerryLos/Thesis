@@ -1,0 +1,2 @@
+
+int anotherFunction(void);

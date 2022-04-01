@@ -121,8 +121,8 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	_libkvmplat_cfg.bstack.start   = _libkvmplat_cfg.bstack.end-__STACK_SIZE;
 	_libkvmplat_cfg.bstack.len   = __STACK_SIZE;
 
-	uk_pr_info(" ASLR - Stack : s: %p e: %p\n",_libkvmplat_cfg.bstack.start,
-	_libkvmplat_cfg.bstack.end);
+	uk_pr_info(" ASLR - Stack : s: %p e: %p\n",(void*)_libkvmplat_cfg.bstack.start,
+	(void*)_libkvmplat_cfg.bstack.end);
 	
 	do{
 	ASLR_offset = uk_swrand_randr() % (max_addr/(4*divisor));
@@ -142,11 +142,9 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	
 	_libkvmplat_cfg.heap.len   = _libkvmplat_cfg.heap.end
 				     - _libkvmplat_cfg.heap.start;
-	uk_pr_info(" ASLR - Heap : s: %p e: %p len: %p\n",_libkvmplat_cfg.heap.start,
-	_libkvmplat_cfg.heap.end,_libkvmplat_cfg.heap.len );
+	uk_pr_info(" ASLR - Heap : s: %p e: %p len: %p\n",(void*)_libkvmplat_cfg.heap.start,
+	(void*)_libkvmplat_cfg.heap.end,(void*)_libkvmplat_cfg.heap.len );
 				 
-	
-	
 #else
 	_libkvmplat_cfg.heap.start = ALIGN_UP((uintptr_t) __END, __PAGE_SIZE);
 	_libkvmplat_cfg.heap.end   = (uintptr_t) max_addr - __STACK_SIZE;
