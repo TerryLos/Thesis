@@ -52,7 +52,6 @@
 #include <uk/essentials.h>
 #include <uk/plat/memory.h>
 #include <uk/allocbbuddy.h>
-#include <sys/random.h>
 #include <stdio.h>
 
 #define PLATFORM_MEM_START 0x100000
@@ -302,9 +301,12 @@ static inline void initialize_allocator()
 		uk_pr_warn("No suitable memory region for memory allocator. Continue without heap\n");
 	else {
 		rc = ukplat_memallocator_set(a);
+		uk_pr_info("Here\n");
 		if (unlikely(rc != 0))
 			UK_CRASH("Could not set the platform memory allocator\n");
+		
 	}
+	uk_pr_info("out\n");
 }
 
 void _libkvmplat_entry(void *arg)
@@ -352,19 +354,19 @@ void _libkvmplat_entry(void *arg)
 		   img.base, img.len);
 
 	initialize_allocator();
-
-	my_mi = malloc(sizeof(struct multiboot_info));
+	my_mi = uk_malloc(uk_alloc_get_default(),sizeof(struct multiboot_info));
 	memcpy(my_mi, mi, sizeof(struct multiboot_info));
-	newcmdline = malloc(MAX_CMDLINE_SIZE);
+	newcmdline = uk_malloc(uk_alloc_get_default(),MAX_CMDLINE_SIZE);
 	strcpy(newcmdline, cmdline);
 	my_mi->cmdline = (multiboot_uint64_t)newcmdline;
 
+	void *elf_load_address = (void*)0x141000;
 	/*
 	 * Parse image
 	 */
 	uk_pr_info("Load image...\n");
 	struct elf_prog  *prog = load_elf(uk_alloc_get_default(), img.base, img.len,
-					"PIE kernel", (void) 0X100000);
+					"PIE kernel", elf_load_address);
 	if (!prog) {
 		uk_pr_info("Error loading the elf\n");
 	}

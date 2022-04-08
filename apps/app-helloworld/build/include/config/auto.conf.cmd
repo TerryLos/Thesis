@@ -56,7 +56,7 @@ deps_config := \
 /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/auto.conf: \
 	$(deps_config)
 
-ifneq "$(UK_FULLVERSION)" "0.7.0~7c4d52d-custom"
+ifneq "$(UK_FULLVERSION)" "0.7.0~5e4e48b-custom"
 /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/auto.conf: FORCE
 endif
 ifneq "$(UK_CODENAME)" "Mimas"

@@ -7,7 +7,7 @@ $(eval $(call addplat_s,kvm,$(CONFIG_PLAT_KVM)))
 ## add pseudoplatform for the loader
 ##
 ifeq ($(CONFIG_MEMORY_DEDUP_ASLR),y)
-$(eval $(call addplat_s,kvmloader,$(CONFIG_PLAT_KVM_LOADER)))
+$(eval $(call addplat_s,kvmloader,$(CONFIG_MEMORY_DEDUP_ASLR)))
 endif
 
 ##
@@ -39,7 +39,6 @@ LIBKVMPLAT_ASINCLUDES-y        += -I$(UK_PLAT_COMMON_BASE)/include
 LIBKVMPLAT_CINCLUDES-y         += -I$(LIBKVMPLAT_BASE)/include
 LIBKVMPLAT_CINCLUDES-y         += -I$(UK_PLAT_COMMON_BASE)/include
 LIBKVMPLAT_CINCLUDES-y         += -I$(UK_PLAT_DRIVERS_BASE)/include
-LIBKVMPLAT_ASLR-y              += -I$(UK_PLAT_DRIVERS_BASE)/include
 
 LIBKVMPLAT_ASFLAGS             += -DKVMPLAT
 LIBKVMPLAT_CFLAGS              += -DKVMPLAT
@@ -230,6 +229,20 @@ LIBKVMGIC_SRCS-y += $(UK_PLAT_DRIVERS_BASE)/gic/gic-v3.c
 endif
 endif
 
+###
+### ASLR CONFIGS
+###
+ifeq ($(CONFIG_LINK_ASLR),y)
+ASLR_LIBS += $(foreach P,$(UK_PLATS) $(UK_PLATS-y),\
+		$(if $(call qstrip,$($(call uc,$(P))_LIBS) $($(call uc,$(P))_LIBS-y)),\
+		$(foreach L,$($(call uc,$(P))_LIBS) $($(call uc,$(P))_LIBS-y), \
+		$(if $(call qstrip,$($(call vprefix_lib,$(L),SRCS)) $($(call vprefix_lib,$(L),SRCS-y))), \
+		$(L) \
+		)))) \
+		$(UK_LIBS) $(UK_LIBS-y)
+ASLR_BANNED_LIBS += libkvmloader
+endif
+
 ifeq ($(CONFIG_MEMORY_DEDUP_ASLR),y)
 ##
 ## Loader platform library definitions
@@ -240,7 +253,7 @@ LIBKVMLOADER_CINCLUDES-y    	 += -I$(LIBKVMPLAT_BASE)/include
 LIBKVMLOADER_CINCLUDES-y       	 += -I$(UK_PLAT_COMMON_BASE)/include
 LIBKVMLOADER_CINCLUDES-y    	 += -I$(UK_PLAT_DRIVERS_BASE)/include
 LIBKVMLOADER_CINCLUDES-y         += -I$(LIBKVMPLAT_BASE)/loader/include
-LIBKVMLOADER_CINCLUDES-y         += -I/home/daniel/Faculty/BachelorThesis/unikraft/arch/x86/x86_64/include -I/home/daniel/Faculty/BachelorThesis/unikraft/include  -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukboot/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukswrand/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/posix-user/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/posix-user/musl-imported/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/posix-sysinfo/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukdebug/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukargparse/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uktimeconv/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/nolibc/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/nolibc/arch/x86_64 -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/nolibc/musl-imported/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/nolibc/musl-imported/arch/generic -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukalloc/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukallocbbuddy/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uksched/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukschedcoop/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/syscall_shim/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/vfscore/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/devfs/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uklock/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukmpi/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukbus/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uksglist/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uknetdev/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uklibparam/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uktime/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uktime/musl-imported/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/posix-process/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/posix-process/musl-imported/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/posix-process/musl-imported/arch/generic -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/uksp/include
+LIBKVMLOADER_CINCLUDES-y         += -I/home/terrylos/Thesis/unikraft/arch/x86/x86_64/include -I/home/terrylos/Thesis/unikraft/include  -I/home/terrylos/Thesis/unikraft/lib/ukboot/include -I/home/terrylos/Thesis/unikraft/lib/ukswrand/include -I/home/terrylos/Thesis/unikraft/lib/posix-user/include -I/home/terrylos/Thesis/unikraft/lib/posix-user/musl-imported/include -I/home/terrylos/Thesis/unikraft/lib/posix-sysinfo/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukdebug/include -I/home/daniel/Faculty/BachelorThesis/unikraft/lib/ukargparse/include -I/home/terrylos/Thesis/unikraft/lib/uktimeconv/include -I/home/terrylos/Thesis/unikraft/lib/nolibc/include -I/home/terrylos/Thesis/unikraft/lib/nolibc/arch/x86_64 -I/home/terrylos/Thesis/unikraft/lib/nolibc/musl-imported/include -I/home/terrylos/Thesis/unikraft/lib/nolibc/musl-imported/arch/generic -I/home/terrylos/Thesis/unikraft/lib/ukalloc/include -I/home/terrylos/Thesis/unikraft/lib/ukallocbbuddy/include -I/home/terrylos/Thesis/unikraft/lib/uksched/include -I/home/terrylos/Thesis/unikraft/lib/ukschedcoop/include -I/home/terrylos/Thesis/unikraft/lib/syscall_shim/include -I/home/terrylos/Thesis/unikraft/lib/vfscore/include -I/home/terrylos/Thesis/unikraft/lib/devfs/include -I/home/terrylos/Thesis/unikraft/lib/uklock/include -I/home/terrylos/Thesis/unikraft/lib/ukmpi/include -I/home/terrylos/Thesis/unikraft/lib/ukbus/include -I/home/terrylos/Thesis/unikraft/lib/uksglist/include -I/home/terrylos/Thesis/unikraft/lib/uknetdev/include -I/home/terrylos/Thesis/unikraft/lib/uklibparam/include -I/home/terrylos/Thesis/unikraft/lib/uktime/include -I/home/terrylos/Thesis/unikraft/lib/uktime/musl-imported/include -I/home/terrylos/Thesis/unikraft/lib/posix-process/include -I/home/terrylos/Thesis/unikraft/lib/posix-process/musl-imported/include -I/home/terrylos/Thesis/unikraft/lib/posix-process/musl-imported/arch/generic -I/home/terrylos/Thesis/unikraft/lib/uksp/include
 
 ##
 ## Ukallocbbuddy library definitions
@@ -268,7 +281,6 @@ LIBKVMLOADER_CINCLUDES-y         += -I$(LIBUKSWRAND_BASE)/include
 ##
 ## Libelf library definitions
 ##
-LIBKVMLOADER_CINCLUDES-y         += -I$(LIBKVMPLAT_BASE)/loader/ukswrand/include
 LIBKVMLOADER_CINCLUDES-y         += -I$(LIBKVMPLAT_BASE)/loader/elfloader
 LIBKVMLOADER_CINCLUDES-y         += -I$(LIBKVMPLAT_BASE)/loader/libelf
 LIBKVMLOADER_CINCLUDES-y         += -I$(LIBKVMPLAT_BASE)/loader/libelf/include
@@ -316,7 +328,6 @@ LIBKVMLOADER_SRCS-y += $(LIBNOLIBC_BASE)/stdlib.c|loader
 LIBKVMLOADER_SRCS-y += $(LIBNOLIBC_BASE)/string.c|loader
 LIBKVMLOADER_SRCS-y += $(LIBNOLIBC_BASE)/sscanf.c|loader
 LIBKVMLOADER_SRCS-y += $(LIBNOLIBC_BASE)/asprintf.c|loader
-LIBKVMLOADER_SRCS-y += $(LIBNOLIBC_BASE)/malloc.c|loader
 
 # LIBKVMLOADER_SRCS-$(CONFIG_LIBNEWLIBC) += $(LIBNEWLIB_LIBC)/errno/errno.c|loader
 # LIBKVMLOADER_SRCS-$(CONFIG_LIBNEWLIBC) += $(LIBNEWLIB_LIBC)/stdio/stdio.c|loader
@@ -408,14 +419,7 @@ LIBKVMLOADER_SRCS-y += $(LIBNOLIBC_BASE)/malloc.c|loader
 # LIBKVMLOADER_SRCS-$(CONFIG_LIBNEWLIBC) += $(LIBNEWLIB_LIBC)/reent/closer.c|loader
 # LIBKVMLOADER_SRCS-$(CONFIG_LIBNEWLIBC) += $(LIBNEWLIB_LIBC)/stdio/vfscanf.c|loader
 # LIBKVMLOADER_SRCS-$(CONFIG_LIBNEWLIBC) += $(LIBNEWLIB_LIBC)/stdlib/assert.c|loader
-# LIBKVMLOADER_SRCS-$(CONFIG_LIBNEWLIBC) += $(LIBNOLIBC_BASE)/malloc.c|loader
 
-##
-## Ukswrand files
-##
-LIBKVMLOADER_SRCS-y += $(LIBUKSWRAND_BASE)/mwc.c|loader
-LIBKVMLOADER_SRCS-y += $(LIBKVMPLAT_BASE)/loader/ukswrand/swrand.c|loader
-LIBKVMLOADER_SRCS-y += $(LIBUKSWRAND_BASE)/getrandom.c|loader
 
 ##
 ## ElfLoader files

@@ -46,5 +46,11 @@
 /home/terrylos/Thesis/apps/app-helloworld/build/libkvmplat/link64.lds.d
 /home/terrylos/Thesis/apps/app-helloworld/build/libkvmplat.ld.o
 /home/terrylos/Thesis/apps/app-helloworld/build/libkvmplat.o
+/home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvmloader-x86_64.o
+/home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvmloader-x86_64.ld.o
+/home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvm-x86_64.o
+/home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvm-x86_64.ld.o
+/home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvmloader-x86_64.o
+/home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvmloader-x86_64.ld.o
 /home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvm-x86_64.o
 /home/terrylos/Thesis/apps/app-helloworld/build/app-helloworld_kvm-x86_64.ld.o

@@ -86,6 +86,21 @@ ISR_ARCHFLAGS += -D__INTERRUPTSAFE__
 M4FLAGS      += -D __Unikraft__ -DUK_CODENAME="$(UK_CODENAME)"
 M4FLAGS      += -DUK_VERSION=$(UK_VERSION).$(UK_SUBVERSION)
 
+LOADER_COMPFLAGS-y += $(COMPFLAGS-y)
+LOADER_LDFLAGS-y += $(LDFLAGS-y)
+LOADER_COMPFLAGS += $(COMPFLAGS)
+LOADER_LDFLAGS += $(LDFLAGS)
+
+ 
+ifeq ($(CONFIG_MEMORY_DEDUP_ASLR),y)
+
+COMPFLAGS-$(call gcc_version_ge,6,1)	+= -fPIC
+LDFLAGS-$(call gcc_version_ge,6,1)	+= -static-pie
+LOADER_COMPFLAGS-y += -no-pie
+LOADER_LDFLAGS-y += -no-pie
+LOADER_LDFLAGS += -Wl,--omagic
+else
+
 # If GCC supports "-no-pie" flag, we will add this flag to link flags to
 # override "pie" option, because some distributions will set
 # "--enable-default-pie" by default.
@@ -101,3 +116,8 @@ endif
 
 COMPFLAGS-$(call have_clang)	+= -fno-builtin -fno-PIC
 LDFLAGS-$(call have_clang)	+= -no-pie
+LOADER_COMPFLAGS-y += -no-pie
+LOADER_LDFLAGS-y += -no-pie
+LOADER_LDFLAGS += -Wl,--omagic
+endif
+

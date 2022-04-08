@@ -138,9 +138,9 @@ def libraryRegion(textRegion,sysRand,libList,debug):
 		textRegion[1] = modfiedRegion+textRegion[1][index-2:]
 		return textRegion
 
-def main(openFile,debug,libList):
+def main(openFiles,debug,libList):
 	
-	analyzer = Analyzer(openFile)
+	analyzer = Analyzer(openFiles[0])
 	table = analyzer.analyze()
 	regionTable = []
 	sysRand = SystemRandom()
@@ -153,7 +153,7 @@ def main(openFile,debug,libList):
 	if table == None:
 		return -1
 	
-	printBack(openFile,table,debug)
+	printBack(openFiles,table,debug)
 	
 	return 0
 
@@ -218,36 +218,39 @@ def swapRegions(table,regionTable,sysRand):
 		return newTable
 	return table
 
-def printBack(openFile,table,debug):
-
+def printBack(openFiles,table,debug):
+	openFileR = openFiles[0]
+	openFileW = openFiles[1]
+	
 	#clears the file and save headers
-	openFile.seek(0)
-	header = openFile.read().split("SECTIONS\n{\n")
-	openFile.seek(0)
-	openFile.truncate()
+	openFileR.seek(0)
+	header = openFileR.read().split("SECTIONS\n{\n")
+	openFileR.seek(0)
+	if (openFileR == openFileW):
+		openFileR.truncate()
 	
 	#Writes back
 	previous = ""
 	if debug:
 		#Doesn't set ENTRY in debug mode otherwise causes double import
-		openFile.write("SECTIONS\n{\n")
+		openFileW.write("SECTIONS\n{\n")
 	else :
-		openFile.write(header[0]+"SECTIONS\n{\n")
+		openFileW.write(header[0]+"SECTIONS\n{\n")
 	
 	for element in table:
 		if element[0] == "curAdd":
 			#Avoid having ALIGN cascade
 			if not (previous.startswith('ALIGN') and element[1].startswith('ALIGN')):
-				openFile.write(". = "+element[1]+";\n")
+				openFileW.write(". = "+element[1]+";\n")
 		elif element[0] == "assign":
 			if len(element) == 3:
-				openFile.write(element[1]+"= ."+element[2]+";\n")
+				openFileW.write(element[1]+"= ."+element[2]+";\n")
 			else:
-				openFile.write(element[1]+"= .;\n")
+				openFileW.write(element[1]+"= .;\n")
 		else:
-			openFile.write("."+element[0]+":"+element[1]+"\n")
+			openFileW.write("."+element[0]+":"+element[1]+"\n")
 		previous = element[1]
-	openFile.write("}")
+	openFileW.write("}")
 	return 0
 def extractLibs(string):
 	wordList = []
@@ -255,29 +258,49 @@ def extractLibs(string):
 		wordList = string.split()
 		
 	return wordList
+def delBannedLibs(libList,bannedLibs):
 	
+	for libs in bannedLibs:
+		if libs in libList:
+			libList.remove(libs)
+	
+	return libList
 if __name__ == '__main__':
 	#Gets back the path of the linker script to modify
 	parser = argparse.ArgumentParser(prog="Unikraft ASLR, linker script implementation")
 
-	parser.add_argument('--file_path', dest='path', default='./', help="Path leading to the file.")
+	parser.add_argument('--file_path', dest='path', default='./', help="Path leading to the linker script.")
 
-	parser.add_argument('--build_dir', dest='build', default='./', help="Path leading to the build file.")	
+	parser.add_argument('--write_file', dest='wpath', default='./', help="Path where we have to write the file")	
+	
+	parser.add_argument('--libs', dest='libs', default=' ', help="List of libs to integrate to the linker script.")
+	
+	parser.add_argument('--banned-libs', dest ='banLibs', default='', help="List of libs to ignore in the libs list.")
 	
 	parser.add_argument('--debug', dest='debug', default='False', 
 		help="Prints on the standard input debug informations.")
 
 	params , _ = parser.parse_known_args(sys.argv[1:])
 	
-	openFile = open(params.path,"r+")
-	if(openFile == None):
+	openFiles = []
+	openFiles.append(open(params.path,"r+"))
+	#Writes back in the same file
+	if(params.path == params.wpath):
+		openFiles.append(openFiles[0])
+	else:
+		openFiles.append(open(params.wpath,"w+"))
+
+	if(openFiles[0] == None or openFiles[1] == None):
 		print("Couldn't open the file, path may be wrong.")
 	else:
-		libList = extractLibs(params.build)
+		libList = extractLibs(params.libs)
+		bannedLibs = extractLibs(params.banLibs)
+		libList = delBannedLibs(libList,bannedLibs)
 		if len(libList) == 0:
 			print("[ASLR] {Error} No lib list given to the program abort.",file=sys.stderr)
 		
-		main(openFile,params.debug,libList)
-		openFile.close()
+		main(openFiles,params.debug,libList)
+		for files in openFiles:
+			files.close()
 	
 	

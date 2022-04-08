@@ -40,6 +40,7 @@
 #define MYMULTIBOOT_FLAGS \
     (MULTIBOOT_PAGE_ALIGN | MULTIBOOT_MEMORY_INFO | MULTIBOOT_AOUT_KLUDGE)
 
+#ifndef CONFIG_MEMORY_DEDUP_ASLR
 .section .data.boot
 
 .align 4
@@ -260,6 +261,8 @@ nopku:
 	cli
 	hlt
 END(_libkvmplat_start64)
+
+#endif
 
 .text
 ENTRY(_libkvmplat_newstack)

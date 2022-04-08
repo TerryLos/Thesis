@@ -301,6 +301,7 @@ __u32 _gen_seed32(){
 	__asm__ __volatile__ ("rdtsc" : "=a" (low), "=d" (high));
 	return ((unsigned long long)high << 32) | low;
 }
+#ifdef CONFIG_RUNTIME_ASLR
 static int uk_swrand_init(void)
 {
 	unsigned int i;
@@ -320,7 +321,7 @@ static int uk_swrand_init(void)
 
 	return seedc;
 }
-
+#endif
 void _libkvmplat_entry(void *arg)
 {
 	struct multiboot_info *mi = (struct multiboot_info *)arg;
@@ -333,7 +334,9 @@ void _libkvmplat_entry(void *arg)
 	 * ASLR, We need to rebuild stack and heap once they've been built.
 	 * This allows to call the randomization functions.
 	 */
+	#ifdef CONFIG_RUNTIME_ASLR
 	uk_swrand_init();
+	#endif
 	
 	uk_pr_info("Entering from KVM (x86)...\n");
 	uk_pr_info("     multiboot: %p\n", mi);
@@ -344,7 +347,9 @@ void _libkvmplat_entry(void *arg)
 	
 	_mb_get_cmdline(mi);
 	_mb_init_mem(mi);
+	#ifndef CONFIG_MEMORY_DEDUP_ASLR
 	_mb_init_initrd(mi);
+	#endif
 	
 	if (_libkvmplat_cfg.initrd.len)
 		uk_pr_info("        initrd: %p\n",
