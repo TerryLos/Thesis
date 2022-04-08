@@ -16,7 +16,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := \
   /usr/include/x86_64-linux-gnu/bits/timesize.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/time64.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stddef.h \
   /usr/include/x86_64-linux-gnu/bits/mman.h \
   /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h \
   /usr/include/x86_64-linux-gnu/bits/mman-linux.h \
@@ -40,15 +40,15 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := \
   /usr/include/fcntl.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/limits.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/syslimits.h \
   /usr/include/limits.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
   /usr/include/x86_64-linux-gnu/bits/local_lim.h \
   /usr/include/linux/limits.h \
   /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdarg.h \
   /usr/include/stdio.h \
   /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
@@ -100,7 +100,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := \
   expr.h \
   /usr/include/assert.h \
   list.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdbool.h \
   lkc_proto.h \
 
 /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o)
