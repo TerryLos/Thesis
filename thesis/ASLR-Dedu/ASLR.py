@@ -2,7 +2,7 @@
 # Written by Loslever Terry 
 # University of Liege
 # Contact : terry.loslever@student.uliege.be
-# 2021
+# 2021-2022
 # foo_start = .;
 # ....
 # foo_end = .; is considered to be a region.
@@ -14,7 +14,12 @@ import sys
 from random import SystemRandom
 import argparse
 
-def printSymTable(table):
+def print_sym_table(table):
+	"""
+	In : Takes a table of symbols
+	Prints what the table contains in a format . | . | . \n or . | . \n depending
+	on the col count.
+	"""
 	for element in table:
 		if len(element) == 3:
 			print( element[0] + " | " + element[1]+ " | " + str(element[2]))
@@ -23,6 +28,11 @@ def printSymTable(table):
 
 #Takes 2 string and returns the longest prefix/suffix between them
 def alike(s1,s2):
+	"""
+		In : s1,s2 two strings
+		returns the number of similar letters either in the prefix or in the suffix.
+		Depending on which is the most alike.
+	"""
 	lenS1 = len(s1)
 	lenS2 = len(s2)
 	
@@ -49,8 +59,13 @@ def alike(s1,s2):
 		return lettersPre
 	else :
 		return lettersSuf
-# Tries to pair the xxx = .; elements which share the longuest prefix
-def regionHandler(table,sysRand,libList,debug):
+
+def region_handler(table,sysRand,libList,debug):
+	"""
+	In : Takes a table of symbols from the linker file, a random engine, the list of libraries contained in the executable and a debug boolean.
+	Returns regionTable which is a table recreating regions based on memory pointers set in the linker script.
+	Those pointers are matched based on their names : i.e foo_start = . ; ..... foo_end  = . ; are matched together
+	"""
 	tableLen = len(table)
 	regionTable = []
 	textRegion = None
@@ -86,7 +101,7 @@ def regionHandler(table,sysRand,libList,debug):
 			if (tableSize == 0 or not atEnd) and i <= maxCompatIndex:
 				#Modifies the lib position
 				if table[i][1] == ' _text ' :
-					table[i+1] = libraryRegion(table[i+1],sysRand,libList,debug)
+					table[i+1] = library_region(table[i+1],sysRand,libList,debug)
 				
 				#Tries to drag pre-configured memory layout with it
 				if i-1 >= 0 and table[i-1][0] == "curAdd" and table[i-1][1].startswith('ALIGN'):
@@ -102,9 +117,12 @@ def regionHandler(table,sysRand,libList,debug):
 	
 	return regionTable, table
 
-def libraryRegion(textRegion,sysRand,libList,debug):
-	#Allows to see memory modifications in readelf
-	#Left temporary to readers to test the program
+def library_region(textRegion,sysRand,libListOrigin,debug):
+	"""
+	In : textRegion is a string of the whole text segment, a random engine, the list of libraries contained in the executable and a debug boolean.
+	Returns a modified version of the textregion with padding and shuffled micro libs.
+	"""
+	libList = libListOrigin.copy()
 	if debug == 'True':
 		index = textRegion[1].find("*(.text)")
 		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
@@ -145,19 +163,23 @@ def main(openFile,debug,libList):
 	regionTable = []
 	sysRand = SystemRandom()
 	if debug == 'True':
-		printSymTable(table)
+		print_sym_table(table)
 	
-	regionTable, table = regionHandler(table,sysRand,libList,debug)
+	regionTable, table = region_handler(table,sysRand,libList,debug)
 	#Swap memory regions
-	table = swapRegions(table,regionTable,sysRand)
+	table = swap_regions(table,regionTable,sysRand)
 	if table == None:
 		return -1
 	
-	printBack(openFile,table,debug)
+	print_back(openFile,table,debug)
 	
 	return 0
 
-def swapRegions(table,regionTable,sysRand):
+def swap_regions(table,regionTable,sysRand):
+	"""
+	In : Takes a table of symbols from the linker file, the table of the linker's memory segments and a random engine.
+	Return a swapped version of the linker script's segment according to some rules specified by Qemu.
+	"""
 	regionCopy = regionTable.copy()
 	iterations = len(regionCopy)
 	regionTableIndex = 0
@@ -218,8 +240,11 @@ def swapRegions(table,regionTable,sysRand):
 		return newTable
 	return table
 
-def printBack(openFile,table,debug):
-
+def print_back(openFile,table,debug):
+	"""
+	In : openFile is the linker script to modify, table is the table containing the modified linker script, debug a boolean.
+	Writes back the modified linker script into the file openFile.
+	"""
 	#clears the file and save headers
 	openFile.seek(0)
 	header = openFile.read().split("SECTIONS\n{\n")
@@ -247,9 +272,16 @@ def printBack(openFile,table,debug):
 		else:
 			openFile.write("."+element[0]+":"+element[1]+"\n")
 		previous = element[1]
+		
+		
+	openFile.write(". = 0x150000;.ind ALIGN(0x1000): {. = . + 0x1e000;work_around.o (.text);}")
 	openFile.write("}")
+	
 	return 0
-def extractLibs(string):
+def extract_libs(string):
+	"""
+	In : string
+	"""
 	wordList = []
 	if string != None:
 		wordList = string.split()
@@ -269,15 +301,18 @@ if __name__ == '__main__':
 
 	params , _ = parser.parse_known_args(sys.argv[1:])
 	
+
 	openFile = open(params.path,"r+")
 	if(openFile == None):
-		print("Couldn't open the file, path may be wrong.")
-	else:
-		libList = extractLibs(params.build)
-		if len(libList) == 0:
-			print("[ASLR] {Error} No lib list given to the program abort.",file=sys.stderr)
-		
-		main(openFile,params.debug,libList)
-		openFile.close()
+		print("[ASLR] {Error} Couldn't open the file, path may be wrong.")
+		sys.exit()
+	
+	libList = extract_libs(params.build)
+	if len(libList) == 0:
+		print("[ASLR] {Error} No lib list given to the program abort.",file=sys.stderr)
+		sys.exit()
+
+	main(openFile,params.debug,libList)
+	openFile.close()
 	
 	

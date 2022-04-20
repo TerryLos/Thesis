@@ -51,6 +51,9 @@ static char cmdline[MAX_CMDLINE_SIZE];
 
 struct kvmplat_config _libkvmplat_cfg = { 0 };
 
+#ifdef CONFIG_MEMORY_DEDUP_ASLR 
+__section(".ind")  __align(0x1000)
+#endif
 extern void _libkvmplat_newstack(uintptr_t stack_start, void (*tramp)(void *),
 				 void *arg);
 

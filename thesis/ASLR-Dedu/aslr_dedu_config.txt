@@ -1,0 +1,47 @@
+#Starting adress of the table and left padding for non included lib
+0x150000 0x1000
+#Libs order
+libkvmvirtio
+libkvmpci
+libkvmplat
+lib9pfs
+libdevfs
+libfdt
+libisrlib
+libnolibc
+libposix-libdl
+libposix-process
+libposix-sysinfo
+libposix-user libramfs
+libsyscall_shim
+libubsan
+libuk9p
+libukalloc
+libukallocbbuddy
+libukallocpool
+libukallocregion
+libukargparse
+libukblkdev
+libukboot
+libukbus
+libukcpio
+libukdebug
+libuklibparam
+libuklock
+libukmmap
+libukmpi
+libuknetdev
+libukring
+libukrust
+libuksched
+libukschedcoop
+libuksglist
+libuksignal
+libuksp
+libukswrand
+libuktest
+libuktime
+libuktimeconv
+likbvfscore
+
+#This is a comment

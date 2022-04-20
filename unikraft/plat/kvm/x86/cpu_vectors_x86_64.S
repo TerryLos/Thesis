@@ -64,6 +64,14 @@
 	popq %rdi
 .endm
 
+.macro NOP_FILLING
+	nop
+	nop
+	nop
+	nop
+	nop
+.endm
+
 .macro TRAP_ENTRY trapname, has_ec
 ENTRY(ASM_TRAP_SYM(\trapname))
 	cld
@@ -77,6 +85,8 @@ ENTRY(ASM_TRAP_SYM(\trapname))
 	movq %rsp, %rdi
 	movq __REGS_OFFSETOF_ORIG_RAX(%rsp), %rsi
 	call do_\trapname
+	NOP_FILLING			    /*Nop allowing the ASLR-MEM dedu */
+
 
 	addq $__REGS_PAD_SIZE, %rsp         /* we have some padding */
 	POP_CALLER_SAVE
@@ -95,6 +105,7 @@ ENTRY(cpu_irq_\irqno)
 
 	movq $\irqno, %rdi
 	call _ukplat_irq_handle
+	NOP_FILLING			    /*Nop allowing the ASLR-MEM dedu */
 
 	addq $__REGS_PAD_SIZE, %rsp         /* we have some padding */
 	POP_CALLER_SAVE

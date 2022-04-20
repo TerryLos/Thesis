@@ -4,7 +4,7 @@ source_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lxdialog/util.o :
 
 deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lxdialog/util.o := \
   /usr/include/stdc-predef.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdarg.h \
   lxdialog/dialog.h \
   /usr/include/x86_64-linux-gnu/sys/types.h \
   /usr/include/features.h \
@@ -21,7 +21,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lxdialog/util.o := 
   /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stddef.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/endian.h \
   /usr/include/x86_64-linux-gnu/bits/endian.h \
@@ -64,10 +64,10 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lxdialog/util.o := 
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/string.h \
   /usr/include/strings.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdbool.h \
   /usr/include/curses.h \
   /usr/include/ncurses_dll.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h \
+  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdint.h \
   /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \

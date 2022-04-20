@@ -256,7 +256,13 @@ nopku:
 	popq %rdi
 
 	call _libkvmplat_entry
-
+#ifdef CONFIG_MEMORY_DEDUP_ASLR
+	nop
+	nop
+	nop
+	nop
+	nop
+#endif
 	cli
 	hlt
 END(_libkvmplat_start64)

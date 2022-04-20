@@ -2,7 +2,7 @@
 # Written by Loslever Terry 
 # University of Liege
 # Contact : terry.loslever@student.uliege.be
-# 2021
+# 2021-2022
 
 import re
 
@@ -19,7 +19,11 @@ class Analyzer:
 		self.region = re.compile("\.\s*(.*)\s*:\s*")
 		self.skippedBraces = 0
 	
-	def __handlesLine(self,string):
+	def __handles_line(self,string):
+		"""
+		In : a string which contains a line of a linker script, tokenize the line in a set of elements. 
+		Adds the tokens into the symbol tables.
+		"""
 		#If that's header elements we skip it
 		strLen = len(string)
 		string = re.sub(self.keywords,'',string)
@@ -68,9 +72,12 @@ class Analyzer:
 				case _:
 					continue
 	def analyze(self):
-		
+		"""
+		Feeds the lines of the file to the line handler.
+		Once the file is parsed, return the symbol table.
+		"""
 		lines = self.file.readlines()
 		for line in lines:
-			self.__handlesLine(line)
+			self.__handles_line(line)
 		
 		return self.symbolTable.copy()

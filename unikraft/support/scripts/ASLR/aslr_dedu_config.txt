@@ -1,0 +1,47 @@
+libkvmvirtio : 0x57000
+libkvmpci : 0x58000
+libkvmplat : 0x59000
+
+#Libs from the lib folder
+
+lib9pfs : 0x60000
+libdevfs : 0x61000
+libfdt : 0x62000
+libisrlib : 0x63000
+libnolibc : 0x64000
+libposix-libdl : 0x65000
+libposix-process : 0x66000
+libposix-sysinfo : 0x67000
+libposix-user libramfs : 0x68000
+libsyscall_shim : 0x69000
+libubsan : 0x70000
+libuk9p : 0x71000
+libukalloc : 0x72000
+libukallocbbuddy : 0x73000
+libukallocpool : 0x74000
+libukallocregion : 0x75000
+libukargparse : 0x76000
+libukblkdev : 0x77000
+libukboot : 0x78000
+libukbus : 0x79000
+libukcpio : 0x80000
+libukdebug : 0x81000
+libuklibparam : 0x82000
+libuklock : 0x83000
+libukmmap : 0x84000
+libukmpi : 0x85000
+libuknetdev : 0x86000
+libukring : 0x87000
+libukrust : 0x88000
+libuksched : 0x89000
+libukschedcoop : 0x90000
+libuksglist : 0x91000
+libuksignal : 0x92000
+libuksp : 0x93000
+libukswrand : 0x94000
+libuktest : 0x95000
+libuktime : 0x96000
+libuktimeconv : 0x97000
+likbvfscore : 0x98000
+
+#This is a comment
