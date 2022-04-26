@@ -5,11 +5,36 @@ SECTIONS
 .text :{
   KEEP (*(.data.boot))
   *(.text.boot)
+  . = . + 0x254;
+  . = . + 0x346;
+libnolibc.o (.text);
+  libuktime.o (.text);
+  libukalloc.o (.text);
+  libukdebug.o (.text);
+  libkvmvirtio.o (.text);
+  . = . + 0x317;
+libuktimeconv.o (.text);
+  libukboot.o (.text);
+  . = . + 0x1C6;
+libukallocbbuddy.o (.text);
+  libukargparse.o (.text);
+  libx86_64arch.o (.text);
+  libuksglist.o (.text);
+  libukbus.o (.text);
+  libkvmplat.o (.text);
+  . = . + 0x39A;
+libkvmpci.o (.text);
+  . = . + 0x2E8;
+libukswrand.o (.text);
+  libukboot_main.o (.text);
+  . = . + 0x120;
+apphelloworld.o (.text);
   *(.text)
   *(.text.*)
  }
  _etext = .;
-.plt 0x150000 : {FILL(0xDEADBEEF);. = . + 0x1e000;BYTE(0xAA)}
+. = ALIGN(0x1000);
+.ind 0x150000 : {FILL(0X90);. = . + 0x1e000;BYTE(0X90)}
 . = ALIGN((1 << 12));
  uk_ctortab_start = .;
 .uk_ctortab :{ KEEP(*(SORT_BY_NAME(.uk_ctortab[0-9]))) }
@@ -18,15 +43,32 @@ SECTIONS
 .uk_inittab :{ KEEP(*(SORT_BY_NAME(.uk_inittab[1-6][0-9]))) }
  uk_inittab_end = .;
 . = ALIGN((1 << 12));
- __eh_frame_start = .;
-.eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
- __eh_frame_end = .;
+ _rodata = .;
+.rodata :{
+  *(.rodata)
+  *(.rodata.*)
+ }
+ _erodata = .;
+. = ALIGN((1 << 12));
+ _data = .;
+.data :{
+  *(.data)
+  *(.data.*)
+ }
+ _edata = .;
 . = ALIGN(0x20);
  _tls_start = .;
 .tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
  _etdata = .;
 .tbss :{ *(.tbss) *(.tbss.*) *(.gnu.linkonce.tb.*) . = ALIGN(0x20); }
  _tls_end = . + SIZEOF(.tbss);
+ __eh_frame_hdr_start = .;
+.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
+ __eh_frame_hdr_end = .;
+. = ALIGN((1 << 12));
+ __eh_frame_start = .;
+.eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
+ __eh_frame_end = .;
 . = ALIGN(0x8);
  _ctors = .;
 .preinit_array :{
@@ -42,24 +84,6 @@ SECTIONS
   PROVIDE_HIDDEN (__init_array_end = .);
  }
  _ectors = .;
-. = ALIGN((1 << 12));
-. = ALIGN(0x1000);
- _rodata = .;
-.rodata :{
-  *(.rodata)
-  *(.rodata.*)
- }
- _erodata = .;
-. = ALIGN((1 << 12));
- _data = .;
-.data :{
-  *(.data)
-  *(.data.*)
- }
- _edata = .;
- __eh_frame_hdr_start = .;
-.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
- __eh_frame_hdr_end = .;
 . = ALIGN((1 << 12));
  __bss_start = .;
 .bss :{

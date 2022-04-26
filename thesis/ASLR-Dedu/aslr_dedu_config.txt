@@ -1,5 +1,5 @@
 #Starting adress of the table and left padding for non included lib
-0x150000 0x1000
+0x150000 0x500
 #Libs order
 libkvmvirtio
 libkvmpci

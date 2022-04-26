@@ -271,7 +271,7 @@ def print_back(openFile,table,debug):
 			else:
 				openFile.write(element[1]+"= .;\n")
 			if element[1] == " _etext ":
-				openFile.write(". = ALIGN((1 << 12));\n.ind 0x150000 : {*(.ind)\nFILL(0xDEADBEEF);. = . + 0x1e000;BYTE(0xAA)}\n")
+				openFile.write(". = ALIGN(0x1000);\n.ind 0x150000 : {FILL(0X90);. = . + 0x1e000;BYTE(0X90)}\n")
 		else:
 			openFile.write("."+element[0]+":"+element[1]+"\n")
 		previous = element[1]

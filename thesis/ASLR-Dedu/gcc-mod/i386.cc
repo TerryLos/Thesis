@@ -16541,14 +16541,14 @@ ix86_output_call_insn (rtx_insn *insn, rtx call_op)
 	    }
 	}
       else
-	xasm = "%!call\t%P0\nnop\nnop\nnop\nnop\nnop";
+	xasm = "%!call\t%P0\nnop\nnop\nnop";
     }
   else
     {
       if (output_indirect_p)
 	xasm = "%0";
       else
-	xasm = "%!call\t%A0\nnop\nnop\nnop\nnop\nnop";
+	xasm = "%!call\t%A0\nnop\nnop\nnop";
     }
 
   if (output_indirect_p && !direct_p)
