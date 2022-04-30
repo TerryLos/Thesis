@@ -1,13 +1,12 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Unikraft/0.7.0~0cacb10-custom Configuration
+ * Unikraft/0.7.0~4b30a89-custom Configuration
  *
  */
 #define CONFIG_LIBNOLIBC_UKDEBUG_ASSERT 1
 #define CONFIG_KVM_KERNEL_SERIAL_CONSOLE 1
 #define CONFIG_LIBUKSWRAND_CHACHA 1
-#define CONFIG_MEMORY_DEDUP_ASLR 1
 #define CONFIG_UK_DEFNAME "app-helloworld"
 #define CONFIG_LIBUKDEBUG_ENABLE_ASSERT 1
 #define CONFIG_LIBUKDEBUG_PRINT_TIME 1
@@ -19,7 +18,7 @@
 #define CONFIG_APPHELLOWORLD_DEPENDENCIES 1
 #define CONFIG_LIBUKTIME 1
 #define CONFIG_LIBNOLIBC 1
-#define CONFIG_UK_FULLVERSION "0.7.0~0cacb10-custom"
+#define CONFIG_UK_FULLVERSION "0.7.0~4b30a89-custom"
 #define CONFIG_UK_NAME "app-helloworld"
 #define CONFIG_LIBUKBOOT 1
 #define CONFIG_LIBUKALLOCBBUDDY 1

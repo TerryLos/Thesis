@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Written by Loslever Terry 
 # University of Liege
 # Contact : terry.loslever@student.uliege.be
@@ -49,28 +48,27 @@ class Analyzer:
 				self.symbolTable.append(["curAdd",secSplit[0]])
 				self.buffer = ''
 			
-			match letter:
-				case '{':
-					if(self.skippedBraces == 0):
-						self.braceCounter += 1
-					elif len(self.buffer)  == 1:
-						letter = ''
-				case '}':
-					self.braceCounter -= 1
-					#Means that we skipped an opening brace before
-					if(self.braceCounter < 0):
-						self.skippedBraces -= 1
-						self.braceCounter += 1
-					#Flushes the section in the table
-					if( self.braceCounter == 0):
-						secSplit = re.split(self.region, self.buffer)[1:]
+			if letter == '{':
+				if(self.skippedBraces == 0):
+					self.braceCounter += 1
+				elif len(self.buffer)  == 1:
+					letter = ''
+			elif letter == '}':
+				self.braceCounter -= 1
+				#Means that we skipped an opening brace before
+				if(self.braceCounter < 0):
+					self.skippedBraces -= 1
+					self.braceCounter += 1
+				#Flushes the section in the table
+				if( self.braceCounter == 0):
+					secSplit = re.split(self.region, self.buffer)[1:]
 
-						if len(secSplit) > 0:
-							self.symbolTable.append([secSplit[0],secSplit[1]])
-							self.buffer = ''
-				#Wildcard
-				case _:
-					continue
+					if len(secSplit) > 0:
+						self.symbolTable.append([secSplit[0],secSplit[1]])
+						self.buffer = ''
+			#Wildcard
+			else:
+				continue
 	def analyze(self):
 		"""
 		Feeds the lines of the file to the line handler.

@@ -156,7 +156,7 @@ def library_region(textRegion,sysRand,libListOrigin,debug):
 		textRegion[1] = modfiedRegion+textRegion[1][index-2:]
 		return textRegion
 
-def main(openFile,debug,libList):
+def main(openFile,output,debug,libList):
 	
 	analyzer = Analyzer(openFile)
 	table = analyzer.analyze()
@@ -168,10 +168,8 @@ def main(openFile,debug,libList):
 	regionTable, table = region_handler(table,sysRand,libList,debug)
 	#Swap memory regions
 	table = swap_regions(table,regionTable,sysRand)
-	if table == None:
-		return -1
-	
-	print_back(openFile,table,debug)
+		
+	print_back(openFile,output,table,debug)
 	
 	return 0
 
@@ -199,7 +197,7 @@ def swap_regions(table,regionTable,sysRand):
 	
 	if len(toDel) == 0:
 		print("[ASLR] {Error} Missing important memory regions : _text, uk_inittab_start, uk_ctortab_start",file=sys.stderr)
-		return None
+		sys.exit()
 	
 	#if there's only one element there's no point swapping it.
 	if iterations > 0:
@@ -240,43 +238,51 @@ def swap_regions(table,regionTable,sysRand):
 		return newTable
 	return table
 
-def print_back(openFile,table,debug):
+def print_back(openFile,output,table,debug):
 	"""
-	In : openFile is the linker script to modify, table is the table containing the modified linker script, debug a boolean.
+	In : openFile is the linker script to modify,output the file in which the programs writes, 
+	table is the table containing the modified linker script, debug a boolean.
 	Writes back the modified linker script into the file openFile.
 	"""
+	writeFile = open(output,"w")
+	if not writeFile:
+		print("[ASLR] {Error} Can't open the output file.",file=sys.stderr)
+		sys.exit()
+	
 	#clears the file and save headers
 	openFile.seek(0)
 	header = openFile.read().split("SECTIONS\n{\n")
 	openFile.seek(0)
-	openFile.truncate()
+	
 	
 	#Writes back
 	previous = ""
 	if debug:
 		#Doesn't set ENTRY in debug mode otherwise causes double import
-		openFile.write("SECTIONS\n{\n")
+		writeFile.write("SECTIONS\n{\n")
 	else :
-		openFile.write(header[0]+"SECTIONS\n{\n")
+		writeFile.write(header[0]+"SECTIONS\n{\n")
 	
 	for element in table:
+		
 		if element[0] == "curAdd":
 			#Avoid having ALIGN cascade
 			if not (previous.startswith('ALIGN') and element[1].startswith('ALIGN')):
-				openFile.write(". = "+element[1]+";\n")
+				writeFile.write(". = "+element[1]+";\n")
 		elif element[0] == "assign":
 			if len(element) == 3:
-				openFile.write(element[1]+"= ."+element[2]+";\n")
+				writeFile.write(element[1]+"= ."+element[2]+";\n")
 			else:
-				openFile.write(element[1]+"= .;\n")
+				writeFile.write(element[1]+"= .;\n")
+			if element[1] == " _etext ":
+				writeFile.write(". = ALIGN(0x1000);\n.ind 0x150000 : {FILL(0X90);. = . + 0x1e000;BYTE(0X90)}\n")
 		else:
-			openFile.write("."+element[0]+":"+element[1]+"\n")
+			writeFile.write("."+element[0]+":"+element[1]+"\n")
 		previous = element[1]
 		
 		
-	openFile.write(". = 0x150000;.ind ALIGN(0x1000): {. = . + 0x1e000;work_around.o (.text);}")
-	openFile.write("}")
-	
+	writeFile.write("}")
+	writeFile.close()
 	return 0
 def extract_libs(string):
 	"""
@@ -294,13 +300,14 @@ if __name__ == '__main__':
 
 	parser.add_argument('--file_path', dest='path', default='./', help="Path leading to the file.")
 
-	parser.add_argument('--build_dir', dest='build', default='./', help="Path leading to the build file.")	
+	parser.add_argument('--output_path', dest='output', default='./', help="Path and name of the file to create.")	
+	
+	parser.add_argument('--lib_list', dest='build', default='./', help="All the libs in the ELF file.")	
 	
 	parser.add_argument('--debug', dest='debug', default='False', 
 		help="Prints on the standard input debug informations.")
 
 	params , _ = parser.parse_known_args(sys.argv[1:])
-	
 
 	openFile = open(params.path,"r+")
 	if(openFile == None):
@@ -312,7 +319,7 @@ if __name__ == '__main__':
 		print("[ASLR] {Error} No lib list given to the program abort.",file=sys.stderr)
 		sys.exit()
 
-	main(openFile,params.debug,libList)
+	main(openFile,params.output,params.debug,libList)
 	openFile.close()
 	
 	

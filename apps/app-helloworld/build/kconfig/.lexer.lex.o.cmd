@@ -12,8 +12,8 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stddef.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdarg.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stddef.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdarg.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
   /usr/include/x86_64-linux-gnu/bits/timesize.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
@@ -65,14 +65,14 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := \
   /usr/include/alloca.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/inttypes.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdint.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdint.h \
   /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
   /usr/include/assert.h \
   /usr/include/glob.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/limits.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/syslimits.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include-fixed/limits.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include-fixed/syslimits.h \
   /usr/include/limits.h \
   /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
   /usr/include/x86_64-linux-gnu/bits/local_lim.h \
@@ -89,7 +89,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/lexer.lex.o := \
     $(wildcard include/config/prefix.h) \
   expr.h \
   list.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdbool.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdbool.h \
   lkc_proto.h \
   /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/parser.tab.h \
 

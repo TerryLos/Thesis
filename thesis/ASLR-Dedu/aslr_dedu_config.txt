@@ -1,5 +1,5 @@
 #Starting adress of the table and left padding for non included lib
-0x150000 0x500
+0x150000 0x800
 #Libs order
 libkvmvirtio
 libkvmpci
@@ -12,7 +12,8 @@ libnolibc
 libposix-libdl
 libposix-process
 libposix-sysinfo
-libposix-user libramfs
+libposix-user 
+libramfs
 libsyscall_shim
 libubsan
 libuk9p

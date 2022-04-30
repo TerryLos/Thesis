@@ -21,7 +21,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o := \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stddef.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stddef.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
@@ -58,7 +58,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o := \
   expr.h \
   /usr/include/assert.h \
   /usr/include/stdio.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdarg.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdarg.h \
   /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
@@ -67,7 +67,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o := \
   /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   list.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdbool.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdbool.h \
   lkc_proto.h \
 
 /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/symbol.o)

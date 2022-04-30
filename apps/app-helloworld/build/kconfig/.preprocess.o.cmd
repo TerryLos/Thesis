@@ -19,11 +19,11 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/preprocess.o := \
   /usr/include/x86_64-linux-gnu/bits/endianness.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdarg.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdbool.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdarg.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdbool.h \
   /usr/include/stdio.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stddef.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stddef.h \
   /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \

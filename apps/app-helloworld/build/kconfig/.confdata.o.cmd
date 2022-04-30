@@ -16,7 +16,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := \
   /usr/include/x86_64-linux-gnu/bits/timesize.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/time64.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stddef.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stddef.h \
   /usr/include/x86_64-linux-gnu/bits/mman.h \
   /usr/include/x86_64-linux-gnu/bits/mman-map-flags-generic.h \
   /usr/include/x86_64-linux-gnu/bits/mman-linux.h \
@@ -40,15 +40,15 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := \
   /usr/include/fcntl.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/limits.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/syslimits.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include-fixed/limits.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include-fixed/syslimits.h \
   /usr/include/limits.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
   /usr/include/x86_64-linux-gnu/bits/local_lim.h \
   /usr/include/linux/limits.h \
   /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdarg.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdarg.h \
   /usr/include/stdio.h \
   /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
@@ -100,7 +100,7 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o := \
   expr.h \
   /usr/include/assert.h \
   list.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdbool.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdbool.h \
   lkc_proto.h \
 
 /home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o: $(deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/confdata.o)

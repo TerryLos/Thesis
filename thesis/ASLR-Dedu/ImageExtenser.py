@@ -6,42 +6,85 @@ from capstone import *
 import lief
 import argparse
 import sys
+import subprocess
+import re
+
+pointerRex = re.compile("\[.*?\]")
 
 class Image:
 	def __init__(self,elfFile,libList):
 		self.elfFile = elfFile
 		self.libList = libList
+		self.libInInd = {}
 		#Maps the libs with their functions/symbols (name)
 		self.funcLibMap = {}
-		self.varLibMap = {}
 		#Maps the function position to its new address and func object
 		self.functionPos = {}
-		self.varPos = {}
 		#Maps a name to the function object
 		self.elfFuncDict = {}
-		self.elfVarDict = {}
 		#Only needs to disass the .text section
+		
 		self.textSec = self.elfFile.get_section(".text")
 		if self.textSec is None :
 			print("[Error] - Couldn't find the .text section")
 			return None
+	def _find_lib(self,addr):
+		for libs in self.libList:
+			if len(self.funcLibMap[libs])> 0 and addr >= self.funcLibMap[libs][0][2] \
+				and addr <= self.funcLibMap[libs][-1][2]:
+				
+				return libs,(self.funcLibMap[libs][0][2],self.funcLibMap[libs][-1][2])
+		return None , None
+	
+	def _handle_move(self,operand):
+		after = operand.split(", ")
+		translatedOp = []
+		for op in after:
+			tmp = str_to_hex(op)
+			if tmp == None:
+				split = re.search(pointerRex,op)
+				if split:
+					translatedOp.append(str_to_hex(split.group(0)[1:-1]))
+				else:
+					translatedOp.append(op)
+			else:
+				translatedOp.append(tmp)
+		return translatedOp
 	
 	def correct_calls(self,disass):
+		stackInit = self.elfFile.get_static_symbol("bootstack")
+		if not stackInit:
+			print("[Error] - Couldn't find the bootstack symbol")
+			sys.exit()
 		instList = disass.disasm(self.textSec.content.tobytes(),self.textSec.virtual_address)
 		maxPos = self.textSec.virtual_address+self.textSec.size
+		textRange = [self.textSec.virtual_address,maxPos]
+		bssRange = self.elfFile.get_section(".bss")
+		
+		if bssRange is None :
+			print("[Error] - Couldn't find the .bss section")
+			bssRange = [0,0]
+		else:
+			bssRange = [bssRange.virtual_address,bssRange.virtual_address+bssRange.size]
+		
+		dataRange = self.elfFile.get_section(".data")
+		if dataRange is None :
+			print("[Error] - Couldn't find the .data section")
+			dataRange = [0,0]
+		else:
+			dataRange = [dataRange.virtual_address,dataRange.virtual_address+dataRange.size]
+		
 		#Generate new absolute calls
 		for inst in instList:
+			_ , rangeLib = self._find_lib(inst.address)
 			patch = b'\xc7\xc0'
-			#If its a hexadecimal operand
-			try:
-				funcInfo = self.functionPos.get(int(inst.op_str,16))
-			#If it's a register
-			except ValueError:
-				funcInfo = None
-				#TODO
+	
+			#Get back the same function from elf
+			funcInfo = self.functionPos.get(str_to_hex(inst.op_str))
+			#Checks if the operands are refering to symbols
+			varInfo = self._handle_move(inst.op_str)
 			
 			if inst.mnemonic == "call" and funcInfo is not None:
-			
 				relAddress = funcInfo[1]
 				if relAddress != None:
 					patch += relAddress.to_bytes(4,'little') + b'\xff\xd0'
@@ -49,13 +92,51 @@ class Image:
 				else:
 					print("[Info] - ",hex(inst.address),funcInfo[0].name," \
 						Couldn't be relocated, it's missing in the indirection table")
-			"""if inst.mnemonic == "jump" and funcInfo is not None:
-					print("[Jump] detected at ",hex(inst.address)," towards ",funcInfo[0].name)
-			if inst.mnemonic == "lea":
+			
+			if jump_mnemonic(inst.mnemonic) and (funcInfo is not None and rangeLib is not None ) \
+				and (funcInfo[0].address < rangeLib[0] or funcInfo[0].address > rangeLib[1]):
+					print("[Warn] Jump left unpatched ",hex(inst.address)," to ",funcInfo[0].name,
+					"out of its own lib")
+			
+			if inst.mnemonic == "lea" and funcInfo is not None:
 					print("[Lead] detected at ",hex(inst.address)," ",inst.op_str)
-			if inst.mnemonic == "mov" and funcInfo is not None:
-					print("[Mov] detected at ",hex(inst.address)," with ",funcInfo[0].name)
-		"""
+			
+			if inst.mnemonic == "mov":
+				tmp  , _ =self._find_lib(inst.address)
+				for index,var in enumerate(varInfo):
+					if type(var) is int and (var in range(bssRange[0],bssRange[1]) \
+						or var in range(dataRange[0],dataRange[1]) or var in range(textRange[0],textRange[1])): 
+						#Patches the address by a jump
+						self._patch_memory_access(inst,varInfo,stackInit)
+	
+	def _patch_memory_access(self,inst,varInfo,stackInit):
+	
+		movSize = len(inst.bytes)
+		if movSize <= 5:
+			return
+
+		#checks its lib
+		lib , _ = self._find_lib(inst.address)
+		#Gets its indirection table
+		ind = self.libInInd.get(lib)
+		
+		if ind and (varInfo[0] != stackInit.value and varInfo[1] != stackInit.value):
+			#Adds it in the .ind table at its lib offset
+			#Jumps towards the table
+			print("mov",hex(ind[1]),inst.op_str,hex(inst.address))
+			fill = b'\x68'+ind[1].to_bytes(4,'little')+b'\xc3'
+			if movSize > 6:
+				fill += b'\x90'*(movSize-6)
+			self.elfFile.patch_address(inst.address,bytearray(fill))
+			#Fills the table with the instruction and jumps back
+			tableCode = inst.bytes
+			#+1 because of the return instruction c3
+			tableCode += b'\xe9'+compute_offset(inst.address-(ind[1]+movSize-1)).to_bytes(4,'little')
+			self.elfFile.patch_address(ind[1],bytearray(tableCode))
+			ind[1] += movSize + 5
+			
+		elif not ind:
+			print("[Error] - Couldn't patch mov/lea at address",inst.address," no lib found.")
 	def add_indirection_table(self,conf):
 		addr = conf.pop(0)
 		padding = int(addr[1],16)
@@ -64,27 +145,38 @@ class Image:
 			print("[Error] - indirection table not created by the linker script.")
 			sys.exit()
 		
+		
 		libSec.type = self.textSec.type #same type as .text section
 		byteCount = 0
 		code =  b''
 		for lib in conf:
+			#Regsiter the lib indirection's table position
+			#.ind.lib start address
+			self.libInInd[lib] = [int(addr[0],16)+byteCount,0,int(addr[0],16)+byteCount+padding]
+			
 			if lib not in self.libList:
 				#Padding
 				code += b'\x90' * padding
 				byteCount += padding
 			else:
+				#Adds indirection for functions
 				for func in self.funcLibMap.get(lib):
 					writeFunc = self.elfFuncDict.get(func[0])
 					if writeFunc is not None:
 						self.functionPos.get(writeFunc.address)[1] = libSec.virtual_address+byteCount
 						relAddress = writeFunc.address-(libSec.virtual_address+byteCount)-5
-						if relAddress <= 0 :
-							relAddress = negative_offset(relAddress)
+						relAddress = compute_offset(relAddress)
 						code += b'\xe9'+relAddress.to_bytes(4,'little') #relative jump to the function
 						
 					else:
 						code += b'\x90\x90\x90\x90\x90'
 					byteCount += 5
+					
+			self.libInInd[lib][1] = int(addr[0],16)+byteCount
+			#.ind.lib last instruction address
+			code += b'\x90'*(self.libInInd[lib][2] - (int(addr[0],16)+byteCount))
+			byteCount += self.libInInd[lib][2] - (int(addr[0],16)+byteCount)
+			
 		print("[Info] - Created .ind segment from "+hex(libSec.virtual_address)+" : "+hex(libSec.virtual_address+byteCount)+".")
 		
 		if  libSec.virtual_address <  self.textSec.virtual_address and libSec.virtual_address+byteCount >= self.textSec.virtual_address:
@@ -99,12 +191,8 @@ class Image:
 		for function in self.elfFile.functions:
 			self.elfFuncDict[function.name] = function
 	
-		for symbol in self.elfFile.symbols:
-			if symbol.is_variable:
-				self.elfVarDict[symbol.name] = symbol
-		
-		if len(self.elfFuncDict) == 0 or len(self.elfVarDict) == 0:
-			print("[Error] - No function or no static symbols found in the binary.")
+		if len(self.elfFuncDict) == 0 :
+			print("[Error] - No function found in the binary.")
 			sys.exit()
 		
 		for libName in self.libList:
@@ -115,53 +203,66 @@ class Image:
 				continue
 				
 			self.funcLibMap[libName] = []
-			self.varLibMap[libName] = []
 			
 			objFile = lief.ELF.parse(lib)
 			
 			funcNames = objFile.functions
-			varNames = objFile.symbols
 			
 			#Maps the function from the ELF with its library and its current address
 			#If the element is not present in the ELF, we'll pad it later
 			for name in funcNames:
 				funct = self.elfFuncDict.get(name.name)
-				self.funcLibMap[libName].append((name.name,name.address))
 				if funct is not None:
+					self.funcLibMap[libName].append((name.name,name.address,funct.value))
 					#None is the destination address that should be further filled.
 					self.functionPos[funct.address] = [funct,None]
 				else:
+					self.funcLibMap[libName].append((name.name,name.address,None))
 					print("Function "+ name.name +" from "+libName+" is never used in ELF")
-			
-			#Maps the variables from the ELF with its library and its current address
-			#If the element is not present in the ELF, we'll pad it later
-			for name in varNames:
-				if name.is_variable:
-					var = self.elfVarDict.get(name.name)
-					self.varLibMap[libName].append((name.name,name.value))
-					if var is not None:
-						#None is the destination address that should be further filled.
-						self.varPos[var.value] = [var,None]
-					else:
-						print("Symbol "+ name.name +" from "+libName+" is never used in ELF")
 
 	def print_info(self):
 		for libs in self.libList:
 			print(libs+" :")
 			for function in self.funcLibMap[libs]:
-				print("\t "+" fct :"+function[0] +" at address "+str(hex(function[1]))+ " in lib")
-			for var in self.varLibMap[libs]:
-				print("\t "+" sym :"+var[0] +" at address "+str(hex(var[1]))+ " in lib")
+				print("\t "+" fct :"+function[0] +" at address "+str(hex(function[1]))+ " in lib "+\
+					str(hex(function[2]))+ " in elf.")
 
-
+def jump_mnemonic(mnemo):
+	if mnemo == "jmp" or mnemo == "je" or mnemo == "jne" or mnemo == "jg" or mnemo == "jge" or mnemo == "ja" \
+		or mnemo == "jae" or mnemo == "jl" or mnemo == "jle" or mnemo == "jb" or mnemo == "jo" \
+		or mnemo == "jno" or mnemo == "jz" or mnemo == "jns" or mnemo == "jjcxz" or mnemo == "jecxz" \
+		or mnemo == "jrcxz":
+		return True
+	return False
 def symbol_types(symType):
 	if lief.ELF.SYMBOL_TYPES(0) == symType or lief.ELF.SYMBOL_TYPES(5) == symType or \
 		lief.ELF.SYMBOL_TYPES(1) == symType or lief.ELF.SYMBOL_TYPES(6) == symType:
 		return True
 	return False
 	
-def negative_offset(offset):
-	return (offset & (2**32-1))
+def compute_offset(offset):
+	if offset <= 0 :
+		return (offset & (2**32-1))
+	else:
+		return offset
+
+def get_assembly(name,operands):
+	fileS = open("tmp_assembly.S",'w')
+	if fileS is None:
+		print("[Error] couldn't generate patched assembly")
+		sys.exit()
+	
+	fileS.write(".intel_syntax noprefix\n"+name+" "+operands[0]+","+operands[1]+"\n")
+	fileS.close()
+	
+	subprocess.call("as  --64 -o tmp_assembly tmp_assembly.S ",shell=True, \
+		stdout=subprocess.DEVNULL,stderr=subprocess.STDOUT)
+	
+	sec = lief.ELF.parse("tmp_assembly")
+	if sec is None :
+		return None
+	content = sec.get_section(".text").content
+	return content.tobytes()
 
 def check_file(elfFile):
 
@@ -174,6 +275,15 @@ def check_file(elfFile):
 			print("[ERROR] - Entered file is not an ELF file.")
 	return False
 
+def str_to_hex(op):
+	try:
+		#It's an address
+		tmp = int(op,16)
+	except ValueError:
+		#it's a register
+		tmp = None
+	
+	return tmp
 def extract_libs(string):
 	"""
 	In : string
@@ -187,6 +297,9 @@ def extract_libs(string):
 		if not libs.startswith("lib"):
 			continue
 		else:
+			if(type(libs) is list):
+				print("[ERROR] - The aslr-dediplication file is not in a proper format.")
+				sys.exit()
 			returnList.append(libs)
 		
 	return returnList
@@ -242,7 +355,7 @@ if __name__ == '__main__':
 	functDic = img.map_symbols_with_library(params.build)
 	img.add_indirection_table(conf)
 	img.correct_calls(disass)
-	#img.print_info()
+	img.print_info()
 	#Write back the modifications
 	elfFile.write(params.path+"_modified")
 	

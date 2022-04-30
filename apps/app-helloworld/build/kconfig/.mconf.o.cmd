@@ -31,8 +31,8 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/mconf.o := \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
   /usr/include/x86_64-linux-gnu/bits/stat.h \
   /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/limits.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include-fixed/syslimits.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include-fixed/limits.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include-fixed/syslimits.h \
   /usr/include/limits.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
@@ -41,9 +41,9 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/mconf.o := \
   /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdarg.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdarg.h \
   /usr/include/stdlib.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stddef.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stddef.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
@@ -111,12 +111,12 @@ deps_/home/terrylos/Thesis/apps/app-helloworld/build/kconfig/mconf.o := \
   /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   list.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdbool.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdbool.h \
   lkc_proto.h \
   lxdialog/dialog.h \
   /usr/include/curses.h \
   /usr/include/ncurses_dll.h \
-  /usr/bin/gcc8.4.0/lib/gcc/x86_64-pc-linux-gnu/8.4.0/include/stdint.h \
+  /usr/local/gcc-11.2/lib/gcc/x86_64-linux-gnu/12.0.1/include/stdint.h \
   /usr/include/stdint.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
