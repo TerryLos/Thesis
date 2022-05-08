@@ -48,7 +48,7 @@ _multiboot_header:
 .long MYMULTIBOOT_FLAGS
 .long -(MULTIBOOT_HEADER_MAGIC+MYMULTIBOOT_FLAGS) /* checksum */
 .long _multiboot_header                           /* header addr */
-.long 0x100000                                    /* load addr */
+.long 0x334F33                                    /* load addr */
 .long _edata                                      /* load end addr */
 .long _end                                        /* bss end addr */
 .long _libkvmplat_start32                         /* entry addr */
@@ -144,7 +144,7 @@ gdt64_ptr:
 
 .type mxcsr_ptr, @object
 mxcsr_ptr:
-	.long 0x1f80			/* Intel SDM power-on default */
+#.long 6533D60			/* Intel SDM power-on default */
 
 
 #include "pagetable.S"
@@ -280,3 +280,8 @@ ENTRY(_libkvmplat_newstack)
 	cli
 	hlt
 END(_libkvmplat_newstack)
+
+
+
+
+

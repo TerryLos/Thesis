@@ -1,38 +1,49 @@
 SECTIONS
 {
-. = 0x100000;
+. = 0x2D652F;
  _text = .;
 .text :{
   KEEP (*(.data.boot))
   *(.text.boot)
-  . = . + 0x338;
-  libukswrand.o (.text);
-  . = . + 0x36A;
-libuktimeconv.o (.text);
-  libuksglist.o (.text);
-  . = . + 0x2BF;
-libukalloc.o (.text);
-  libukboot_main.o (.text);
-  . = . + 0x48;
+  . = . + 0x66F0;
+  . = . + 0xBB4E;
+libkvmpci.o (.text);
+  . = . + 0x409;
+libukallocbbuddy.o (.text);
+  . = . + 0x42FB;
 libuktime.o (.text);
-  apphelloworld.o (.text);
-  libx86_64arch.o (.text);
-  libukdebug.o (.text);
-  libkvmplat.o (.text);
-  libkvmpci.o (.text);
-  libkvmvirtio.o (.text);
-  libukargparse.o (.text);
-  libukboot.o (.text);
-  libukallocbbuddy.o (.text);
-  libnolibc.o (.text);
-  . = . + 0x25C;
+  . = . + 0x9A60;
+libuktimeconv.o (.text);
+  . = . + 0xB942;
+libukargparse.o (.text);
+  . = . + 0x8823;
+libkvmvirtio.o (.text);
+  . = . + 0x79E6;
+apphelloworld.o (.text);
+  . = . + 0x48C0;
+libukdebug.o (.text);
+  . = . + 0x48DD;
+libukswrand.o (.text);
+  . = . + 0x3871;
+libuksglist.o (.text);
+  . = . + 0xDA91;
+libx86_64arch.o (.text);
+  . = . + 0x8ABB;
 libukbus.o (.text);
+  . = . + 0xF1CF;
+libukboot.o (.text);
+  . = . + 0x4830;
+libukboot_main.o (.text);
+  . = . + 0xA3AC;
+libkvmplat.o (.text);
+  . = . + 0xBB8E;
+libnolibc.o (.text);
+  . = . + 0xB954;
+libukalloc.o (.text);
   *(.text)
   *(.text.*)
  }
  _etext = .;
-. = ALIGN(0x1000);
-.ind 0x150000 : {FILL(0X90);. = . + 0x1e000;BYTE(0X90)}
 . = ALIGN((1 << 12));
  uk_ctortab_start = .;
 .uk_ctortab :{ KEEP(*(SORT_BY_NAME(.uk_ctortab[0-9]))) }
@@ -41,15 +52,12 @@ libukbus.o (.text);
 .uk_inittab :{ KEEP(*(SORT_BY_NAME(.uk_inittab[1-6][0-9]))) }
  uk_inittab_end = .;
 . = ALIGN((1 << 12));
- __eh_frame_start = .;
-.eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
- __eh_frame_end = .;
-. = ALIGN(0x20);
- _tls_start = .;
-.tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
- _etdata = .;
-.tbss :{ *(.tbss) *(.tbss.*) *(.gnu.linkonce.tb.*) . = ALIGN(0x20); }
- _tls_end = . + SIZEOF(.tbss);
+ _rodata = .;
+.rodata :{
+  *(.rodata)
+  *(.rodata.*)
+ }
+ _erodata = .;
 . = ALIGN(0x8);
  _ctors = .;
 .preinit_array :{
@@ -65,16 +73,19 @@ libukbus.o (.text);
   PROVIDE_HIDDEN (__init_array_end = .);
  }
  _ectors = .;
+. = ALIGN((1 << 12));
+ __eh_frame_start = .;
+.eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
+ __eh_frame_end = .;
  __eh_frame_hdr_start = .;
 .eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
  __eh_frame_hdr_end = .;
-. = ALIGN((1 << 12));
- _rodata = .;
-.rodata :{
-  *(.rodata)
-  *(.rodata.*)
- }
- _erodata = .;
+. = ALIGN(0x20);
+ _tls_start = .;
+.tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
+ _etdata = .;
+.tbss :{ *(.tbss) *(.tbss.*) *(.gnu.linkonce.tb.*) . = ALIGN(0x20); }
+ _tls_end = . + SIZEOF(.tbss);
 . = ALIGN((1 << 12));
  _data = .;
 .data :{

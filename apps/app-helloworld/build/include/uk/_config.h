@@ -1,7 +1,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Unikraft/0.7.0~4b30a89-custom Configuration
+ * Unikraft/0.7.0~f267a5a-custom Configuration
  *
  */
 #define CONFIG_LIBNOLIBC_UKDEBUG_ASSERT 1
@@ -18,7 +18,7 @@
 #define CONFIG_APPHELLOWORLD_DEPENDENCIES 1
 #define CONFIG_LIBUKTIME 1
 #define CONFIG_LIBNOLIBC 1
-#define CONFIG_UK_FULLVERSION "0.7.0~4b30a89-custom"
+#define CONFIG_UK_FULLVERSION "0.7.0~f267a5a-custom"
 #define CONFIG_UK_NAME "app-helloworld"
 #define CONFIG_LIBUKBOOT 1
 #define CONFIG_LIBUKALLOCBBUDDY 1
@@ -56,5 +56,4 @@
 #define CONFIG_CROSS_COMPILE ""
 #define CONFIG_LIBUKSWRAND_INITIALSEED_TIME 1
 #define CONFIG_LLVM_TARGET_ARCH ""
-#define CONFIG_RUNTIME_ASLR 1
 #define CONFIG_ARCH_X86_64 1

@@ -1,0 +1,3 @@
+$(eval $(call addlib,appentropy))
+
+APPENTROPY_SRCS-y += $(APPENTROPY_BASE)/main.c

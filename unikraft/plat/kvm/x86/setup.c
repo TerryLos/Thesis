@@ -43,7 +43,7 @@
 #include <x86/acpi/acpi.h>
 #include <uk/swrand.h>
 
-#define PLATFORM_MEM_START 0x100000
+#define PLATFORM_MEM_START 0X100000
 #define PLATFORM_MAX_MEM_ADDR 0x40000000
 
 #define MAX_CMDLINE_SIZE 8192
@@ -110,7 +110,7 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	 */
 	if ((max_addr - m->addr) < __STACK_SIZE)
 		UK_CRASH("Not enough memory to allocate boot stack\n");
-	
+
 #ifdef CONFIG_RUNTIME_ASLR
 	int ASLR_offset;
 	int divisor = 1;
@@ -123,7 +123,7 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	_libkvmplat_cfg.bstack.end = ALIGN_UP(max_addr - ASLR_offset, __PAGE_SIZE);
 	_libkvmplat_cfg.bstack.start   = _libkvmplat_cfg.bstack.end-__STACK_SIZE;
 	_libkvmplat_cfg.bstack.len   = __STACK_SIZE;
-
+	
 	uk_pr_info(" ASLR - Stack : s: %p e: %p\n",_libkvmplat_cfg.bstack.start,
 	_libkvmplat_cfg.bstack.end);
 	
@@ -158,6 +158,7 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	_libkvmplat_cfg.bstack.start = _libkvmplat_cfg.heap.end;
 	_libkvmplat_cfg.bstack.end   = max_addr;
 	_libkvmplat_cfg.bstack.len   = __STACK_SIZE;
+	uk_pr_info(" ASLR - Heap : s: %d e: %d \n",__STACK_SIZE,_libkvmplat_cfg.heap.len);
 #endif
 }
 

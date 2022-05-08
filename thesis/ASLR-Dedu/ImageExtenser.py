@@ -43,8 +43,12 @@ class Image:
 			tmp = str_to_hex(op)
 			if tmp == None:
 				split = re.search(pointerRex,op)
+				inside = None
 				if split:
-					translatedOp.append(str_to_hex(split.group(0)[1:-1]))
+					inside = str_to_hex(split.group(0)[1:-1])
+				
+				if inside:
+					translatedOp.append(inside)
 				else:
 					translatedOp.append(op)
 			else:
@@ -59,13 +63,13 @@ class Image:
 		instList = disass.disasm(self.textSec.content.tobytes(),self.textSec.virtual_address)
 		maxPos = self.textSec.virtual_address+self.textSec.size
 		textRange = [self.textSec.virtual_address,maxPos]
-		bssRange = self.elfFile.get_section(".bss")
+		roData = self.elfFile.get_section(".rodata")
 		
-		if bssRange is None :
+		if roData is None :
 			print("[Error] - Couldn't find the .bss section")
-			bssRange = [0,0]
+			roData = [0,0]
 		else:
-			bssRange = [bssRange.virtual_address,bssRange.virtual_address+bssRange.size]
+			roData = [roData.virtual_address,roData.virtual_address+roData.size]
 		
 		dataRange = self.elfFile.get_section(".data")
 		if dataRange is None :
@@ -98,13 +102,11 @@ class Image:
 					print("[Warn] Jump left unpatched ",hex(inst.address)," to ",funcInfo[0].name,
 					"out of its own lib")
 			
-			if inst.mnemonic == "lea" and funcInfo is not None:
-					print("[Lead] detected at ",hex(inst.address)," ",inst.op_str)
-			
-			if inst.mnemonic == "mov":
+			if inst.mnemonic == "mov" or inst.mnemonic == "lea" or inst.mnemonic == "mov":
 				tmp  , _ =self._find_lib(inst.address)
-				for index,var in enumerate(varInfo):
-					if type(var) is int and (var in range(bssRange[0],bssRange[1]) \
+
+				for var in varInfo:
+					if type(var) is int and (var in range(roData[0],roData[1]) \
 						or var in range(dataRange[0],dataRange[1]) or var in range(textRange[0],textRange[1])): 
 						#Patches the address by a jump
 						self._patch_memory_access(inst,varInfo,stackInit)
@@ -112,18 +114,16 @@ class Image:
 	def _patch_memory_access(self,inst,varInfo,stackInit):
 	
 		movSize = len(inst.bytes)
-		if movSize <= 5:
-			return
-
 		#checks its lib
 		lib , _ = self._find_lib(inst.address)
 		#Gets its indirection table
 		ind = self.libInInd.get(lib)
+		if movSize <= 5:
+			return
 		
 		if ind and (varInfo[0] != stackInit.value and varInfo[1] != stackInit.value):
 			#Adds it in the .ind table at its lib offset
 			#Jumps towards the table
-			print("mov",hex(ind[1]),inst.op_str,hex(inst.address))
 			fill = b'\x68'+ind[1].to_bytes(4,'little')+b'\xc3'
 			if movSize > 6:
 				fill += b'\x90'*(movSize-6)
@@ -135,7 +135,7 @@ class Image:
 			self.elfFile.patch_address(ind[1],bytearray(tableCode))
 			ind[1] += movSize + 5
 			
-		elif not ind:
+		else :
 			print("[Error] - Couldn't patch mov/lea at address",inst.address," no lib found.")
 	def add_indirection_table(self,conf):
 		addr = conf.pop(0)
