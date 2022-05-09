@@ -12,7 +12,9 @@
 from Analyzer import Analyzer
 import sys
 from random import SystemRandom
+from utils import extract_conf,extract_libs
 import argparse
+import re
 
 def print_sym_table(table):
 	"""
@@ -60,9 +62,10 @@ def alike(s1,s2):
 	else :
 		return lettersSuf
 
-def region_handler(table,sysRand,libList,debug):
+def region_handler(table,sysRand,libList,debug,baseAddr):
 	"""
-	In : Takes a table of symbols from the linker file, a random engine, the list of libraries contained in the executable and a debug boolean.
+	In : Takes a table of symbols from the linker file, a random engine, 
+	the list of libraries contained in the executable, a debug boolean and a baseAddress.
 	Returns regionTable which is a table recreating regions based on memory pointers set in the linker script.
 	Those pointers are matched based on their names : i.e foo_start = . ; ..... foo_end  = . ; are matched together
 	"""
@@ -111,9 +114,11 @@ def region_handler(table,sysRand,libList,debug):
 		
 		#Randomizes static addresses
 		elif(table[i][0] == "curAdd" and not table[i][1].startswith('ALIGN')):
-			#doesn't modify 0x100000 to respect qemu assumptions
-			if int(table[i][1],16) != int("0x100000",16): 
-				table[i][1] = '0x'+''.join('{:02X}'.format(int(table[i][1],16)+(8*sysRand.randint(-500,500))))
+			#Replaces the starting address
+			if i == 0:
+				table[i][1] = '0x'+baseAddr
+			else:
+				table[i][1] = '0x'+''.join('{:02X}'.format(int(table[i][1],16)+(sysRand.randint(0,65536))))
 	
 	return regionTable, table
 
@@ -125,38 +130,35 @@ def library_region(textRegion,sysRand,libListOrigin,debug):
 	libList = libListOrigin.copy()
 	if debug == 'True':
 		index = textRegion[1].find("*(.text)")
-		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
-		modfiedRegion = textRegion[1][0:index] + padding +"}"
+		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,65536)))+";\n"
+		modfiedRegion = textRegion[1][0:index] +"}"
 		nextLib = libList.pop(0)
 		modfiedRegion += "  .text."+nextLib+" . :{ "+nextLib+".o (.text);}\n"
 		while len(libList) != 0:
-			padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
+			padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,65536)))+";\n"
 			nextLib = sysRand.choice(libList)
 			libList.remove(nextLib)
 			modfiedRegion += "  .text."+nextLib+" . :{ "
-			if sysRand.randint(0,4) == 1:
-				modfiedRegion += padding+"  "
+			modfiedRegion += padding+"  "
 			modfiedRegion += nextLib+".o (.text);}\n"
 		
 		textRegion[1] = modfiedRegion
 		return textRegion
 	else:
 		index = textRegion[1].find("*(.text)")
-		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
-		modfiedRegion = textRegion[1][0:index] + padding
+		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,65536)))+";\n"
+		modfiedRegion = textRegion[1][0:index]
 		while len(libList) != 0:
-			padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,1000)))+";\n"
+			padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,65536)))+";\n"
 			nextLib = sysRand.choice(libList)
 			libList.remove(nextLib)
-			modfiedRegion += "  "
-			if sysRand.randint(0,4) == 1:
-				modfiedRegion += padding
+			modfiedRegion += "  " + padding
 			modfiedRegion += nextLib+".o (.text);\n"
 		
 		textRegion[1] = modfiedRegion+textRegion[1][index-2:]
 		return textRegion
 
-def main(openFile,output,debug,libList):
+def main(openFile,output,debug,libList,baseAddr,dedu):
 	
 	analyzer = Analyzer(openFile)
 	table = analyzer.analyze()
@@ -165,11 +167,11 @@ def main(openFile,output,debug,libList):
 	if debug == 'True':
 		print_sym_table(table)
 	
-	regionTable, table = region_handler(table,sysRand,libList,debug)
+	regionTable, table = region_handler(table,sysRand,libList,debug,baseAddr)
 	#Swap memory regions
 	table = swap_regions(table,regionTable,sysRand)
 		
-	print_back(openFile,output,table,debug)
+	print_back(openFile,output,table,debug,dedu)
 	
 	return 0
 
@@ -238,17 +240,23 @@ def swap_regions(table,regionTable,sysRand):
 		return newTable
 	return table
 
-def print_back(openFile,output,table,debug):
+def print_back(openFile,output,table,debug,dedu):
 	"""
 	In : openFile is the linker script to modify,output the file in which the programs writes, 
-	table is the table containing the modified linker script, debug a boolean.
+	table is the table containing the modified linker script, debug a boolean and a char activating or not
+	deduplication compatibility.
 	Writes back the modified linker script into the file openFile.
 	"""
+	deduFile = None
 	writeFile = open(output,"w")
 	if not writeFile:
 		print("[ASLR] {Error} Can't open the output file.",file=sys.stderr)
 		sys.exit()
-	
+	if dedu != './':
+		deduFile = open(dedu,"r")
+		if not deduFile:
+			print("[ASLR] {Error} Can't open the deduplication config file.",file=sys.stderr)
+			sys.exit()
 	#clears the file and save headers
 	openFile.seek(0)
 	header = openFile.read().split("SECTIONS\n{\n")
@@ -274,8 +282,13 @@ def print_back(openFile,output,table,debug):
 				writeFile.write(element[1]+"= ."+element[2]+";\n")
 			else:
 				writeFile.write(element[1]+"= .;\n")
-			if element[1] == " _etext ":
-				writeFile.write(". = ALIGN(0x1000);\n.ind 0x150000 : {FILL(0X90);. = . + 0x1e000;BYTE(0X90)}\n")
+			if element[1] == " _etext " and deduFile:
+				conf = extract_conf(deduFile)
+				addr = conf.pop(0)
+				fill = 0
+				for lib in conf:
+					fill += int(lib[1],16)
+				writeFile.write(". = ALIGN(0x1000);\n.ind "+addr+" : {FILL(0X90);. = . + "+hex(fill)+";BYTE(0X90)}\n")
 		else:
 			writeFile.write("."+element[0]+":"+element[1]+"\n")
 		previous = element[1]
@@ -284,42 +297,79 @@ def print_back(openFile,output,table,debug):
 	writeFile.write("}")
 	writeFile.close()
 	return 0
-def extract_libs(string):
-	"""
-	In : string
-	"""
-	wordList = []
-	if string != None:
-		wordList = string.split()
-		
-	return wordList
+
+def handleSetup(file,readOnly):
+	regex = re.compile(".long 0[xX][0-9a-fA-F]+")
+	newString = ""
+	if not readOnly:
+		patch = ''.join('{:02X}'.format(SystemRandom().randint(1048576,1048576*4)))
+		for line in file.readlines():
+			detect = re.split(regex,line)
+			if len(detect) > 1:
+				#that int is 0x100000 in hexa 
+				print(patch)
+				newString += ".long 0x"+ patch + detect [1]
+			else:
+				newString += line
 	
+		file.seek(0)
+		file.write(newString)
+	else:
+		for line in file.readlines():
+			detect = re.split(regex,line)
+			if len(detect) > 1:
+				addr = re.compile("0[xX][0-9a-fA-F]+")
+				final = addr.findall(line)
+				if final:
+					print(final[0][2:])
+					patch = final
+
+	return patch
 if __name__ == '__main__':
 	#Gets back the path of the linker script to modify
 	parser = argparse.ArgumentParser(prog="Unikraft ASLR, linker script implementation")
 
+	parser.add_argument('--setup_file', dest='setup', default='./', help="Path leading to the entry64.S file.")	
+	
+	parser.add_argument('--base_addr', dest='baseAddr', default='-1', help="ASLR's base address")
+	
 	parser.add_argument('--file_path', dest='path', default='./', help="Path leading to the file.")
 
 	parser.add_argument('--output_path', dest='output', default='./', help="Path and name of the file to create.")	
 	
-	parser.add_argument('--lib_list', dest='build', default='./', help="All the libs in the ELF file.")	
+	parser.add_argument('--lib_list', dest='build', default=None, help="All the libs in the ELF file.")	
+	
+	parser.add_argument('--deduplication', dest='dedu', default='./', help="Creates the table or not")
 	
 	parser.add_argument('--debug', dest='debug', default='False', 
 		help="Prints on the standard input debug informations.")
 
 	params , _ = parser.parse_known_args(sys.argv[1:])
-
-	openFile = open(params.path,"r+")
-	if(openFile == None):
-		print("[ASLR] {Error} Couldn't open the file, path may be wrong.")
+	if params.setup != "./":
+		openFile = open(params.setup,"r+")
+		if(openFile == None):
+			print("[ASLR] {Error} Couldn't open the entropy.S file, path may be wrong.")
+			sys.exit()
+		if params.baseAddr == '-2':
+			handleSetup(openFile,True)
+		else:
+			handleSetup(openFile,False)
+		openFile.close()
+	elif params.baseAddr != '-1':
+		openFile = open(params.path,"r+")
+		if(openFile == None):
+			print("[ASLR] {Error} Couldn't open the file, path may be wrong.")
+			sys.exit()
+		
+		libList = extract_libs(params.build,False)
+		if len(libList) == 0:
+			print("[ASLR] {Error} No lib list given to the program abort.",file=sys.stderr)
+			sys.exit()
+		main(openFile,params.output,params.debug,libList,params.baseAddr,params.dedu)
+		openFile.close()
+	else:
+		print("[ASLR] {Error} Base address should be positive or given.",file=sys.stderr)
 		sys.exit()
-	
-	libList = extract_libs(params.build)
-	if len(libList) == 0:
-		print("[ASLR] {Error} No lib list given to the program abort.",file=sys.stderr)
-		sys.exit()
 
-	main(openFile,params.output,params.debug,libList)
-	openFile.close()
 	
 	

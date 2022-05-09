@@ -1,7 +1,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Unikraft/0.7.0~f267a5a-custom Configuration
+ * Unikraft/0.7.0~9baaa29-custom Configuration
  *
  */
 #define CONFIG_LIBNOLIBC_UKDEBUG_ASSERT 1
@@ -18,7 +18,7 @@
 #define CONFIG_APPHELLOWORLD_DEPENDENCIES 1
 #define CONFIG_LIBUKTIME 1
 #define CONFIG_LIBNOLIBC 1
-#define CONFIG_UK_FULLVERSION "0.7.0~f267a5a-custom"
+#define CONFIG_UK_FULLVERSION "0.7.0~9baaa29-custom"
 #define CONFIG_UK_NAME "app-helloworld"
 #define CONFIG_LIBUKBOOT 1
 #define CONFIG_LIBUKALLOCBBUDDY 1

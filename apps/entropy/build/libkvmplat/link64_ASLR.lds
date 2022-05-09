@@ -1,45 +1,44 @@
 SECTIONS
 {
-. = 0x334F33;
+. = 0x380C12;
  _text = .;
 .text :{
   KEEP (*(.data.boot))
   *(.text.boot)
-  . = . + 0x87B8;
-  . = . + 0x3033;
-libukargparse.o (.text);
-  . = . + 0xA789;
-libkvmpci.o (.text);
-  . = . + 0xC35E;
-appentropy.o (.text);
-  . = . + 0xFAFE;
-libuktimeconv.o (.text);
-  . = . + 0x8158;
-libukalloc.o (.text);
-  . = . + 0x704A;
+    . = . + 0xDDF6;
 libukbus.o (.text);
-  . = . + 0xE483;
-libukboot_main.o (.text);
-  . = . + 0xE43A;
+  . = . + 0x5631;
 libnolibc.o (.text);
-  . = . + 0xCA3E;
-libkvmvirtio.o (.text);
-  . = . + 0x4CDF;
+  . = . + 0x7D88;
 libukboot.o (.text);
-  . = . + 0xD71C;
-libukswrand.o (.text);
-  . = . + 0xFDE0;
-libuktime.o (.text);
-  . = . + 0x8831;
-libx86_64arch.o (.text);
-  . = . + 0x980F;
-libukdebug.o (.text);
-  . = . + 0xD4F4;
+  . = . + 0x889F;
 libukallocbbuddy.o (.text);
-  . = . + 0x25BD;
+  . = . + 0x9E14;
 libkvmplat.o (.text);
-  . = . + 0x68FC;
+  . = . + 0x1542;
+libukboot_main.o (.text);
+  . = . + 0xF4B;
+appentropy.o (.text);
+  . = . + 0x2144;
+libuktimeconv.o (.text);
+  . = . + 0x5626;
+libukswrand.o (.text);
+  . = . + 0x70D7;
+libukargparse.o (.text);
+  . = . + 0x8E56;
+libkvmvirtio.o (.text);
+  . = . + 0xA172;
+libukalloc.o (.text);
+  . = . + 0xE576;
+libukdebug.o (.text);
+  . = . + 0x4E71;
+libuktime.o (.text);
+  . = . + 0x4622;
 libuksglist.o (.text);
+  . = . + 0xE8E4;
+libx86_64arch.o (.text);
+  . = . + 0x6D7;
+libkvmpci.o (.text);
   *(.text)
   *(.text.*)
  }
@@ -51,9 +50,6 @@ libuksglist.o (.text);
  uk_inittab_start = .;
 .uk_inittab :{ KEEP(*(SORT_BY_NAME(.uk_inittab[1-6][0-9]))) }
  uk_inittab_end = .;
- __eh_frame_hdr_start = .;
-.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
- __eh_frame_hdr_end = .;
 . = ALIGN(0x8);
  _ctors = .;
 .preinit_array :{
@@ -69,6 +65,9 @@ libuksglist.o (.text);
   PROVIDE_HIDDEN (__init_array_end = .);
  }
  _ectors = .;
+ __eh_frame_hdr_start = .;
+.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
+ __eh_frame_hdr_end = .;
 . = ALIGN(0x20);
  _tls_start = .;
 .tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }

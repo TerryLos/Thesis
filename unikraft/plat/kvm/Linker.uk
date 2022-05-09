@@ -25,8 +25,11 @@ ASLR_LIBS += $(foreach P,$(UK_PLATS) $(UK_PLATS-y),\
 		$(UK_LIBS) $(UK_LIBS-y)
 
 ASLR_args += --base_addr=$(ASLR_BASE_ADDRESS) --file_path=$(UK_PLAT_KVM_DEF_LDS) \
-	--lib_list="$(ASLR_LIBS)" --output_path=$(UK_PLAT_KVM_DEF_LDS_ASLR) \
-	--deduplication="$(CONFIG_MEMORY_DEDUP_ASLR)"
+	--lib_list="$(ASLR_LIBS)" --output_path=$(UK_PLAT_KVM_DEF_LDS_ASLR) 
+
+ifeq (y,$(CONFIG_MEMORY_DEDUP_ASLR))
+ASLR_args += --deduplication="$(SCRIPTS_DIR)/ASLR/aslr_dedu_config.txt"
+endif
 
 ifeq (y,$(CONFIG_LINK_ASLR))
 $(KVM_DEBUG_IMAGE): $(KVM_ALIBS) $(KVM_ALIBS-y) $(KVM_OLIBS) $(KVM_OLIBS-y) \

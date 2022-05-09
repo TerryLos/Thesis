@@ -48,7 +48,7 @@ _multiboot_header:
 .long MYMULTIBOOT_FLAGS
 .long -(MULTIBOOT_HEADER_MAGIC+MYMULTIBOOT_FLAGS) /* checksum */
 .long _multiboot_header                           /* header addr */
-.long 0x334F33                                    /* load addr */
+.long 0x3B5E5A                                    /* load addr */
 .long _edata                                      /* load end addr */
 .long _end                                        /* bss end addr */
 .long _libkvmplat_start32                         /* entry addr */

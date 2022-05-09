@@ -12,6 +12,7 @@
 from Analyzer import Analyzer
 import sys
 from random import SystemRandom
+from utils import extract_conf,extract_libs
 import argparse
 import re
 
@@ -114,10 +115,10 @@ def region_handler(table,sysRand,libList,debug,baseAddr):
 		#Randomizes static addresses
 		elif(table[i][0] == "curAdd" and not table[i][1].startswith('ALIGN')):
 			#Replaces the starting address
-			if int(table[i][1],16) == int("0x100000",16):
+			if i == 0:
 				table[i][1] = '0x'+baseAddr
 			else:
-				table[i][1] = '0x'+''.join('{:02X}'.format(int(table[i][1],16)+(8*sysRand.randint(0,1000))))
+				table[i][1] = '0x'+''.join('{:02X}'.format(int(table[i][1],16)+(sysRand.randint(0,65536))))
 	
 	return regionTable, table
 
@@ -130,7 +131,7 @@ def library_region(textRegion,sysRand,libListOrigin,debug):
 	if debug == 'True':
 		index = textRegion[1].find("*(.text)")
 		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,65536)))+";\n"
-		modfiedRegion = textRegion[1][0:index] + padding +"}"
+		modfiedRegion = textRegion[1][0:index] +"}"
 		nextLib = libList.pop(0)
 		modfiedRegion += "  .text."+nextLib+" . :{ "+nextLib+".o (.text);}\n"
 		while len(libList) != 0:
@@ -146,7 +147,7 @@ def library_region(textRegion,sysRand,libListOrigin,debug):
 	else:
 		index = textRegion[1].find("*(.text)")
 		padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,65536)))+";\n"
-		modfiedRegion = textRegion[1][0:index] + padding
+		modfiedRegion = textRegion[1][0:index]
 		while len(libList) != 0:
 			padding = '. = . + 0x'+''.join('{:02X}'.format(sysRand.randint(0,65536)))+";\n"
 			nextLib = sysRand.choice(libList)
@@ -246,11 +247,16 @@ def print_back(openFile,output,table,debug,dedu):
 	deduplication compatibility.
 	Writes back the modified linker script into the file openFile.
 	"""
+	deduFile = None
 	writeFile = open(output,"w")
 	if not writeFile:
 		print("[ASLR] {Error} Can't open the output file.",file=sys.stderr)
 		sys.exit()
-	
+	if dedu != './':
+		deduFile = open(dedu,"r")
+		if not deduFile:
+			print("[ASLR] {Error} Can't open the deduplication config file.",file=sys.stderr)
+			sys.exit()
 	#clears the file and save headers
 	openFile.seek(0)
 	header = openFile.read().split("SECTIONS\n{\n")
@@ -276,8 +282,13 @@ def print_back(openFile,output,table,debug,dedu):
 				writeFile.write(element[1]+"= ."+element[2]+";\n")
 			else:
 				writeFile.write(element[1]+"= .;\n")
-			if element[1] == " _etext " and dedu == 'y':
-				writeFile.write(". = ALIGN(0x1000);\n.ind 0x150000 : {FILL(0X90);. = . + 0x1e000;BYTE(0X90)}\n")
+			if element[1] == " _etext " and deduFile:
+				conf = extract_conf(deduFile)
+				addr = conf.pop(0)
+				fill = 0
+				for lib in conf:
+					fill += int(lib[1],16)
+				writeFile.write(". = ALIGN(0x1000);\n.ind "+addr+" : {FILL(0X90);. = . + "+hex(fill)+";BYTE(0X90)}\n")
 		else:
 			writeFile.write("."+element[0]+":"+element[1]+"\n")
 		previous = element[1]
@@ -314,16 +325,6 @@ def handleSetup(file,readOnly):
 					patch = final
 
 	return patch
-def extract_libs(string):
-	"""
-	In : string
-	"""
-	wordList = []
-	if string != None:
-		wordList = string.split()
-		
-	return wordList
-	
 if __name__ == '__main__':
 	#Gets back the path of the linker script to modify
 	parser = argparse.ArgumentParser(prog="Unikraft ASLR, linker script implementation")
@@ -338,7 +339,7 @@ if __name__ == '__main__':
 	
 	parser.add_argument('--lib_list', dest='build', default=None, help="All the libs in the ELF file.")	
 	
-	parser.add_argument('--deduplication', dest='dedu', default='n', help="Creates the table or not")
+	parser.add_argument('--deduplication', dest='dedu', default='./', help="Creates the table or not")
 	
 	parser.add_argument('--debug', dest='debug', default='False', 
 		help="Prints on the standard input debug informations.")
@@ -360,7 +361,7 @@ if __name__ == '__main__':
 			print("[ASLR] {Error} Couldn't open the file, path may be wrong.")
 			sys.exit()
 		
-		libList = extract_libs(params.build)
+		libList = extract_libs(params.build,False)
 		if len(libList) == 0:
 			print("[ASLR] {Error} No lib list given to the program abort.",file=sys.stderr)
 			sys.exit()

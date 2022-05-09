@@ -1,45 +1,44 @@
 SECTIONS
 {
-. = 0x2D652F;
+. = 0x3B5E5A;
  _text = .;
 .text :{
   KEEP (*(.data.boot))
   *(.text.boot)
-  . = . + 0x66F0;
-  . = . + 0xBB4E;
-libkvmpci.o (.text);
-  . = . + 0x409;
-libukallocbbuddy.o (.text);
-  . = . + 0x42FB;
-libuktime.o (.text);
-  . = . + 0x9A60;
-libuktimeconv.o (.text);
-  . = . + 0xB942;
-libukargparse.o (.text);
-  . = . + 0x8823;
-libkvmvirtio.o (.text);
-  . = . + 0x79E6;
-apphelloworld.o (.text);
-  . = . + 0x48C0;
-libukdebug.o (.text);
-  . = . + 0x48DD;
-libukswrand.o (.text);
-  . = . + 0x3871;
-libuksglist.o (.text);
-  . = . + 0xDA91;
-libx86_64arch.o (.text);
-  . = . + 0x8ABB;
-libukbus.o (.text);
-  . = . + 0xF1CF;
-libukboot.o (.text);
-  . = . + 0x4830;
+    . = . + 0x5EA4;
 libukboot_main.o (.text);
-  . = . + 0xA3AC;
-libkvmplat.o (.text);
-  . = . + 0xBB8E;
+  . = . + 0x145C;
+libukallocbbuddy.o (.text);
+  . = . + 0x86D3;
+apphelloworld.o (.text);
+  . = . + 0x8564;
+libukboot.o (.text);
+  . = . + 0x152F;
 libnolibc.o (.text);
-  . = . + 0xB954;
+  . = . + 0xE67C;
+libuktimeconv.o (.text);
+  . = . + 0x9692;
+libkvmplat.o (.text);
+  . = . + 0x51E8;
+libkvmvirtio.o (.text);
+  . = . + 0xD71F;
+libkvmpci.o (.text);
+  . = . + 0x37F;
+libukbus.o (.text);
+  . = . + 0xA7F;
+libukdebug.o (.text);
+  . = . + 0x928A;
 libukalloc.o (.text);
+  . = . + 0x9C7D;
+libuksglist.o (.text);
+  . = . + 0x9269;
+libukargparse.o (.text);
+  . = . + 0x69B0;
+libuktime.o (.text);
+  . = . + 0x3B14;
+libx86_64arch.o (.text);
+  . = . + 0xA8F9;
+libukswrand.o (.text);
   *(.text)
   *(.text.*)
  }
@@ -77,15 +76,15 @@ libukalloc.o (.text);
  __eh_frame_start = .;
 .eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
  __eh_frame_end = .;
- __eh_frame_hdr_start = .;
-.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
- __eh_frame_hdr_end = .;
 . = ALIGN(0x20);
  _tls_start = .;
 .tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
  _etdata = .;
 .tbss :{ *(.tbss) *(.tbss.*) *(.gnu.linkonce.tb.*) . = ALIGN(0x20); }
  _tls_end = . + SIZEOF(.tbss);
+ __eh_frame_hdr_start = .;
+.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
+ __eh_frame_hdr_end = .;
 . = ALIGN((1 << 12));
  _data = .;
 .data :{
