@@ -87,7 +87,7 @@ def drawEntropy(addrArray,Range,index):
 	for element in addrArray:
 		addrBin = format(element[index],"032b")
 		x.append(int(addrBin[31-Range[0][1]:31-Range[0][0]],2))
-		y.append(int(addrBin[31-Range[1][1]:31-Range[1][0]],2))
+		y.append(int(addrBin[31-Range[1][1]:31-Range[1][0]],2))	
 	
 	plt.figure(num=None, figsize=(5.5, 4), dpi=80, facecolor='w', edgecolor='k')
 	ax = plt.subplot(111)
@@ -100,9 +100,9 @@ def drawEntropy(addrArray,Range,index):
 	if index == 2:
 		plt.title("Data Section Entropy")
 	plt.xticks((0,0x40,0x7F,0xBF,0xFF))
-	plt.xlabel("Lower bits")
+	plt.xlabel("8 Lower bits starting from "+str(Range[0][0]+1))
 	plt.yticks((0,0x40,0x7F,0xBF,0xFF))
-	plt.ylabel("Higher bits")
+	plt.ylabel("8 Higher bits starting from "+str(Range[1][0]+1))
 	plt.show()
 def verifyUnif(limit):
 	sysRand = SystemRandom()
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 	print("The file is "+str(len(ASLRData))+" lines long.")
 	NoASLRData = load(NoASLRFile)
 	#verifyUnif(100000)
-	drawEntropy(ASLRData,[[3,11],[12,20]],0)
+	drawEntropy(ASLRData,[[11,19],[19,27]],1)
 	print("Entropy is ",computeEntropy(ASLRData,0),computeEntropy(ASLRData,1),computeEntropy(ASLRData,2),\
 		" Max theo entropy is ",math.log(len(ASLRData),2))
 	print(avgBitModified(ASLRData,NoASLRData))

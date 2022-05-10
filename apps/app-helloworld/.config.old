@@ -1,8 +1,8 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Unikraft/0.7.0~f267a5a-custom Configuration
+# Unikraft/0.7.0~3e14fc5-custom Configuration
 #
-CONFIG_UK_FULLVERSION="0.7.0~f267a5a-custom"
+CONFIG_UK_FULLVERSION="0.7.0~3e14fc5-custom"
 CONFIG_UK_CODENAME="Mimas"
 CONFIG_UK_ARCH="x86_64"
 CONFIG_UK_BASE="/home/terrylos/Thesis/unikraft"
@@ -61,7 +61,7 @@ CONFIG_KVM_SERIAL_BAUD_115200=y
 # Memory security
 #
 CONFIG_LINK_ASLR=y
-# CONFIG_RUNTIME_ASLR is not set
+CONFIG_RUNTIME_ASLR=y
 # CONFIG_MEMORY_DEDUP_ASLR is not set
 # end of Memory security
 
@@ -172,15 +172,15 @@ CONFIG_HAVE_TIME=y
 # Build Options
 #
 # CONFIG_OPTIMIZE_NONE is not set
-CONFIG_OPTIMIZE_PERF=y
-# CONFIG_OPTIMIZE_SIZE is not set
-
-#
-# Hint: Specify a CPU type to get most benefits from performance optimization
-#
+# CONFIG_OPTIMIZE_PERF is not set
+CONFIG_OPTIMIZE_SIZE=y
 CONFIG_OPTIMIZE_NOOMITFP=y
 # CONFIG_OPTIMIZE_DEADELIM is not set
-# CONFIG_OPTIMIZE_LTO is not set
+
+#
+# Hint: Enable dropping of unused code to further reduce target image size
+#
+CONFIG_OPTIMIZE_LTO=y
 # CONFIG_DEBUG_SYMBOLS_LVL0 is not set
 # CONFIG_DEBUG_SYMBOLS_LVL1 is not set
 # CONFIG_DEBUG_SYMBOLS_LVL2 is not set
