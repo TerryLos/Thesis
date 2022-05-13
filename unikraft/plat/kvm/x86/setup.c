@@ -41,7 +41,9 @@
 #include <uk/assert.h>
 #include <uk/essentials.h>
 #include <x86/acpi/acpi.h>
+#ifdef CONFIG_LINK_ASLR
 #include <uk/swrand.h>
+#endif
 
 #define PLATFORM_MEM_START 0X100000
 #define PLATFORM_MAX_MEM_ADDR 0x40000000
@@ -133,16 +135,8 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	divisor++;
 	}
 	while(_libkvmplat_cfg.heap.start >= _libkvmplat_cfg.bstack.start);
-	
-	divisor = 1;
-	
-	do{
-	ASLR_offset = uk_swrand_randr() % (max_addr/(8*divisor));
-	_libkvmplat_cfg.heap.end = (uintptr_t) _libkvmplat_cfg.bstack.start-ASLR_offset;
-	divisor++;
-	}
-	while(_libkvmplat_cfg.heap.end >= _libkvmplat_cfg.bstack.start);
-	
+
+	_libkvmplat_cfg.heap.end = (uintptr_t) _libkvmplat_cfg.bstack.start;
 	_libkvmplat_cfg.heap.len   = _libkvmplat_cfg.heap.end
 				     - _libkvmplat_cfg.heap.start;
 	uk_pr_info(" ASLR - Heap : s: %p e: %p len: %p\n",_libkvmplat_cfg.heap.start,
@@ -158,10 +152,8 @@ static inline void _mb_init_mem(struct multiboot_info *mi)
 	_libkvmplat_cfg.bstack.start = _libkvmplat_cfg.heap.end;
 	_libkvmplat_cfg.bstack.end   = max_addr;
 	_libkvmplat_cfg.bstack.len   = __STACK_SIZE;
-	uk_pr_info(" ASLR - Heap : s: %d e: %d \n",__STACK_SIZE,_libkvmplat_cfg.heap.len);
 #endif
 }
-
 static inline void _mb_init_initrd(struct multiboot_info *mi)
 {
 	multiboot_module_t *mod1;
@@ -302,6 +294,7 @@ static void _libkvmplat_entry2(void *arg __attribute__((unused)))
 {
 	ukplat_entry_argp(NULL, cmdline, sizeof(cmdline));
 }
+#ifdef CONFIG_RUNTIME_ASLR
 __u32 _gen_seed32(){
 	__u32 low,high;
 	__asm__ __volatile__ ("rdtsc" : "=a" (low), "=d" (high));
@@ -326,11 +319,12 @@ static int uk_swrand_init(void)
 
 	return seedc;
 }
-
+#endif
 void _libkvmplat_entry(void *arg)
 {
-	struct multiboot_info *mi = (struct multiboot_info *)arg;
 	
+	struct multiboot_info *mi = (struct multiboot_info *)arg;
+
 	_init_cpufeatures();
 	_libkvmplat_init_console();
 	traps_init();
@@ -339,7 +333,10 @@ void _libkvmplat_entry(void *arg)
 	 * ASLR, We need to rebuild stack and heap once they've been built.
 	 * This allows to call the randomization functions.
 	 */
+	#ifdef CONFIG_RUNTIME_ASLR
 	uk_swrand_init();
+	#endif
+	
 	
 	uk_pr_info("Entering from KVM (x86)...\n");
 	uk_pr_info("     multiboot: %p\n", mi);

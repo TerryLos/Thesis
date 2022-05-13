@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include<stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <errno.h>
 int global = 1000;
@@ -10,6 +12,8 @@ int main(int argc, char *argv[])
 {
 	char string[30]; 
 	strcpy(string,"This is a string very cool.");
-	printf("%x %x %x\n",(void*)secret_function,string,&global);
+	int *array = malloc(5*sizeof(int));
+	printf("%x %x %x %x\n",(unsigned int)secret_function,
+		(unsigned int)string,(unsigned int)&global,(unsigned int)array);
 	return 0;
 }

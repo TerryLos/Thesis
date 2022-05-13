@@ -1,43 +1,43 @@
 SECTIONS
 {
-. = 0x380C12;
+. = 0x18888C;
  _text = .;
 .text :{
   KEEP (*(.data.boot))
   *(.text.boot)
-    . = . + 0xDDF6;
-libukbus.o (.text);
-  . = . + 0x5631;
-libnolibc.o (.text);
-  . = . + 0x7D88;
-libukboot.o (.text);
-  . = . + 0x889F;
-libukallocbbuddy.o (.text);
-  . = . + 0x9E14;
-libkvmplat.o (.text);
-  . = . + 0x1542;
-libukboot_main.o (.text);
-  . = . + 0xF4B;
-appentropy.o (.text);
-  . = . + 0x2144;
-libuktimeconv.o (.text);
-  . = . + 0x5626;
-libukswrand.o (.text);
-  . = . + 0x70D7;
-libukargparse.o (.text);
-  . = . + 0x8E56;
+    . = . + 0xF242;
 libkvmvirtio.o (.text);
-  . = . + 0xA172;
-libukalloc.o (.text);
-  . = . + 0xE576;
-libukdebug.o (.text);
-  . = . + 0x4E71;
-libuktime.o (.text);
-  . = . + 0x4622;
-libuksglist.o (.text);
-  . = . + 0xE8E4;
+  . = . + 0x3B6F;
 libx86_64arch.o (.text);
-  . = . + 0x6D7;
+  . = . + 0xAA6B;
+libukswrand.o (.text);
+  . = . + 0x4523;
+appentropy.o (.text);
+  . = . + 0x63C5;
+libuktime.o (.text);
+  . = . + 0x9F33;
+libukdebug.o (.text);
+  . = . + 0x1615;
+libukbus.o (.text);
+  . = . + 0xA748;
+libukallocbbuddy.o (.text);
+  . = . + 0x3C4B;
+libuksglist.o (.text);
+  . = . + 0xFD26;
+libkvmplat.o (.text);
+  . = . + 0x3E44;
+libukboot_main.o (.text);
+  . = . + 0x2143;
+libukargparse.o (.text);
+  . = . + 0x40C8;
+libnolibc.o (.text);
+  . = . + 0xDC8D;
+libukboot.o (.text);
+  . = . + 0x9881;
+libuktimeconv.o (.text);
+  . = . + 0x4F0D;
+libukalloc.o (.text);
+  . = . + 0x1979;
 libkvmpci.o (.text);
   *(.text)
   *(.text.*)
@@ -50,6 +50,10 @@ libkvmpci.o (.text);
  uk_inittab_start = .;
 .uk_inittab :{ KEEP(*(SORT_BY_NAME(.uk_inittab[1-6][0-9]))) }
  uk_inittab_end = .;
+. = ALIGN((1 << 12));
+ __eh_frame_start = .;
+.eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
+ __eh_frame_end = .;
 . = ALIGN(0x8);
  _ctors = .;
 .preinit_array :{
@@ -65,19 +69,12 @@ libkvmpci.o (.text);
   PROVIDE_HIDDEN (__init_array_end = .);
  }
  _ectors = .;
- __eh_frame_hdr_start = .;
-.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
- __eh_frame_hdr_end = .;
 . = ALIGN(0x20);
  _tls_start = .;
 .tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
  _etdata = .;
 .tbss :{ *(.tbss) *(.tbss.*) *(.gnu.linkonce.tb.*) . = ALIGN(0x20); }
  _tls_end = . + SIZEOF(.tbss);
-. = ALIGN((1 << 12));
- __eh_frame_start = .;
-.eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
- __eh_frame_end = .;
 . = ALIGN((1 << 12));
  _rodata = .;
 .rodata :{
@@ -92,6 +89,9 @@ libkvmpci.o (.text);
   *(.data.*)
  }
  _edata = .;
+ __eh_frame_hdr_start = .;
+.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
+ __eh_frame_hdr_end = .;
 . = ALIGN((1 << 12));
  __bss_start = .;
 .bss :{

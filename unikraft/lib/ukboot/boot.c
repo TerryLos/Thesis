@@ -72,6 +72,8 @@
 #endif
 #include "banner.h"
 
+#include <uk/trace.h>
+
 int main(int argc, char *argv[]) __weak;
 
 static void main_thread_func(void *arg) __noreturn;

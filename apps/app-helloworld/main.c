@@ -1,5 +1,10 @@
 #include <stdio.h>
+#include<uk/trace.h>
+#ifndef UK_DEBUG_TRACE
+#define UK_DEBUG_TRACE
+#endif
 
+UK_TRACEPOINT(trace_entered_main, "");
 /* Import user configuration: */
 #ifdef __Unikraft__
 #include <uk/config.h>
@@ -9,6 +14,7 @@
 #include <time.h>
 #include <errno.h>
 #include "monkey.h"
+
 
 static void millisleep(unsigned int millisec)
 {
@@ -25,10 +31,11 @@ static void millisleep(unsigned int millisec)
 
 int main(int argc, char *argv[])
 {
+	
 #if CONFIG_APPHELLOWORLD_PRINTARGS || CONFIG_APPHELLOWORLD_SPINNER
 	int i;
 #endif
-
+	trace_entered_main();
 	printf("Hello world!\n");
 
 #if CONFIG_APPHELLOWORLD_PRINTARGS

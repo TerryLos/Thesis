@@ -8,13 +8,13 @@ def load(openFile):
 	toRet = []
 	for line in openFile.readlines():
 		comp = line.split()
-		if len(comp) == 3:
+		if len(comp) == 4:
 			tmp = []
 			for val in comp:
 				tmp.append(int(val,16))
 			toRet.append(tmp)
 		else:
-			print(tmp)
+			print(comp)
 			print("[Entropy] {Error} One of the given file doesn't respect the proper format.")
 			sys.exit()
 	if len(toRet) == 1:
@@ -33,17 +33,20 @@ def avgBitModified(modified,source):
 	textSec = 0
 	stackSec = 0
 	globalVar = 0
+	heapVar = 0
 
 	for el in modified:
 		textSec += xorAndCount(el[0],source[0])
 		stackSec +=  xorAndCount(el[1],source[1])
 		globalVar +=  xorAndCount(el[2],source[2])
+		heapVar += xorAndCount(el[3],source[3])
 	modLen = len(modified)
 	textSec = abs(round(textSec / modLen))
 	stackSec =  abs(round(stackSec / modLen))
 	globalVar =  abs(round(globalVar / modLen))
+	heap =  abs(round(heapVar / modLen))
 	
-	return [textSec,stackSec,globalVar]
+	return [textSec,stackSec,globalVar,heap]
 
 def varModified(data):
 	text = [0,0]
@@ -99,6 +102,8 @@ def drawEntropy(addrArray,Range,index):
 		plt.title("Stack Entropy")
 	if index == 2:
 		plt.title("Data Section Entropy")
+	if index == 3:
+		plt.title("Heap Entropy")
 	plt.xticks((0,0x40,0x7F,0xBF,0xFF))
 	plt.xlabel("8 Lower bits starting from "+str(Range[0][0]+1))
 	plt.yticks((0,0x40,0x7F,0xBF,0xFF))
@@ -144,8 +149,8 @@ if __name__ == '__main__':
 	print("The file is "+str(len(ASLRData))+" lines long.")
 	NoASLRData = load(NoASLRFile)
 	#verifyUnif(100000)
-	drawEntropy(ASLRData,[[11,19],[19,27]],1)
+	drawEntropy(ASLRData,[[11,19],[19,27]],3)
 	print("Entropy is ",computeEntropy(ASLRData,0),computeEntropy(ASLRData,1),computeEntropy(ASLRData,2),\
-		" Max theo entropy is ",math.log(len(ASLRData),2))
+		computeEntropy(ASLRData,3)," Max theo entropy is ",math.log(len(ASLRData),2))
 	print(avgBitModified(ASLRData,NoASLRData))
 	print(varModified(ASLRData))
