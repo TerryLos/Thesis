@@ -41,7 +41,7 @@
 #include <uk/assert.h>
 #include <uk/essentials.h>
 #include <x86/acpi/acpi.h>
-#ifdef CONFIG_LINK_ASLR
+#ifdef CONFIG_RUNTIME_ASLR
 #include <uk/swrand.h>
 #endif
 

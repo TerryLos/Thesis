@@ -1,48 +1,50 @@
 SECTIONS
 {
-. = 0x2DBCBA;
+. = 0x355D72;
  _text = .;
 .text :{
   KEEP (*(.data.boot))
   *(.text.boot)
-    . = . + 0x6662;
-libuktimeconv.o (.text);
-  . = . + 0xEE8B;
-libukbus.o (.text);
-  . = . + 0x29B6;
-libnolibc.o (.text);
-  . = . + 0xDA57;
-libukallocbbuddy.o (.text);
-  . = . + 0x6C1;
-libukboot.o (.text);
-  . = . + 0x845A;
-libkvmplat.o (.text);
-  . = . + 0x6C81;
-libkvmpci.o (.text);
-  . = . + 0xA289;
-libukswrand.o (.text);
-  . = . + 0x4AC2;
-libukdebug.o (.text);
-  . = . + 0x894C;
-libx86_64arch.o (.text);
-  . = . + 0xFC75;
-libuksglist.o (.text);
-  . = . + 0x408B;
-libukboot_main.o (.text);
-  . = . + 0x5A81;
-apphelloworld.o (.text);
-  . = . + 0xE490;
+    . = . + 0x93C8;
 libkvmvirtio.o (.text);
-  . = . + 0x7B13;
-libuktime.o (.text);
-  . = . + 0x9BA4;
+  . = . + 0x6922;
+libkvmplat.o (.text);
+  . = . + 0xD2F4;
+libx86_64arch.o (.text);
+  . = . + 0xE6E9;
+libkvmpci.o (.text);
+  . = . + 0xB002;
+libukdebug.o (.text);
+  . = . + 0x67A2;
+libukboot.o (.text);
+  . = . + 0x1F91;
+libukallocbbuddy.o (.text);
+  . = . + 0x2A20;
+apphelloworld.o (.text);
+  . = . + 0xFD19;
+libnolibc.o (.text);
+  . = . + 0xC3E;
+libukswrand.o (.text);
+  . = . + 0xAF2F;
 libukargparse.o (.text);
-  . = . + 0xA2A9;
+  . = . + 0x5BC;
+libuksglist.o (.text);
+  . = . + 0x1A0B;
+libuktime.o (.text);
+  . = . + 0x9A79;
+libukbus.o (.text);
+  . = . + 0x9A0D;
+libukboot_main.o (.text);
+  . = . + 0xDA80;
+libuktimeconv.o (.text);
+  . = . + 0xE02F;
 libukalloc.o (.text);
   *(.text)
   *(.text.*)
  }
  _etext = .;
+. = ALIGN(0x1000);
+.ind 0x500000 : {FILL(0X90);. = . + 0x9300;BYTE(0X90)}
 . = ALIGN((1 << 12));
  uk_ctortab_start = .;
 .uk_ctortab :{ KEEP(*(SORT_BY_NAME(.uk_ctortab[0-9]))) }
@@ -50,6 +52,21 @@ libukalloc.o (.text);
  uk_inittab_start = .;
 .uk_inittab :{ KEEP(*(SORT_BY_NAME(.uk_inittab[1-6][0-9]))) }
  uk_inittab_end = .;
+. = ALIGN(0x8);
+ _ctors = .;
+.preinit_array :{
+  PROVIDE_HIDDEN (__preinit_array_start = .);
+  KEEP (*(.preinit_array))
+  PROVIDE_HIDDEN (__preinit_array_end = .);
+ }
+. = ALIGN(0x8);
+.init_array :{
+  PROVIDE_HIDDEN (__init_array_start = .);
+  KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+  KEEP (*(.init_array .ctors))
+  PROVIDE_HIDDEN (__init_array_end = .);
+ }
+ _ectors = .;
 . = ALIGN(0x20);
  _tls_start = .;
 .tdata :{ *(.tdata) *(.tdata.*) *(.gnu.linkonce.td.*) }
@@ -70,28 +87,13 @@ libukalloc.o (.text);
   *(.data.*)
  }
  _edata = .;
-. = ALIGN(0x8);
- _ctors = .;
-.preinit_array :{
-  PROVIDE_HIDDEN (__preinit_array_start = .);
-  KEEP (*(.preinit_array))
-  PROVIDE_HIDDEN (__preinit_array_end = .);
- }
-. = ALIGN(0x8);
-.init_array :{
-  PROVIDE_HIDDEN (__init_array_start = .);
-  KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
-  KEEP (*(.init_array .ctors))
-  PROVIDE_HIDDEN (__init_array_end = .);
- }
- _ectors = .;
- __eh_frame_hdr_start = .;
-.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
- __eh_frame_hdr_end = .;
 . = ALIGN((1 << 12));
  __eh_frame_start = .;
 .eh_frame :{ *(.eh_frame) *(.eh_frame.*) }
  __eh_frame_end = .;
+ __eh_frame_hdr_start = .;
+.eh_frame_hdr :{ *(.eh_frame_hdr) *(.eh_frame_hdr.*) }
+ __eh_frame_hdr_end = .;
 . = ALIGN((1 << 12));
  __bss_start = .;
 .bss :{

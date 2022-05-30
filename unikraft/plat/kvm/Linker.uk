@@ -15,6 +15,10 @@ KVM_LD_SCRIPT_FLAGS := $(addprefix -Wl$(comma)-dT$(comma),\
 			 $(UK_PLAT_KVM_DEF_LDS))
 KVM_LD_SCRIPT_FLAGS += $(addprefix -Wl$(comma)-T$(comma),\
 			$(KVM_LD_SCRIPT-y) $(EXTRA_LD_SCRIPT-y))
+KVM_LD_SCRIPT_FLAGS_ASLR := $(addprefix -Wl$(comma)-dT$(comma),\
+			 $(UK_PLAT_KVM_DEF_LDS_ASLR))
+KVM_LD_SCRIPT_FLAGS_ASLR += $(addprefix -Wl$(comma)-T$(comma),\
+			$(KVM_LD_SCRIPT-y) $(EXTRA_LD_SCRIPT-y))
 
 ASLR_LIBS += $(foreach P,$(UK_PLATS) $(UK_PLATS-y),\
 		$(if $(call qstrip,$($(call uc,$(P))_LIBS) $($(call uc,$(P))_LIBS-y)),\
@@ -42,8 +46,8 @@ $(KVM_DEBUG_IMAGE): $(KVM_ALIBS) $(KVM_ALIBS-y) $(KVM_OLIBS) $(KVM_OLIBS-y) \
 	$(call build_cmd,LD,,$(KVM_IMAGE).ld.o,\
 	       $(LD) -r $(LIBLDFLAGS) $(LIBLDFLAGS-y) \
 			$(KVM_LDFLAGS) $(KVM_LDFLAGS-y) \
-			-T$(UK_PLAT_KVM_DEF_LDS_ASLR)\
-		     	-L$(BUILD_DIR) \
+			$(KVM_OLIBS) $(KVM_OLIBS-y) \
+			$(UK_OLIBS) $(UK_OLIBS-y) \
 			-Wl$(comma)--start-group \
 			$(KVM_ALIBS) $(KVM_ALIBS-y) \
 			$(UK_ALIBS) $(UK_ALIBS-y) \
@@ -62,9 +66,9 @@ $(KVM_DEBUG_IMAGE): $(KVM_ALIBS) $(KVM_ALIBS-y) $(KVM_OLIBS) $(KVM_OLIBS-y) \
 	$(call build_cmd,LD,,$@,\
 	       $(LD) $(LDFLAGS) $(LDFLAGS-y) \
 		     $(KVM_LDFLAGS) $(KVM_LDFLAGS-y) \
-		     -T$(UK_PLAT_KVM_DEF_LDS_ASLR)\
+		     $(KVM_LD_SCRIPT_FLAGS_ASLR)\
 		     -L$(BUILD_DIR) \
-		      -o $@)
+		     -o $@)
 else
 $(KVM_DEBUG_IMAGE): $(KVM_ALIBS) $(KVM_ALIBS-y) $(KVM_OLIBS) $(KVM_OLIBS-y) \
 		    $(UK_ALIBS) $(UK_ALIBS-y) $(UK_OLIBS) $(UK_OLIBS-y)
@@ -90,6 +94,19 @@ $(KVM_DEBUG_IMAGE): $(KVM_ALIBS) $(KVM_ALIBS-y) $(KVM_OLIBS) $(KVM_OLIBS-y) \
 		     $(KVM_IMAGE).o -o $@)
 endif
 
+KVM_DEDU_DEBUG: $(KVM_IMAGE).dbg
+	$(call build_cmd,DEDU,,$(KVM_IMAGE).dbg,\
+		$(SCRIPTS_DIR)/ASLR/ImageExtender.py \
+			--file_path="$(KVM_IMAGE).dbg" --build_path="$(BUILD_DIR)" \
+			--conf_file="$(SCRIPTS_DIR)/ASLR/aslr_dedu_config.txt")
+	
+	$(call build_cmd,SCSTRIP,,$(KVM_IMAGE).dbg_deduplication,\
+		$(SCRIPTS_DIR)/sect-strip.py \
+			$(SECT_STRIP_FLAGS) $(SECT_STRIP_FLAGS-y) \
+			--with-objcopy=$(OBJCOPY) \
+			$< -o $(KVM_IMAGE).dbg_deduplication && \
+		$(STRIP) -s $(KVM_IMAGE).dbg_deduplication)
+
 $(KVM_IMAGE): $(KVM_IMAGE).dbg
 	$(call build_cmd,SCSTRIP,,$@,\
 		$(SCRIPTS_DIR)/sect-strip.py \
@@ -107,6 +124,9 @@ $(KVM_IMAGE).gz: $(KVM_IMAGE)
 # register images to the build
 ifeq ($(CONFIG_PLAT_KVM),y)
 UK_DEBUG_IMAGES-y                     += $(KVM_DEBUG_IMAGE)
+ifeq (y,$(CONFIG_MEMORY_DEDUP_ASLR))
+UK_DEBUG_IMAGES-y                     += KVM_DEDU_DEBUG
+endif
 UK_IMAGES-y                           += $(KVM_IMAGE)
 UK_IMAGES-$(CONFIG_OPTIMIZE_SYMFILE)  += $(KVM_IMAGE).sym
 UK_IMAGES-$(CONFIG_OPTIMIZE_COMPRESS) += $(KVM_IMAGE).gz

@@ -47,17 +47,18 @@ def extract_conf(openConf):
 	'''
 	content = openConf.readlines()
 	conf = []
-	index = 0
-	for i,line in enumerate(content):
+	default = 0
+	first = True
+	for line in content:
 		if not line.startswith("#"):
 			words = line.split(" : ")
-			if len(words) > 1 :
+			if len(words) == 2 :
 				conf.append([words[0],words[1].rstrip("\n")])
-				index += 1
-				continue
-			elif index == 0:
-				conf.append(words[0].rstrip("\n"))
-				index += 1
+				if first:
+					default = words[1].rstrip("\n")
+					first = False
+			elif len(words) == 1 and not first:
+				conf.append([words[0].rstrip("\n"),default])
 			else:
 				print("[Error] - line "+str(i)+" of the config file doesn't respect the format.")
 	return conf

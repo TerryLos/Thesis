@@ -1,5 +1,5 @@
 #Starting adress of the table and left padding for non included lib
-0x150000
+0x150000 : 0x800
 #Libs order
 libkvmvirtio : 0x800
 libkvmpci : 0x800
@@ -35,12 +35,12 @@ libuknetdev : 0x800
 libukring : 0x800
 libukrust : 0x800
 libuksched : 0x800
-libukschedcoop : 0x800
+libukschedcoop
 libuksglist : 0x800
 libuksignal : 0x800
 libuksp : 0x800
 libukswrand : 0x800
 libuktest : 0x800
-libuktime : 0x800
-libuktimeconv : 0x800
-likbvfscore : 0x800
+libuktime
+libuktimeconv
+likbvfscore

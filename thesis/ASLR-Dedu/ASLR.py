@@ -282,9 +282,9 @@ def print_back(openFile,output,table,debug,dedu):
 				writeFile.write(element[1]+"= ."+element[2]+";\n")
 			else:
 				writeFile.write(element[1]+"= .;\n")
-			if element[1] == " _etext " and deduFile:
+			if element[1] == " _end " and deduFile:
 				conf = extract_conf(deduFile)
-				addr = conf.pop(0)
+				addr = conf.pop(0)[0]
 				fill = 0
 				for lib in conf:
 					fill += int(lib[1],16)
@@ -298,31 +298,25 @@ def print_back(openFile,output,table,debug,dedu):
 	writeFile.close()
 	return 0
 
-def handleSetup(file,readOnly):
+def handleSetup(file,address):
 	regex = re.compile(".long 0[xX][0-9a-fA-F]+")
 	newString = ""
-	if not readOnly:
+
+	if address == "-1":
 		patch = ''.join('{:02X}'.format(SystemRandom().randint(1048576,1048576*4)))
-		for line in file.readlines():
-			detect = re.split(regex,line)
-			if len(detect) > 1:
-				#that int is 0x100000 in hexa 
-				print(patch)
-				newString += ".long 0x"+ patch + detect [1]
-			else:
-				newString += line
-	
-		file.seek(0)
-		file.write(newString)
 	else:
-		for line in file.readlines():
-			detect = re.split(regex,line)
-			if len(detect) > 1:
-				addr = re.compile("0[xX][0-9a-fA-F]+")
-				final = addr.findall(line)
-				if final:
-					print(final[0][2:])
-					patch = final
+		patch = address
+	for line in file.readlines():
+		detect = re.split(regex,line)
+		if len(detect) > 1:
+			#that int is 0x100000 in hexa 
+			print(patch)
+			newString += ".long 0x"+ patch + detect [1]
+		else:
+			newString += line
+
+	file.seek(0)
+	file.write(newString)
 
 	return patch
 if __name__ == '__main__':
@@ -345,16 +339,15 @@ if __name__ == '__main__':
 		help="Prints on the standard input debug informations.")
 
 	params , _ = parser.parse_known_args(sys.argv[1:])
+
 	if params.setup != "./":
 		openFile = open(params.setup,"r+")
 		if(openFile == None):
 			print("[ASLR] {Error} Couldn't open the entropy.S file, path may be wrong.")
 			sys.exit()
-		if params.baseAddr == '-2':
-			handleSetup(openFile,True)
-		else:
-			handleSetup(openFile,False)
+		handleSetup(openFile,params.baseAddr)
 		openFile.close()
+	
 	elif params.baseAddr != '-1':
 		openFile = open(params.path,"r+")
 		if(openFile == None):
@@ -367,6 +360,7 @@ if __name__ == '__main__':
 			sys.exit()
 		main(openFile,params.output,params.debug,libList,params.baseAddr,params.dedu)
 		openFile.close()
+	
 	else:
 		print("[ASLR] {Error} Base address should be positive or given.",file=sys.stderr)
 		sys.exit()

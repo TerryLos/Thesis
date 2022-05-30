@@ -1,8 +1,8 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Unikraft/0.7.0~b224133-custom Configuration
+# Unikraft/0.7.0~fbc67fe-custom Configuration
 #
-CONFIG_UK_FULLVERSION="0.7.0~b224133-custom"
+CONFIG_UK_FULLVERSION="0.7.0~fbc67fe-custom"
 CONFIG_UK_CODENAME="Mimas"
 CONFIG_UK_ARCH="x86_64"
 CONFIG_UK_BASE="/home/terrylos/Thesis/unikraft"
@@ -62,7 +62,7 @@ CONFIG_KVM_SERIAL_BAUD_115200=y
 #
 CONFIG_LINK_ASLR=y
 CONFIG_RUNTIME_ASLR=y
-# CONFIG_MEMORY_DEDUP_ASLR is not set
+CONFIG_MEMORY_DEDUP_ASLR=y
 # end of Memory security
 
 CONFIG_KVM_PCI=y
@@ -191,7 +191,7 @@ CONFIG_LLVM_TARGET_ARCH=""
 #
 CONFIG_APPHELLOWORLD_DEPENDENCIES=y
 # CONFIG_APPHELLOWORLD_PRINTARGS is not set
-# CONFIG_APPHELLOWORLD_SPINNER is not set
+CONFIG_APPHELLOWORLD_SPINNER=y
 # end of Application Options
 
 CONFIG_UK_NAME="app-helloworld"
