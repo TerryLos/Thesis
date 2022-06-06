@@ -60,8 +60,9 @@ CONFIG_KVM_SERIAL_BAUD_115200=y
 #
 # Memory security
 #
-# CONFIG_LINK_ASLR is not set
-# CONFIG_RUNTIME_ASLR is not set
+CONFIG_LINK_ASLR=y
+CONFIG_RUNTIME_ASLR=y
+CONFIG_MEMORY_DEDUP_ASLR=y
 # end of Memory security
 
 CONFIG_KVM_PCI=y

@@ -12,7 +12,7 @@ import re
 from utils import check_file,str_to_hex,extract_libs,extract_conf
 
 pointerRex = re.compile("\[.*?\]")
-
+DEBUG = False
 class Image:
 	def __init__(self,elfFile,config):
 		self.elfFile = elfFile
@@ -38,15 +38,6 @@ class Image:
 			print("[Error] - indirection table not created by the linker script.")
 			sys.exit()
 		self.baseAddr = self.libSec.virtual_address
-
-	def _find_lib(self,addr):
-		for libs in self.config:
-			if self.funcLibMap[libs[0]] is None:
-				continue
-			bounds = self.funcLibMap[libs[0]][1]
-			if len(self.funcLibMap[libs[0]][0])> 0 and addr >= bounds[0] and addr <= bounds[1]:
-				return libs[0],(bounds[0], bounds[1])
-		return None , None
 	
 	def _handle_move(self,operand):
 		after = operand.split(", ")
@@ -68,17 +59,19 @@ class Image:
 		return translatedOp
 	
 	def correct_calls(self,disass):
-		stackInit = self.elfFile.get_static_symbol("bootstack")
-		if not stackInit:
-			print("[Error] - Couldn't find the bootstack symbol")
-			sys.exit()
+		currentFunction = None
+		currentSize = 0
+		currentLib = None
+		
+		
 		instList = disass.disasm(self.textSec.content.tobytes(),self.textSec.virtual_address)
+		
 		maxPos = self.textSec.virtual_address+self.textSec.size
 		textRange = [self.textSec.virtual_address,maxPos]
 		roData = self.elfFile.get_section(".rodata")
-		
+
 		if roData is None :
-			print("[Error] - Couldn't find the .bss section")
+			print("[Error] - Couldn't find the .rodata section")
 			roData = [0,0]
 		else:
 			roData = [roData.virtual_address,roData.virtual_address+roData.size]
@@ -89,12 +82,23 @@ class Image:
 			dataRange = [0,0]
 		else:
 			dataRange = [dataRange.virtual_address,dataRange.virtual_address+dataRange.size]
-		
+
 		#Generate new absolute calls
 		for inst in instList:
-			_ , rangeLib = self._find_lib(inst.address)
+			#Changes the parent function of the instruction
+			if self.functionPos.get(inst.address):
+				currentFunction = self.functionPos.get(inst.address)[0]
+				currentSize = currentFunction.size
+				#Gets the current lib based on the function
+				currentLib = self.functionPos.get(inst.address)[2]
+
+			#if lib and function not in the config file
+			elif currentFunction and currentFunction.value + currentSize < inst.address:
+				currentFunction = currentLib = None
+				currentFunctionSize = 0
+			
 			patch = b'\xc7\xc0'
-	
+
 			#Get back the same function from elf
 			funcInfo = self.functionPos.get(str_to_hex(inst.op_str))
 			#Checks if the operands are refering to symbols
@@ -104,54 +108,57 @@ class Image:
 				if relAddress != None:
 					patch += relAddress.to_bytes(4,'little') + b'\xff\xd0'
 					self.elfFile.patch_address(inst.address,bytearray(patch))
-				else:
+				elif DEBUG:
 					print("[Info] - ",hex(inst.address),funcInfo[0].name," \
 						Couldn't be relocated, it's missing in the indirection table")
 			
-			elif jump_mnemonic(inst.mnemonic) and (funcInfo is not None and rangeLib is not None ) \
-				and (funcInfo[0].value < rangeLib[0] or funcInfo[0].value > rangeLib[1]):
+			elif jump_mnemonic(inst.mnemonic) and DEBUG and (funcInfo is not None and currentFunction is not None) \
+				and funcInfo[0] == currentFunction:
 					print("[Warn] Jump left unpatched ",hex(inst.address)," to ",funcInfo[0].name,
-					"out of its own lib")
+					"out of its own function")
 			#Patches instructions that does direct addressing in their operands
-			elif varInfo and not jump_mnemonic(inst.mnemonic):
-				tmp  , _ =self._find_lib(inst.address)
+			elif varInfo and (inst.mnemonic=="mov" or inst.mnemonic=="movh" or inst.mnemonic=="lea"):
 				for var in varInfo:
 					if type(var) is int and (var in range(roData[0],roData[1]) \
 						or var in range(dataRange[0],dataRange[1]) or var in range(textRange[0],textRange[1])): 
 						#Patches the address by a jump
-						self._patch_memory_access(inst,varInfo,stackInit)
-						
+						self._patch_memory_access(inst,currentLib,varInfo)
+		#check sizes
+		for lib in self.config:
+			ind = self.libInInd.get(lib[0])
+			if ind and ind[1] > ind[2]:
+				print("[ERROR] - couldn't pach the instruction, missing space for "+lib[0]+\
+					" at least "+ str(ind[1]-ind[2])+" bytes.")
 			
 	
-	def _patch_memory_access(self,inst,varInfo,stackInit):
+	def _patch_memory_access(self,inst,currentLib,varInfo):
 	
 		movSize = len(inst.bytes)
-		#checks its lib
-		lib , _ = self._find_lib(inst.address)
-		#Gets its indirection table
-		ind = self.libInInd.get(lib)
 		if movSize <= 5:
 			return
-
+		#Gets its indirection table
+		ind = self.libInInd.get(currentLib)
+		
 		if ind :
-			if len(varInfo) > 2 and varInfo[0] == stackInit.value \
-				and varInfo[1] == stackInit.value:
-				return
 			#Adds it in the .ind table at its lib offset
 			#Jumps towards the table
 			fill = b'\x68'+ind[1].to_bytes(4,'little')+b'\xc3'
+			
 			if movSize > 6:
 				fill += b'\x90'*(movSize-6)
-			self.elfFile.patch_address(inst.address,bytearray(fill))
-			#Fills the table with the instruction and jumps back
-			tableCode = inst.bytes
-			#+1 because of the return instruction c3
-			tableCode += b'\xe9'+compute_offset(inst.address-(ind[1]+movSize-1)).to_bytes(4,'little')
-			self.elfFile.patch_address(ind[1],bytearray(tableCode))
-			ind[1] += movSize + 5
 			
-		else :
-			print("[Error] - Couldn't patch mov/lea at address",inst.address," no lib found.")
+			#Doesn't write after the table but keepts counting to
+			if ind[1] < ind[2]:
+				self.elfFile.patch_address(inst.address,bytearray(fill))
+				#Fills the table with the instruction and jumps back
+				tableCode = inst.bytes
+				#+1 because of the return instruction c3
+				tableCode += b'\xe9'+compute_offset(inst.address-(ind[1]+movSize-1)).to_bytes(4,'little')
+				self.elfFile.patch_address(ind[1],bytearray(tableCode))
+			ind[1] += movSize + 5
+		
+		elif DEBUG :
+			print("[WARN] - Couldn't patch mov/lea at address",inst.address," no lib found.")
 	def add_indirection_table(self):
 		
 		self.libSec.type = self.textSec.type #same type as .text section
@@ -168,7 +175,7 @@ class Image:
 				byteCount += padding
 			else:
 				#Adds indirection for functions
-				for func in (self.funcLibMap.get(lib[0])[0]):
+				for func in (self.funcLibMap.get(lib[0])):
 					writeFunc = self.elfFuncDict.get(func[0])
 					if writeFunc is not None:
 						self.functionPos.get(writeFunc.value)[1] = self.libSec.virtual_address+byteCount
@@ -183,15 +190,21 @@ class Image:
 			#.ind.lib last instruction address
 			code += b'\x90'*(self.libInInd[lib[0]][2] - (self.baseAddr+byteCount))
 			byteCount += (self.libInInd[lib[0]][2] - (self.baseAddr+byteCount))
+			if self.libInInd[lib[0]][1] > self.libInInd[lib[0]][2]:
+				print("[Error] - The space reserved for lib "+lib[0]+" is too small, add at least",\
+					(self.libInInd[lib[0]][1]-self.libInInd[lib[0]][2]),"bytes.")
+				sys.exit()
+		
 		print("[Info] - Created .ind segment from "+hex(self.libSec.virtual_address)\
 			+" : "+hex(self.libSec.virtual_address+byteCount)+".")
-		
-		if  self.libSec.virtual_address <  self.textSec.virtual_address and \
+			
+		if self.libSec.virtual_address <  self.textSec.virtual_address and \
 			self.libSec.virtual_address+byteCount >= self.textSec.virtual_address:
 			print("[Error] - the indirection table rewrites the text section, change the configuration file.")
 			sys.exit()
+		
 		self.libSec.content = bytearray(code)
-		self.libSec.flags = 0x4+0x2 #No need to write this section
+		self.libSec.flags = self.textSec.flags
 	
 	def map_symbols_with_library(self,buildPath):
 		#Work around since get_function_address doesn't seem to send back good addresses
@@ -226,7 +239,7 @@ class Image:
 				if funct is not None:
 					self.funcLibMap[library[0]].append((name.name,name.value,funct.value))
 					#None is the destination address that should be further filled.
-					self.functionPos[funct.value] = [funct,None]
+					self.functionPos[funct.value] = [funct,None,library[0]]
 					libInElf = True
 				else:
 					#Consider functions that are not included in the elf so that absolute addresses
@@ -236,15 +249,12 @@ class Image:
 			#No function was found in the binary, pad this lib
 			if libInElf == False:
 				self.funcLibMap[library[0]] = None
-			else:
-				self.funcLibMap[library[0]] = [self.funcLibMap[library[0]], \
-				self.get_lib_limits(self.funcLibMap[library[0]])]
 
 	def print_info(self):
 		for libs in self.config:
 			print(libs[0]+" :")
 			if self.funcLibMap.get(libs[0]):
-				for function in self.funcLibMap.get(libs[0])[0]:
+				for function in self.funcLibMap.get(libs[0]):
 					if function[2]:
 						print("\t "+" fct :"+function[0] +" at address "+str(hex(function[1])) \
 						+ " in lib "+str(hex(function[2]))+ " in elf.")
@@ -259,13 +269,13 @@ class Image:
 		lastName = None
 		index = 0
 		endIndex = len(functionList)
+		
 		for index in range(endIndex):
 			if functionList[index][2] and start > functionList[index][2] :
 				start = functionList[index][2]
 			if functionList[index][2] and end < functionList[index][2] :
 				lastName = functionList[index][0]
 				end = functionList[index][2]
-		
 		#The end of the lib is the last byte of the last function
 		end += (self.elfFuncDict[lastName].size-1)
 	

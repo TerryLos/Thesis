@@ -99,13 +99,6 @@ KVM_DEDU_DEBUG: $(KVM_IMAGE).dbg
 		$(SCRIPTS_DIR)/ASLR/ImageExtender.py \
 			--file_path="$(KVM_IMAGE).dbg" --build_path="$(BUILD_DIR)" \
 			--conf_file="$(SCRIPTS_DIR)/ASLR/aslr_dedu_config.txt")
-	
-	$(call build_cmd,SCSTRIP,,$(KVM_IMAGE).dbg_deduplication,\
-		$(SCRIPTS_DIR)/sect-strip.py \
-			$(SECT_STRIP_FLAGS) $(SECT_STRIP_FLAGS-y) \
-			--with-objcopy=$(OBJCOPY) \
-			$< -o $(KVM_IMAGE).dbg_deduplication && \
-		$(STRIP) -s $(KVM_IMAGE).dbg_deduplication)
 
 $(KVM_IMAGE): $(KVM_IMAGE).dbg
 	$(call build_cmd,SCSTRIP,,$@,\

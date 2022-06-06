@@ -282,7 +282,7 @@ def print_back(openFile,output,table,debug,dedu):
 				writeFile.write(element[1]+"= ."+element[2]+";\n")
 			else:
 				writeFile.write(element[1]+"= .;\n")
-			if element[1] == " _end " and deduFile:
+			if element[1] == " _etext " and deduFile:
 				conf = extract_conf(deduFile)
 				addr = conf.pop(0)[0]
 				fill = 0

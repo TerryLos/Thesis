@@ -1,0 +1,1237 @@
+make[1]: Entering directory '/home/terrylos/Thesis/unikraft'
+  CP      config
+  LN      app-ftp_kvm-x86_64.dbg.gdb.py
+  LN      KVM_DEDU_DEBUG.gdb.py
+  GEN     uk-gdb.py
+  CC      libkvmplat: trace.common.o
+  CC      libkvmplat: traps.isr.o
+  CC      libkvmplat: cpu_features.common.o
+  CC      libkvmplat: cpu_native.common.o
+  AS      libkvmplat: thread_start.common.o
+  CC      libkvmplat: thread.common.o
+  CC      libkvmplat: sw_ctx.common.o
+  AS      libkvmplat: entry64.o
+  CC      libkvmplat: traps.o
+  AS      libkvmplat: cpu_vectors_x86_64.o
+  CC      libkvmplat: setup.o
+  CC      libkvmplat: console.o
+  CC      libkvmplat: lcpu.o
+  CC      libkvmplat: intctrl.o
+  CC      libkvmplat: tscclock.o
+  CC      libkvmplat: time.o
+  CC      libkvmplat: memory.x86.o
+  CC      libkvmplat: vga_console.o
+  CC      libkvmplat: serial_console.o
+  CC      libkvmplat: shutdown.o
+  CC      libkvmplat: memory.o
+  CC      libkvmplat: irq.o
+  CC      libkvmplat: io.o
+  CC      libkvmplat: lcpu.common.o
+  CC      libkvmplat: memory.common.o
+  LDS     libkvmplat: link64.lds
+  CC      libkvmpci: pci_bus.common.o
+  CC      libkvmpci: pci_bus_x86.x86.o
+  CC      libkvmvirtio: virtio_bus.o
+  CC      libkvmvirtio: virtio_ring.o
+  CC      libkvmvirtio: virtio_pci.o
+  CC      libkvmvirtionet: virtio_net.o
+  CC      libftp: server.o
+  CC      libftp: siftp.o
+  CC      libftp: service.o
+  CC      libposix_process: process.o
+  CC      libposix_user: user.o
+  CC      libukalloc: alloc.o
+  CC      libukallocbbuddy: bbuddy.o
+  CC      libukargparse: argparse.o
+  CC      libukboot: boot.o
+  CC      libukboot: version.o
+  CC      libukboot: banner.o
+  CC      libukboot_main: weak_main.o
+  CC      libukbus: bus.o
+  CC      libukdebug: print.o
+  CC      libukdebug: snprintf.o
+  CC      libukdebug: outf.o
+  CC      libukdebug: hexdump.o
+  CC      libuklibparam: param.o
+  CC      libuklock: semaphore.o
+  CC      libuklock: mutex.o
+  CC      libukmpi: mbox.o
+  CC      libuknetdev: netbuf.o
+  CC      libuknetdev: netdev.o
+  LDS     libuknetdev: libparam.lds
+  CC      libuksched: sched.o
+  CC      libuksched: thread.o
+  CC      libuksched: thread_attr.o
+  CC      libukschedcoop: schedcoop.o
+  CC      libuksglist: sglist.o
+  CC      libuksignal: signal.o
+  CC      libuksignal: sigset.o
+  CC      libuksignal: uk_signal.o
+  CC      libukswrand: chacha.o
+  CC      libukswrand: swrand.o
+  CC      libukswrand: getrandom.o
+  CC      libuktime: __month_to_secs.o
+  CC      libuktime: __secs_to_tm.o
+  CC      libuktime: timegm.o
+  CC      libuktime: __tm_to_secs.o
+  CC      libuktime: __year_to_secs.o
+  CC      libuktime: time.o
+  CC      libuktime: timer.o
+  CC      libuktimeconv: timeconv.o
+  CC      libvfscore: fd.o
+  CC      libvfscore: file.o
+  CC      libvfscore: stdio.o
+  CC      libvfscore: mount.o
+  CC      libvfscore: vnode.o
+  CC      libvfscore: dentry.o
+  CC      libvfscore: syscalls.o
+  CC      libvfscore: main.o
+  CC      libvfscore: task.o
+  CC      libvfscore: lookup.o
+  CC      libvfscore: fops.o
+  CC      libvfscore: subr_uio.o
+  CC      libvfscore: pipe.o
+  LDS     libvfscore: libparam.lds
+  CC      libpthread-embedded: pte_osal.glue.o
+  CC      libpthread-embedded: attributes.glue.o
+  CC      libpthread-embedded: pthread_atfork.glue.o
+  CC      libpthread-embedded: pthread_sigmask.glue.o
+  CC      libpthread-embedded: pthread_condattr.glue.o
+  CC      libpthread-embedded: cleanup.o
+  CC      libpthread-embedded: create.o
+  CC      libpthread-embedded: global.o
+  CC      libpthread-embedded: tls-helper.o
+  CC      libpthread-embedded: pte_callUserDestroyRoutines.o
+  CC      libpthread-embedded: pte_cancellable_wait.o
+  CC      libpthread-embedded: pte_cond_check_need_init.o
+  CC      libpthread-embedded: pte_detach.o
+  CC      libpthread-embedded: pte_getprocessors.o
+  CC      libpthread-embedded: pte_is_attr.o
+  CC      libpthread-embedded: pte_mutex_check_need_init.o
+  CC      libpthread-embedded: pte_new.o
+  CC      libpthread-embedded: pte_relmillisecs.o
+  CC      libpthread-embedded: pte_reuse.o
+  CC      libpthread-embedded: pte_rwlock_cancelwrwait.o
+  CC      libpthread-embedded: pte_rwlock_check_need_init.o
+  CC      libpthread-embedded: pte_spinlock_check_need_init.o
+  CC      libpthread-embedded: pte_threadDestroy.o
+  CC      libpthread-embedded: pte_threadStart.o
+  CC      libpthread-embedded: pte_throw.o
+  CC      libpthread-embedded: pte_tkAssocCreate.o
+  CC      libpthread-embedded: pte_tkAssocDestroy.o
+  CC      libpthread-embedded: pthread_attr_destroy.o
+  CC      libpthread-embedded: pthread_attr_getdetachstate.o
+  CC      libpthread-embedded: pthread_attr_getinheritsched.o
+  CC      libpthread-embedded: pthread_attr_getschedparam.o
+  CC      libpthread-embedded: pthread_attr_getschedpolicy.o
+  CC      libpthread-embedded: pthread_attr_getscope.o
+  CC      libpthread-embedded: pthread_attr_getstackaddr.o
+  CC      libpthread-embedded: pthread_attr_getstacksize.o
+  CC      libpthread-embedded: pthread_attr_init.o
+  CC      libpthread-embedded: pthread_attr_setdetachstate.o
+  CC      libpthread-embedded: pthread_attr_setinheritsched.o
+  CC      libpthread-embedded: pthread_attr_setschedparam.o
+  CC      libpthread-embedded: pthread_attr_setschedpolicy.o
+  CC      libpthread-embedded: pthread_attr_setscope.o
+  CC      libpthread-embedded: pthread_attr_setstackaddr.o
+  CC      libpthread-embedded: pthread_attr_setstacksize.o
+  CC      libpthread-embedded: pthread_barrierattr_destroy.o
+  CC      libpthread-embedded: pthread_barrierattr_getpshared.o
+  CC      libpthread-embedded: pthread_barrierattr_init.o
+  CC      libpthread-embedded: pthread_barrierattr_setpshared.o
+  CC      libpthread-embedded: pthread_barrier_destroy.o
+  CC      libpthread-embedded: pthread_barrier_init.o
+  CC      libpthread-embedded: pthread_barrier_wait.o
+  CC      libpthread-embedded: pthread_cancel.o
+  CC      libpthread-embedded: pthread_condattr_destroy.o
+  CC      libpthread-embedded: pthread_condattr_getpshared.o
+  CC      libpthread-embedded: pthread_condattr_init.o
+  CC      libpthread-embedded: pthread_condattr_setpshared.o
+  CC      libpthread-embedded: pthread_cond_destroy.o
+  CC      libpthread-embedded: pthread_cond_init.o
+  CC      libpthread-embedded: pthread_cond_signal.o
+  CC      libpthread-embedded: pthread_cond_wait.o
+  CC      libpthread-embedded: pthread_delay_np.o
+  CC      libpthread-embedded: pthread_detach.o
+  CC      libpthread-embedded: pthread_equal.o
+  CC      libpthread-embedded: pthread_exit.o
+  CC      libpthread-embedded: pthread_getconcurrency.o
+  CC      libpthread-embedded: pthread_getschedparam.o
+  CC      libpthread-embedded: pthread_getspecific.o
+  CC      libpthread-embedded: pthread_init.o
+  CC      libpthread-embedded: pthread_join.o
+  CC      libpthread-embedded: pthread_key_create.o
+  CC      libpthread-embedded: pthread_key_delete.o
+  CC      libpthread-embedded: pthread_kill.o
+  CC      libpthread-embedded: pthread_mutexattr_destroy.o
+  CC      libpthread-embedded: pthread_mutexattr_getkind_np.o
+  CC      libpthread-embedded: pthread_mutexattr_getpshared.o
+  CC      libpthread-embedded: pthread_mutexattr_gettype.o
+  CC      libpthread-embedded: pthread_mutexattr_init.o
+  CC      libpthread-embedded: pthread_mutexattr_setkind_np.o
+  CC      libpthread-embedded: pthread_mutexattr_setpshared.o
+  CC      libpthread-embedded: pthread_mutexattr_settype.o
+  CC      libpthread-embedded: pthread_mutex_destroy.o
+  CC      libpthread-embedded: pthread_mutex_init.o
+  CC      libpthread-embedded: pthread_mutex_lock.o
+  CC      libpthread-embedded: pthread_mutex_timedlock.o
+  CC      libpthread-embedded: pthread_mutex_trylock.o
+  CC      libpthread-embedded: pthread_mutex_unlock.o
+  CC      libpthread-embedded: pthread_num_processors_np.o
+  CC      libpthread-embedded: pthread_once.o
+  CC      libpthread-embedded: pthread_rwlockattr_destroy.o
+  CC      libpthread-embedded: pthread_rwlockattr_getpshared.o
+  CC      libpthread-embedded: pthread_rwlockattr_init.o
+  CC      libpthread-embedded: pthread_rwlockattr_setpshared.o
+  CC      libpthread-embedded: pthread_rwlock_destroy.o
+  CC      libpthread-embedded: pthread_rwlock_init.o
+  CC      libpthread-embedded: pthread_rwlock_rdlock.o
+  CC      libpthread-embedded: pthread_rwlock_timedrdlock.o
+  CC      libpthread-embedded: pthread_rwlock_timedwrlock.o
+  CC      libpthread-embedded: pthread_rwlock_tryrdlock.o
+  CC      libpthread-embedded: pthread_rwlock_trywrlock.o
+  CC      libpthread-embedded: pthread_rwlock_unlock.o
+  CC      libpthread-embedded: pthread_rwlock_wrlock.o
+  CC      libpthread-embedded: pthread_self.o
+  CC      libpthread-embedded: pthread_setcancelstate.o
+  CC      libpthread-embedded: pthread_setcanceltype.o
+  CC      libpthread-embedded: pthread_setconcurrency.o
+  CC      libpthread-embedded: pthread_setschedparam.o
+  CC      libpthread-embedded: pthread_setspecific.o
+  CC      libpthread-embedded: pthread_spin_destroy.o
+  CC      libpthread-embedded: pthread_spin_init.o
+  CC      libpthread-embedded: pthread_spin_lock.o
+  CC      libpthread-embedded: pthread_spin_trylock.o
+  CC      libpthread-embedded: pthread_spin_unlock.o
+  CC      libpthread-embedded: pthread_terminate.o
+  CC      libpthread-embedded: pthread_testcancel.o
+  CC      libpthread-embedded: pthread_timechange_handler_np.o
+  CC      libpthread-embedded: sched_get_priority_max.o
+  CC      libpthread-embedded: sched_get_priority_min.o
+  CC      libpthread-embedded: sched_setscheduler.o
+  CC      libpthread-embedded: sem_close.o
+  CC      libpthread-embedded: sem_destroy.o
+  CC      libpthread-embedded: sem_getvalue.o
+  CC      libpthread-embedded: sem_init.o
+  CC      libpthread-embedded: sem_open.o
+  CC      libpthread-embedded: sem_post_multiple.o
+  CC      libpthread-embedded: sem_timedwait.o
+  CC      libpthread-embedded: sem_post.o
+  CC      libpthread-embedded: sem_trywait.o
+  CC      libpthread-embedded: sem_unlink.o
+  CC      libpthread-embedded: sem_wait.o
+  CC      liblwip: alloc.unikraft.o
+  CC      liblwip: proto.o
+  CC      liblwip: host.o
+  CC      liblwip: serv.o
+  CC      liblwip: inet.unikraft.o
+  CC      liblwip: getnameinfo.unikraft.o
+  CC      liblwip: mutex.unikraft.o
+  CC      liblwip: semaphore.unikraft.o
+  CC      liblwip: mailbox.unikraft.o
+  CC      liblwip: threads.unikraft.o
+  CC      liblwip: init.unikraft.o
+  CC      liblwip: time.unikraft.o
+  CC      liblwip: sendfile.unikraft.o
+  CC      liblwip: sockets.unikraft.o
+  CC      liblwip: init.o
+  CC      liblwip: def.o
+  CC      liblwip: inet_chksum.o
+  CC      liblwip: ip.o
+  CC      liblwip: memp.o
+  CC      liblwip: mem.o
+  CC      liblwip: netif.o
+  CC      liblwip: pbuf.o
+  CC      liblwip: raw.o
+  CC      liblwip: stats.o
+  CC      liblwip: sys.o
+  CC      liblwip: timeouts.o
+  CC      liblwip: dns.o
+  CC      liblwip: tcp.o
+  CC      liblwip: tcp_in.o
+  CC      liblwip: tcp_out.o
+  CC      liblwip: udp.o
+  CC      liblwip: api_lib.o
+  CC      liblwip: api_msg.o
+  CC      liblwip: err.o
+  CC      liblwip: netbuf.o
+  CC      liblwip: netdb.o
+  CC      liblwip: netifapi.o
+  CC      liblwip: tcpip.o
+  CC      liblwip: if_api.o
+  CC      liblwip: sockets.o
+  CC      liblwip: ethernet.o
+  CC      liblwip: netbuf.unikraft.o
+  CC      liblwip: uknetdev.unikraft.o
+  CC      liblwip: etharp.o
+  CC      liblwip: ip4_frag.o
+  CC      liblwip: ip4.o
+  CC      liblwip: ip4_addr.o
+  CC      liblwip: icmp.o
+  CC      libnewlibc: argz_add.o
+  CC      libnewlibc: argz_add_sep.o
+  CC      libnewlibc: argz_append.o
+  CC      libnewlibc: argz_count.o
+  CC      libnewlibc: argz_create.o
+  CC      libnewlibc: argz_create_sep.o
+  CC      libnewlibc: argz_delete.o
+  CC      libnewlibc: argz_extract.o
+  CC      libnewlibc: argz_insert.o
+  CC      libnewlibc: argz_next.o
+  CC      libnewlibc: argz_replace.o
+  CC      libnewlibc: argz_stringify.o
+  CC      libnewlibc: buf_findstr.o
+  CC      libnewlibc: envz_entry.o
+  CC      libnewlibc: envz_get.o
+  CC      libnewlibc: envz_add.o
+  CC      libnewlibc: envz_remove.o
+  CC      libnewlibc: envz_merge.o
+  CC      libnewlibc: envz_strip.o
+  CC      libnewlibc: ctype_.o
+  CC      libnewlibc: isalnum.o
+  CC      libnewlibc: isalpha.o
+  CC      libnewlibc: iscntrl.o
+  CC      libnewlibc: isdigit.o
+  CC      libnewlibc: islower.o
+  CC      libnewlibc: isupper.o
+  CC      libnewlibc: isprint.o
+  CC      libnewlibc: ispunct.o
+  CC      libnewlibc: isspace.o
+  CC      libnewlibc: isxdigit.o
+  CC      libnewlibc: tolower.o
+  CC      libnewlibc: toupper.o
+  CC      libnewlibc: isalnum_l.o
+  CC      libnewlibc: isalpha_l.o
+  CC      libnewlibc: isascii.o
+  CC      libnewlibc: isascii_l.o
+  CC      libnewlibc: isblank.o
+  CC      libnewlibc: isblank_l.o
+  CC      libnewlibc: iscntrl_l.o
+  CC      libnewlibc: isdigit_l.o
+  CC      libnewlibc: islower_l.o
+  CC      libnewlibc: isupper_l.o
+  CC      libnewlibc: isprint_l.o
+  CC      libnewlibc: ispunct_l.o
+  CC      libnewlibc: isspace_l.o
+  CC      libnewlibc: iswalnum.o
+  CC      libnewlibc: iswalnum_l.o
+  CC      libnewlibc: iswalpha.o
+  CC      libnewlibc: iswalpha_l.o
+  CC      libnewlibc: iswblank.o
+  CC      libnewlibc: iswblank_l.o
+  CC      libnewlibc: iswcntrl.o
+  CC      libnewlibc: iswcntrl_l.o
+  CC      libnewlibc: iswctype.o
+  CC      libnewlibc: iswctype_l.o
+  CC      libnewlibc: iswdigit.o
+  CC      libnewlibc: iswdigit_l.o
+  CC      libnewlibc: iswgraph.o
+  CC      libnewlibc: iswgraph_l.o
+  CC      libnewlibc: iswlower.o
+  CC      libnewlibc: iswlower_l.o
+  CC      libnewlibc: iswprint.o
+  CC      libnewlibc: iswprint_l.o
+  CC      libnewlibc: iswpunct.o
+  CC      libnewlibc: iswpunct_l.o
+  CC      libnewlibc: iswspace.o
+  CC      libnewlibc: iswspace_l.o
+  CC      libnewlibc: iswupper.o
+  CC      libnewlibc: iswupper_l.o
+  CC      libnewlibc: iswxdigit.o
+  CC      libnewlibc: iswxdigit_l.o
+  CC      libnewlibc: isxdigit_l.o
+  CC      libnewlibc: jp2uc.o
+  CC      libnewlibc: toascii.o
+  CC      libnewlibc: toascii_l.o
+  CC      libnewlibc: tolower_l.o
+  CC      libnewlibc: toupper_l.o
+  CC      libnewlibc: towctrans.o
+  CC      libnewlibc: towctrans_l.o
+  CC      libnewlibc: towlower.o
+  CC      libnewlibc: towlower_l.o
+  CC      libnewlibc: towupper.o
+  CC      libnewlibc: towupper_l.o
+  CC      libnewlibc: wctrans.o
+  CC      libnewlibc: wctrans_l.o
+  CC      libnewlibc: wctype.o
+  CC      libnewlibc: wctype_l.o
+  CC      libnewlibc: errno.o
+  CC      libnewlibc: aliasesi.o
+  CC      libnewlibc: ucsconv.o
+  CC      libnewlibc: nullconv.o
+  CC      libnewlibc: iconv.o
+  CC      libnewlibc: aliasesbi.o
+  CC      libnewlibc: iconvnls.o
+  CC      libnewlibc: utf-8.o
+  CC      libnewlibc: utf-16.o
+  CC      libnewlibc: ucs-2.o
+  CC      libnewlibc: us-ascii.o
+  CC      libnewlibc: ucs-4.o
+  CC      libnewlibc: ucs-2-internal.o
+  CC      libnewlibc: ucs-4-internal.o
+  CC      libnewlibc: cesbi.o
+  CC      libnewlibc: table.o
+  CC      libnewlibc: table-pcs.o
+  CC      libnewlibc: euc.o
+  CC      libnewlibc: ccsbi.o
+  CC      libnewlibc: iso_8859_10.o
+  CC      libnewlibc: iso_8859_13.o
+  CC      libnewlibc: iso_8859_14.o
+  CC      libnewlibc: iso_8859_15.o
+  CC      libnewlibc: iso_8859_1.o
+  CC      libnewlibc: iso_8859_2.o
+  CC      libnewlibc: iso_8859_3.o
+  CC      libnewlibc: iso_8859_4.o
+  CC      libnewlibc: iso_8859_5.o
+  CC      libnewlibc: iso_8859_6.o
+  CC      libnewlibc: iso_8859_7.o
+  CC      libnewlibc: iso_8859_8.o
+  CC      libnewlibc: iso_8859_9.o
+  CC      libnewlibc: iso_8859_11.o
+  CC      libnewlibc: win_1250.o
+  CC      libnewlibc: win_1252.o
+  CC      libnewlibc: win_1254.o
+  CC      libnewlibc: win_1256.o
+  CC      libnewlibc: win_1258.o
+  CC      libnewlibc: win_1251.o
+  CC      libnewlibc: win_1253.o
+  CC      libnewlibc: win_1255.o
+  CC      libnewlibc: win_1257.o
+  CC      libnewlibc: koi8_r.o
+  CC      libnewlibc: koi8_u.o
+  CC      libnewlibc: koi8_ru.o
+  CC      libnewlibc: koi8_uni.o
+  CC      libnewlibc: iso_ir_111.o
+  CC      libnewlibc: big5.o
+  CC      libnewlibc: cp775.o
+  CC      libnewlibc: cp850.o
+  CC      libnewlibc: cp852.o
+  CC      libnewlibc: cp855.o
+  CC      libnewlibc: cp866.o
+  CC      libnewlibc: jis_x0212_1990.o
+  CC      libnewlibc: jis_x0201_1976.o
+  CC      libnewlibc: jis_x0208_1990.o
+  CC      libnewlibc: ksx1001.o
+  CC      libnewlibc: cns11643_plane1.o
+  CC      libnewlibc: cns11643_plane2.o
+  CC      libnewlibc: cns11643_plane14.o
+  CC      libnewlibc: locale.o
+  CC      libnewlibc: localeconv.o
+  CC      libnewlibc: duplocale.o
+  CC      libnewlibc: freelocale.o
+  CC      libnewlibc: lctype.o
+  CC      libnewlibc: lmessages.o
+  CC      libnewlibc: lnumeric.o
+  CC      libnewlibc: lmonetary.o
+  CC      libnewlibc: newlocale.o
+  CC      libnewlibc: nl_langinfo.o
+  CC      libnewlibc: timelocal.o
+  CC      libnewlibc: uselocale.o
+  CC      libnewlibc: __dprintf.o
+  CC      libnewlibc: unctrl.o
+  CC      libnewlibc: ffs.o
+  CC      libnewlibc: init.o
+  CC      libnewlibc: fini.o
+  CC      libnewlibc: collate.o
+  CC      libnewlibc: collcmp.o
+  CC      libnewlibc: glob.o
+  CC      libnewlibc: regcomp.o
+  CC      libnewlibc: regerror.o
+  CC      libnewlibc: regexec.o
+  CC      libnewlibc: regfree.o
+  CC      libnewlibc: closer.o
+  CC      libnewlibc: reent.o
+  CC      libnewlibc: impure.o
+  CC      libnewlibc: fcntlr.o
+  CC      libnewlibc: fstatr.o
+  CC      libnewlibc: gettimeofdayr.o
+  CC      libnewlibc: isattyr.o
+  CC      libnewlibc: linkr.o
+  CC      libnewlibc: lseekr.o
+  CC      libnewlibc: mkdirr.o
+  CC      libnewlibc: openr.o
+  CC      libnewlibc: readr.o
+  CC      libnewlibc: renamer.o
+  CC      libnewlibc: signalr.o
+  CC      libnewlibc: signgam.o
+  CC      libnewlibc: statr.o
+  CC      libnewlibc: timesr.o
+  CC      libnewlibc: unlinkr.o
+  CC      libnewlibc: writer.o
+  CC      libnewlibc: bsearch.o
+  CC      libnewlibc: qsort.o
+  CC      libnewlibc: hash.o
+  CC      libnewlibc: hash_bigkey.o
+  CC      libnewlibc: hash_buf.o
+  CC      libnewlibc: hash_func.o
+  CC      libnewlibc: hash_log2.o
+  CC      libnewlibc: hash_page.o
+  CC      libnewlibc: hcreate.o
+  CC      libnewlibc: hcreate_r.o
+  CC      libnewlibc: tdelete.o
+  CC      libnewlibc: tdestroy.o
+  CC      libnewlibc: tfind.o
+  CC      libnewlibc: tsearch.o
+  CC      libnewlibc: twalk.o
+  CC      libnewlibc: qsort_r.o
+  CC      libnewlibc: bsd_qsort_r.o
+  CC      libnewlibc: psignal.o
+  CC      libnewlibc: printf.o
+  CC      libnewlibc: vfprintf.o
+  CC      libnewlibc: vfprintf.integer.o
+  CC      libnewlibc: vfprintf.string.o
+  CC      libnewlibc: vfprintf.stringinteger.o
+  CC      libnewlibc: vfwprintf.dummy.o
+  CC      libnewlibc: vfwprintf.integer.o
+  CC      libnewlibc: vfwprintf.string.o
+  CC      libnewlibc: vfwprintf.stringinteger.o
+  CC      libnewlibc: vfscanf.o
+  CC      libnewlibc: vfscanf.integer.o
+  CC      libnewlibc: vfscanf.string.o
+  CC      libnewlibc: vfscanf.stringinteger.o
+  CC      libnewlibc: vfwscanf.o
+  CC      libnewlibc: vfwscanf.integer.o
+  CC      libnewlibc: vfwscanf.string.o
+  CC      libnewlibc: vfwscanf.stringinteger.o
+  CC      libnewlibc: findfp.o
+  CC      libnewlibc: fputc.o
+  CC      libnewlibc: fclose.o
+  CC      libnewlibc: wsetup.o
+  CC      libnewlibc: clearerr.o
+  CC      libnewlibc: fdopen.o
+  CC      libnewlibc: feof.o
+  CC      libnewlibc: ferror.o
+  CC      libnewlibc: fflush.o
+  CC      libnewlibc: fgetc.o
+  CC      libnewlibc: fgetpos.o
+  CC      libnewlibc: fgets.o
+  CC      libnewlibc: fileno.o
+  CC      libnewlibc: flags.o
+  CC      libnewlibc: fopen.o
+  CC      libnewlibc: fprintf.o
+  CC      libnewlibc: fputs.o
+  CC      libnewlibc: fread.o
+  CC      libnewlibc: freopen.o
+  CC      libnewlibc: fscanf.o
+  CC      libnewlibc: fseek.o
+  CC      libnewlibc: fsetpos.o
+  CC      libnewlibc: ftell.o
+  CC      libnewlibc: fvwrite.o
+  CC      libnewlibc: fwalk.o
+  CC      libnewlibc: fwrite.o
+  CC      libnewlibc: getc.o
+  CC      libnewlibc: getchar.o
+  CC      libnewlibc: getc_u.o
+  CC      libnewlibc: getchar_u.o
+  CC      libnewlibc: getdelim.o
+  CC      libnewlibc: getline.o
+  CC      libnewlibc: gets.o
+  CC      libnewlibc: makebuf.o
+  CC      libnewlibc: perror.o
+  CC      libnewlibc: putc.o
+  CC      libnewlibc: putchar.o
+  CC      libnewlibc: putc_u.o
+  CC      libnewlibc: putchar_u.o
+  CC      libnewlibc: puts.o
+  CC      libnewlibc: refill.o
+  CC      libnewlibc: remove.o
+  CC      libnewlibc: rewind.o
+  CC      libnewlibc: rget.o
+  CC      libnewlibc: scanf.o
+  CC      libnewlibc: sccl.o
+  CC      libnewlibc: setbuf.o
+  CC      libnewlibc: setbuffer.o
+  CC      libnewlibc: setlinebuf.o
+  CC      libnewlibc: setvbuf.o
+  CC      libnewlibc: snprintf.o
+  CC      libnewlibc: sprintf.o
+  CC      libnewlibc: sscanf.o
+  CC      libnewlibc: stdio.o
+  CC      libnewlibc: swprintf.o
+  CC      libnewlibc: tmpfile.o
+  CC      libnewlibc: tmpnam.o
+  CC      libnewlibc: ungetc.o
+  CC      libnewlibc: vdprintf.o
+  CC      libnewlibc: vprintf.o
+  CC      libnewlibc: vscanf.o
+  CC      libnewlibc: vsnprintf.o
+  CC      libnewlibc: vsprintf.o
+  CC      libnewlibc: vsscanf.o
+  CC      libnewlibc: wbuf.o
+  CC      libnewlibc: asprintf.o
+  CC      libnewlibc: fcloseall.o
+  CC      libnewlibc: fseeko.o
+  CC      libnewlibc: ftello.o
+  CC      libnewlibc: getw.o
+  CC      libnewlibc: mktemp.o
+  CC      libnewlibc: putw.o
+  CC      libnewlibc: vasprintf.o
+  CC      libnewlibc: fiprintf.o
+  CC      libnewlibc: fiscanf.o
+  CC      libnewlibc: iprintf.o
+  CC      libnewlibc: iscanf.o
+  CC      libnewlibc: siprintf.o
+  CC      libnewlibc: siscanf.o
+  CC      libnewlibc: sniprintf.o
+  CC      libnewlibc: vdiprintf.o
+  CC      libnewlibc: viprintf.o
+  CC      libnewlibc: viscanf.o
+  CC      libnewlibc: vsiprintf.o
+  CC      libnewlibc: vsiscanf.o
+  CC      libnewlibc: vsniprintf.o
+  CC      libnewlibc: vasnprintf.o
+  CC      libnewlibc: asniprintf.o
+  CC      libnewlibc: diprintf.o
+  CC      libnewlibc: vasniprintf.o
+  CC      libnewlibc: asnprintf.o
+  CC      libnewlibc: clearerr_u.o
+  CC      libnewlibc: dprintf.o
+  CC      libnewlibc: feof_u.o
+  CC      libnewlibc: ferror_u.o
+  CC      libnewlibc: fflush_u.o
+  CC      libnewlibc: fgetc_u.o
+  CC      libnewlibc: fgets_u.o
+  CC      libnewlibc: fgetwc.o
+  CC      libnewlibc: fgetwc_u.o
+  CC      libnewlibc: fgetws.o
+  CC      libnewlibc: fgetws_u.o
+  CC      libnewlibc: fileno_u.o
+  CC      libnewlibc: fmemopen.o
+  CC      libnewlibc: fopencookie.o
+  CC      libnewlibc: fpurge.o
+  CC      libnewlibc: fputc_u.o
+  CC      libnewlibc: fputs_u.o
+  CC      libnewlibc: fputwc.o
+  CC      libnewlibc: fputws.o
+  CC      libnewlibc: fputwc_u.o
+  CC      libnewlibc: fputws_u.o
+  CC      libnewlibc: fread_u.o
+  CC      libnewlibc: fsetlocking.o
+  CC      libnewlibc: funopen.o
+  CC      libnewlibc: fwide.o
+  CC      libnewlibc: fwprintf.o
+  CC      libnewlibc: fwrite_u.o
+  CC      libnewlibc: fwscanf.o
+  CC      libnewlibc: getwc.o
+  CC      libnewlibc: getwc_u.o
+  CC      libnewlibc: getwchar.o
+  CC      libnewlibc: getwchar_u.o
+  CC      libnewlibc: open_memstream.o
+  CC      libnewlibc: putwc.o
+  CC      libnewlibc: putwc_u.o
+  CC      libnewlibc: putwchar.o
+  CC      libnewlibc: putwchar_u.o
+  CC      libnewlibc: swscanf.o
+  CC      libnewlibc: stdio_ext.o
+  CC      libnewlibc: ungetwc.o
+  CC      libnewlibc: vswprintf.o
+  CC      libnewlibc: vswscanf.o
+  CC      libnewlibc: vwprintf.o
+  CC      libnewlibc: vwscanf.o
+  CC      libnewlibc: wprintf.o
+  CC      libnewlibc: wscanf.o
+  CC      libnewlibc: stdio64.o
+  CC      libnewlibc: fgetpos64.o
+  CC      libnewlibc: fopen64.o
+  CC      libnewlibc: freopen64.o
+  CC      libnewlibc: fseeko64.o
+  CC      libnewlibc: fsetpos64.o
+  CC      libnewlibc: ftello64.o
+  CC      libnewlibc: tmpfile64.o
+  CC      libnewlibc: __adjust.o
+  CC      libnewlibc: __atexit.o
+  CC      libnewlibc: __call_atexit.o
+  CC      libnewlibc: __ten_mu.o
+  CC      libnewlibc: __exp10.o
+  CC      libnewlibc: _Exit.o
+  CC      libnewlibc: abs.o
+  CC      libnewlibc: aligned_alloc.o
+  CC      libnewlibc: assert.o
+  CC      libnewlibc: atexit.o
+  CC      libnewlibc: atof.o
+  CC      libnewlibc: atoff.o
+  CC      libnewlibc: atoi.o
+  CC      libnewlibc: atol.o
+  CC      libnewlibc: div.o
+  CC      libnewlibc: dtoa.o
+  CC      libnewlibc: dtoastub.o
+  CC      libnewlibc: environ.o
+  CC      libnewlibc: envlock.o
+  CC      libnewlibc: eprintf.o
+  CC      libnewlibc: exit.o
+  CC      libnewlibc: gdtoa-gethex.o
+  CC      libnewlibc: gdtoa-hexnan.o
+  CC      libnewlibc: getenv.o
+  CC      libnewlibc: getenv_r.o
+  CC      libnewlibc: imaxabs.o
+  CC      libnewlibc: imaxdiv.o
+  CC      libnewlibc: itoa.o
+  CC      libnewlibc: ldiv.o
+  CC      libnewlibc: labs.o
+  CC      libnewlibc: ldtoa.o
+  CC      libnewlibc: mblen.o
+  CC      libnewlibc: mblen_r.o
+  CC      libnewlibc: mbstowcs.o
+  CC      libnewlibc: mbstowcs_r.o
+  CC      libnewlibc: mbtowc.o
+  CC      libnewlibc: mbtowc_r.o
+  CC      libnewlibc: mprec.o
+  CC      libnewlibc: on_exit_args.o
+  CC      libnewlibc: quick_exit.o
+  CC      libnewlibc: rand.o
+  CC      libnewlibc: rand_r.o
+  CC      libnewlibc: random.o
+  CC      libnewlibc: reallocarray.o
+  CC      libnewlibc: reallocf.o
+  CC      libnewlibc: sb_charsets.o
+  CC      libnewlibc: strtod.o
+  CC      libnewlibc: strtodg.o
+  CC      libnewlibc: strtoimax.o
+  CC      libnewlibc: strtol.o
+  CC      libnewlibc: strtold.o
+  CC      libnewlibc: strtorx.o
+  CC      libnewlibc: strtoul.o
+  CC      libnewlibc: strtoumax.o
+  CC      libnewlibc: utoa.o
+  CC      libnewlibc: wcstod.o
+  CC      libnewlibc: wcstoimax.o
+  CC      libnewlibc: wcstol.o
+  CC      libnewlibc: wcstoul.o
+  CC      libnewlibc: wcstoumax.o
+  CC      libnewlibc: wcstombs.o
+  CC      libnewlibc: wcstombs_r.o
+  CC      libnewlibc: wctomb.o
+  CC      libnewlibc: wctomb_r.o
+  CC      libnewlibc: arc4random.o
+  CC      libnewlibc: arc4random_uniform.o
+  CC      libnewlibc: cxa_atexit.o
+  CC      libnewlibc: cxa_finalize.o
+  CC      libnewlibc: drand48.o
+  CC      libnewlibc: ecvtbuf.o
+  CC      libnewlibc: efgcvt.o
+  CC      libnewlibc: erand48.o
+  CC      libnewlibc: jrand48.o
+  CC      libnewlibc: lcong48.o
+  CC      libnewlibc: lrand48.o
+  CC      libnewlibc: mrand48.o
+  CC      libnewlibc: nrand48.o
+  CC      libnewlibc: rand48.o
+  CC      libnewlibc: seed48.o
+  CC      libnewlibc: strtoll.o
+  CC      libnewlibc: strtoll_r.o
+  CC      libnewlibc: strtoull.o
+  CC      libnewlibc: srand48.o
+  CC      libnewlibc: strtoull_r.o
+  CC      libnewlibc: wcstoll.o
+  CC      libnewlibc: wcstoll_r.o
+  CC      libnewlibc: wcstold.o
+  CC      libnewlibc: wcstoull.o
+  CC      libnewlibc: wcstoull_r.o
+  CC      libnewlibc: atoll.o
+  CC      libnewlibc: llabs.o
+  CC      libnewlibc: lldiv.o
+  CC      libnewlibc: putenv.o
+  CC      libnewlibc: putenv_r.o
+  CC      libnewlibc: setenv.o
+  CC      libnewlibc: setenv_r.o
+  CC      libnewlibc: rpmatch.o
+  CC      libnewlibc: a64l.o
+  CC      libnewlibc: btowc.o
+  CC      libnewlibc: getopt.o
+  CC      libnewlibc: getsubopt.o
+  CC      libnewlibc: l64a.o
+  CC      libnewlibc: mbrlen.o
+  CC      libnewlibc: mbrtowc.o
+  CC      libnewlibc: mbsinit.o
+  CC      libnewlibc: mbsnrtowcs.o
+  CC      libnewlibc: mbsrtowcs.o
+  CC      libnewlibc: on_exit.o
+  CC      libnewlibc: wcrtomb.o
+  CC      libnewlibc: wcsnrtombs.o
+  CC      libnewlibc: wcsrtombs.o
+  CC      libnewlibc: wctob.o
+  CC      libnewlibc: bcopy.o
+  CC      libnewlibc: bzero.o
+  CC      libnewlibc: explicit_bzero.o
+  CC      libnewlibc: ffsl.o
+  CC      libnewlibc: ffsll.o
+  CC      libnewlibc: fls.o
+  CC      libnewlibc: flsl.o
+  CC      libnewlibc: flsll.o
+  CC      libnewlibc: index.o
+  CC      libnewlibc: memchr.o
+  CC      libnewlibc: memrchr.o
+  CC      libnewlibc: memcmp.o
+  CC      libnewlibc: memcpy.o
+  CC      libnewlibc: memmove.o
+  CC      libnewlibc: memset.o
+  CC      libnewlibc: memmem.o
+  CC      libnewlibc: rindex.o
+  CC      libnewlibc: strcasecmp.o
+  CC      libnewlibc: strcat.o
+  CC      libnewlibc: strchr.o
+  CC      libnewlibc: strcmp.o
+  CC      libnewlibc: strcoll.o
+  CC      libnewlibc: strcpy.o
+  CC      libnewlibc: strcspn.o
+  CC      libnewlibc: strdup.o
+  CC      libnewlibc: strdup_r.o
+  CC      libnewlibc: strerror.o
+  CC      libnewlibc: strerror_r.o
+  CC      libnewlibc: strlcat.o
+  CC      libnewlibc: strlcpy.o
+  CC      libnewlibc: strlen.o
+  CC      libnewlibc: strlwr.o
+  CC      libnewlibc: strncasecmp.o
+  CC      libnewlibc: strncasecmp_l.o
+  CC      libnewlibc: strncat.o
+  CC      libnewlibc: strncmp.o
+  CC      libnewlibc: strncpy.o
+  CC      libnewlibc: strnlen.o
+  CC      libnewlibc: strnstr.o
+  CC      libnewlibc: strpbrk.o
+  CC      libnewlibc: strrchr.o
+  CC      libnewlibc: strsep.o
+  CC      libnewlibc: strsignal.o
+  CC      libnewlibc: strspn.o
+  CC      libnewlibc: strtok.o
+  CC      libnewlibc: strtok_r.o
+  CC      libnewlibc: strupr.o
+  CC      libnewlibc: strxfrm.o
+  CC      libnewlibc: strstr.o
+  CC      libnewlibc: timingsafe_bcmp.o
+  CC      libnewlibc: swab.o
+  CC      libnewlibc: timingsafe_memcmp.o
+  CC      libnewlibc: u_strerr.o
+  CC      libnewlibc: wcscat.o
+  CC      libnewlibc: wcschr.o
+  CC      libnewlibc: wcscmp.o
+  CC      libnewlibc: wcscoll.o
+  CC      libnewlibc: wcscpy.o
+  CC      libnewlibc: wcscspn.o
+  CC      libnewlibc: wcslcat.o
+  CC      libnewlibc: wcslcpy.o
+  CC      libnewlibc: wcslen.o
+  CC      libnewlibc: wcsncmp.o
+  CC      libnewlibc: wcsncat.o
+  CC      libnewlibc: wcsncpy.o
+  CC      libnewlibc: wcsnlen.o
+  CC      libnewlibc: wcspbrk.o
+  CC      libnewlibc: wcsrchr.o
+  CC      libnewlibc: wcsspn.o
+  CC      libnewlibc: wcsstr.o
+  CC      libnewlibc: wcstok.o
+  CC      libnewlibc: wcswidth.o
+  CC      libnewlibc: wcsxfrm.o
+  CC      libnewlibc: wmemchr.o
+  CC      libnewlibc: wcwidth.o
+  CC      libnewlibc: wmemcmp.o
+  CC      libnewlibc: wmemcpy.o
+  CC      libnewlibc: wmemmove.o
+  CC      libnewlibc: wmemset.o
+  CC      libnewlibc: xpg_strerror_r.o
+  CC      libnewlibc: bcmp.o
+  CC      libnewlibc: memccpy.o
+  CC      libnewlibc: mempcpy.o
+  CC      libnewlibc: stpcpy.o
+  CC      libnewlibc: stpncpy.o
+  CC      libnewlibc: strndup.o
+  CC      libnewlibc: strcasestr.o
+  CC      libnewlibc: strchrnul.o
+  CC      libnewlibc: strndup_r.o
+  CC      libnewlibc: wcpcpy.o
+  CC      libnewlibc: wcpncpy.o
+  CC      libnewlibc: wcsdup.o
+  CC      libnewlibc: wcscasecmp.o
+  CC      libnewlibc: asctime.o
+  CC      libnewlibc: asctime_r.o
+  CC      libnewlibc: clock.o
+  CC      libnewlibc: ctime.o
+  CC      libnewlibc: ctime_r.o
+  CC      libnewlibc: difftime.o
+  CC      libnewlibc: gettzinfo.o
+  CC      libnewlibc: gmtime.o
+  CC      libnewlibc: gmtime_r.o
+  CC      libnewlibc: lcltime.o
+  CC      libnewlibc: lcltime_r.o
+  CC      libnewlibc: mktime.o
+  CC      libnewlibc: month_lengths.o
+  CC      libnewlibc: strftime.o
+  CC      libnewlibc: strptime.o
+  CC      libnewlibc: tzcalc_limits.o
+  CC      libnewlibc: tzlock.o
+  CC      libnewlibc: tzset.o
+  CC      libnewlibc: tzset_r.o
+  CC      libnewlibc: tzvars.o
+  CC      libnewlibc: wcsftime.o
+  CC      libnewlibc: basename.o
+  CC      libnewlibc: dirname.o
+  AS      libnewlibc: setjmp.o
+  CC      libnewlibm: e_acos.o
+  CC      libnewlibm: e_acosh.o
+  CC      libnewlibm: e_asin.o
+  CC      libnewlibm: e_atan2.o
+  CC      libnewlibm: e_atanh.o
+  CC      libnewlibm: e_cosh.o
+  CC      libnewlibm: e_exp.o
+  CC      libnewlibm: ef_acos.o
+  CC      libnewlibm: ef_acosh.o
+  CC      libnewlibm: ef_asin.o
+  CC      libnewlibm: ef_atan2.o
+  CC      libnewlibm: ef_atanh.o
+  CC      libnewlibm: ef_cosh.o
+  CC      libnewlibm: ef_exp.o
+  CC      libnewlibm: ef_fmod.o
+  CC      libnewlibm: ef_hypot.o
+  CC      libnewlibm: ef_j0.o
+  CC      libnewlibm: ef_j1.o
+  CC      libnewlibm: ef_jn.o
+  CC      libnewlibm: ef_log10.o
+  CC      libnewlibm: ef_log.o
+  CC      libnewlibm: e_fmod.o
+  CC      libnewlibm: ef_pow.o
+  CC      libnewlibm: ef_remainder.o
+  CC      libnewlibm: ef_rem_pio2.o
+  CC      libnewlibm: ef_scalb.o
+  CC      libnewlibm: ef_sinh.o
+  CC      libnewlibm: ef_sqrt.o
+  CC      libnewlibm: e_hypot.o
+  CC      libnewlibm: e_j0.o
+  CC      libnewlibm: e_j1.o
+  CC      libnewlibm: e_jn.o
+  CC      libnewlibm: el_hypot.o
+  CC      libnewlibm: e_log10.o
+  CC      libnewlibm: e_log.o
+  CC      libnewlibm: e_pow.o
+  CC      libnewlibm: e_remainder.o
+  CC      libnewlibm: e_rem_pio2.o
+  CC      libnewlibm: erf_gamma.o
+  CC      libnewlibm: erf_lgamma.o
+  CC      libnewlibm: er_gamma.o
+  CC      libnewlibm: er_lgamma.o
+  CC      libnewlibm: e_scalb.o
+  CC      libnewlibm: e_sinh.o
+  CC      libnewlibm: e_sqrt.o
+  CC      libnewlibm: k_cos.o
+  CC      libnewlibm: kf_cos.o
+  CC      libnewlibm: kf_rem_pio2.o
+  CC      libnewlibm: kf_sin.o
+  CC      libnewlibm: kf_tan.o
+  CC      libnewlibm: k_rem_pio2.o
+  CC      libnewlibm: k_sin.o
+  CC      libnewlibm: k_standard.o
+  CC      libnewlibm: k_tan.o
+  CC      libnewlibm: s_asinh.o
+  CC      libnewlibm: s_atan.o
+  CC      libnewlibm: s_ceil.o
+  CC      libnewlibm: s_cos.o
+  CC      libnewlibm: s_erf.o
+  CC      libnewlibm: s_fabs.o
+  CC      libnewlibm: sf_asinh.o
+  CC      libnewlibm: sf_atan.o
+  CC      libnewlibm: sf_ceil.o
+  CC      libnewlibm: sf_cos.o
+  CC      libnewlibm: sf_erf.o
+  CC      libnewlibm: sf_fabs.o
+  CC      libnewlibm: sf_floor.o
+  CC      libnewlibm: sf_frexp.o
+  CC      libnewlibm: sf_ldexp.o
+  CC      libnewlibm: s_floor.o
+  CC      libnewlibm: s_frexp.o
+  CC      libnewlibm: sf_signif.o
+  CC      libnewlibm: sf_sin.o
+  CC      libnewlibm: sf_tan.o
+  CC      libnewlibm: sf_tanh.o
+  CC      libnewlibm: s_ldexp.o
+  CC      libnewlibm: s_signif.o
+  CC      libnewlibm: s_sin.o
+  CC      libnewlibm: s_tan.o
+  CC      libnewlibm: s_tanh.o
+  CC      libnewlibm: w_acos.o
+  CC      libnewlibm: w_acosh.o
+  CC      libnewlibm: w_asin.o
+  CC      libnewlibm: w_atan2.o
+  CC      libnewlibm: w_atanh.o
+  CC      libnewlibm: w_cosh.o
+  CC      libnewlibm: w_drem.o
+  CC      libnewlibm: w_exp2.o
+  CC      libnewlibm: w_exp.o
+  CC      libnewlibm: wf_acos.o
+  CC      libnewlibm: wf_acosh.o
+  CC      libnewlibm: wf_asin.o
+  CC      libnewlibm: wf_atan2.o
+  CC      libnewlibm: wf_atanh.o
+  CC      libnewlibm: wf_cosh.o
+  CC      libnewlibm: wf_drem.o
+  CC      libnewlibm: wf_exp2.o
+  CC      libnewlibm: wf_exp.o
+  CC      libnewlibm: wf_fmod.o
+  CC      libnewlibm: wf_gamma.o
+  CC      libnewlibm: wf_hypot.o
+  CC      libnewlibm: wf_j0.o
+  CC      libnewlibm: wf_j1.o
+  CC      libnewlibm: wf_jn.o
+  CC      libnewlibm: wf_lgamma.o
+  CC      libnewlibm: wf_log10.o
+  CC      libnewlibm: wf_log.o
+  CC      libnewlibm: w_fmod.o
+  CC      libnewlibm: wf_pow.o
+  CC      libnewlibm: wf_remainder.o
+  CC      libnewlibm: wf_scalb.o
+  CC      libnewlibm: wf_sincos.o
+  CC      libnewlibm: wf_sinh.o
+  CC      libnewlibm: wf_sqrt.o
+  CC      libnewlibm: wf_tgamma.o
+  CC      libnewlibm: w_gamma.o
+  CC      libnewlibm: w_hypot.o
+  CC      libnewlibm: w_j0.o
+  CC      libnewlibm: w_j1.o
+  CC      libnewlibm: w_jn.o
+  CC      libnewlibm: w_lgamma.o
+  CC      libnewlibm: w_log10.o
+  CC      libnewlibm: w_log.o
+  CC      libnewlibm: w_pow.o
+  CC      libnewlibm: w_remainder.o
+  CC      libnewlibm: wrf_gamma.o
+  CC      libnewlibm: wrf_lgamma.o
+  CC      libnewlibm: wr_gamma.o
+  CC      libnewlibm: wr_lgamma.o
+  CC      libnewlibm: w_scalb.o
+  CC      libnewlibm: w_sincos.o
+  CC      libnewlibm: w_sinh.o
+  CC      libnewlibm: w_sqrt.o
+  CC      libnewlibm: w_tgamma.o
+  CC      libnewlibm: lroundl.o
+  CC      libnewlibm: llroundl.o
+  CC      libnewlibm: logl.o
+  CC      libnewlibm: expl.o
+  CC      libnewlibm: ceill.o
+  CC      libnewlibm: floorl.o
+  CC      libnewlibm: ldexpl.o
+  CC      libnewlibm: frexpl.o
+  CC      libnewlibm: powl.o
+  CC      libnewlibm: cosl.o
+  CC      libnewlibm: sinl.o
+  CC      libnewlibm: atanl.o
+  CC      libnewlibm: tanl.o
+  CC      libnewlibm: fmodl.o
+  CC      libnewlibm: sinhl.o
+  CC      libnewlibm: coshl.o
+  CC      libnewlibm: s_finite.o
+  CC      libnewlibm: s_copysign.o
+  CC      libnewlibm: s_modf.o
+  CC      libnewlibm: s_scalbn.o
+  CC      libnewlibm: s_cbrt.o
+  CC      libnewlibm: s_exp10.o
+  CC      libnewlibm: s_expm1.o
+  CC      libnewlibm: s_ilogb.o
+  CC      libnewlibm: s_infinity.o
+  CC      libnewlibm: s_isinf.o
+  CC      libnewlibm: s_isinfd.o
+  CC      libnewlibm: s_isnan.o
+  CC      libnewlibm: s_isnand.o
+  CC      libnewlibm: s_log1p.o
+  CC      libnewlibm: s_nan.o
+  CC      libnewlibm: s_nextafter.o
+  CC      libnewlibm: s_pow10.o
+  CC      libnewlibm: s_rint.o
+  CC      libnewlibm: s_logb.o
+  CC      libnewlibm: s_log2.o
+  CC      libnewlibm: s_matherr.o
+  CC      libnewlibm: s_lib_ver.o
+  CC      libnewlibm: s_fdim.o
+  CC      libnewlibm: s_fma.o
+  CC      libnewlibm: s_fmax.o
+  CC      libnewlibm: s_fmin.o
+  CC      libnewlibm: s_fpclassify.o
+  CC      libnewlibm: s_lrint.o
+  CC      libnewlibm: s_llrint.o
+  CC      libnewlibm: s_lround.o
+  CC      libnewlibm: s_llround.o
+  CC      libnewlibm: s_nearbyint.o
+  CC      libnewlibm: s_remquo.o
+  CC      libnewlibm: s_round.o
+  CC      libnewlibm: s_scalbln.o
+  CC      libnewlibm: s_signbit.o
+  CC      libnewlibm: s_trunc.o
+  CC      libnewlibm: sf_finite.o
+  CC      libnewlibm: sf_copysign.o
+  CC      libnewlibm: sf_modf.o
+  CC      libnewlibm: sf_scalbn.o
+  CC      libnewlibm: sf_cbrt.o
+  CC      libnewlibm: sf_exp10.o
+  CC      libnewlibm: sf_expm1.o
+  CC      libnewlibm: sf_ilogb.o
+  CC      libnewlibm: sf_infinity.o
+  CC      libnewlibm: sf_isinf.o
+  CC      libnewlibm: sf_isinff.o
+  CC      libnewlibm: sf_isnan.o
+  CC      libnewlibm: sf_isnanf.o
+  CC      libnewlibm: sf_log1p.o
+  CC      libnewlibm: sf_nan.o
+  CC      libnewlibm: sf_nextafter.o
+  CC      libnewlibm: sf_pow10.o
+  CC      libnewlibm: sf_rint.o
+  CC      libnewlibm: sf_logb.o
+  CC      libnewlibm: sf_log2.o
+  CC      libnewlibm: sf_fdim.o
+  CC      libnewlibm: sf_fma.o
+  CC      libnewlibm: sf_fmax.o
+  CC      libnewlibm: sf_fmin.o
+  CC      libnewlibm: sf_fpclassify.o
+  CC      libnewlibm: sf_lrint.o
+  CC      libnewlibm: sf_llrint.o
+  CC      libnewlibm: sf_lround.o
+  CC      libnewlibm: sf_llround.o
+  CC      libnewlibm: sf_nearbyint.o
+  CC      libnewlibm: sf_remquo.o
+  CC      libnewlibm: sf_round.o
+  CC      libnewlibm: sf_scalbln.o
+  CC      libnewlibm: sf_trunc.o
+  CC      libnewlibm: sqrtl.o
+  CC      libnewlibglue: console.o
+  CC      libnewlibglue: plat.o
+  CC      libnewlibglue: file.o
+  CC      libnewlibglue: mem.o
+  CC      libnewlibglue: pty.o
+  CC      libnewlibglue: locale.o
+  CC      libnewlibglue: dev.o
+  CC      libnewlibglue: link.o
+  CC      libnewlibglue: mntent.o
+  CC      libnewlibglue: syscall.o
+  CC      libnewlibglue: syslog.o
+  CC      libnewlibglue: tcsetattr.o
+  CC      libnewlibglue: tcgetattr.o
+  CC      libnewlibglue: sincosl.o
+  CC      libnewlibglue: assert.o
+  CC      libnewlibglue: crypt_blowfish.o
+  CC      libnewlibglue: crypt.o
+  CC      libnewlibglue: crypt_des.o
+  CC      libnewlibglue: crypt_md5.o
+  CC      libnewlibglue: crypt_r.o
+  CC      libnewlibglue: crypt_sha256.o
+  CC      libnewlibglue: crypt_sha512.o
+  CC      libnewlibglue: encrypt.o
+  CC      libx86_64arch: tls.o
+  LD      libkvmplat.ld.o
+  LD      libkvmpci.ld.o
+  LD      libkvmvirtio.ld.o
+  LD      libkvmvirtionet.ld.o
+  LD      libftp.ld.o
+  LD      libposix_process.ld.o
+  LD      libposix_user.ld.o
+  LD      libukalloc.ld.o
+  LD      libukallocbbuddy.ld.o
+  LD      libukargparse.ld.o
+  LD      libukboot.ld.o
+  LD      libukboot_main.ld.o
+  LD      libukbus.ld.o
+  LD      libukdebug.ld.o
+  LD      libuklibparam.ld.o
+  LD      libuklock.ld.o
+  LD      libukmpi.ld.o
+  LD      libuknetdev.ld.o
+  LD      libuksched.ld.o
+  LD      libukschedcoop.ld.o
+  LD      libuksglist.ld.o
+  LD      libuksignal.ld.o
+  LD      libukswrand.ld.o
+  LD      libuktimeconv.ld.o
+  LD      libuktime.ld.o
+  LD      libvfscore.ld.o
+  LD      libpthread-embedded.ld.o
+  LD      liblwip.ld.o
+  LD      libnewlibc.ld.o
+  LD      libx86_64arch.ld.o
+  LD      libnewlibm.ld.o
+  OBJCOPY libkvmplat.o
+  OBJCOPY libkvmpci.o
+  OBJCOPY libkvmvirtio.o
+  OBJCOPY libkvmvirtionet.o
+  OBJCOPY libftp.o
+  OBJCOPY libposix_process.o
+  OBJCOPY libposix_user.o
+  OBJCOPY libukalloc.o
+  OBJCOPY libukallocbbuddy.o
+  OBJCOPY libukargparse.o
+  OBJCOPY libukboot.o
+  OBJCOPY libukboot_main.o
+  OBJCOPY libukbus.o
+  OBJCOPY libuklibparam.o
+  OBJCOPY libukdebug.o
+  OBJCOPY libuklock.o
+  OBJCOPY libukmpi.o
+  OBJCOPY libuksched.o
+  OBJCOPY libuknetdev.o
+  OBJCOPY libukschedcoop.o
+  OBJCOPY libuksglist.o
+  OBJCOPY libuksignal.o
+  OBJCOPY libukswrand.o
+  OBJCOPY libuktime.o
+  OBJCOPY libuktimeconv.o
+  OBJCOPY libx86_64arch.o
+  OBJCOPY libvfscore.o
+  OBJCOPY liblwip.o
+  OBJCOPY libpthread-embedded.o
+  LD      libnewlibglue.ld.o
+  OBJCOPY libnewlibglue.o
+  OBJCOPY libnewlibm.o
+  OBJCOPY libnewlibc.o
+  ASLR    app-ftp_kvm-x86_64.dbg
+  LD      app-ftp_kvm-x86_64.ld.o
+  OBJCOPY app-ftp_kvm-x86_64.o
+  COPY    ASLR scripts
+  LD      app-ftp_kvm-x86_64.dbg
+  DEDU    app-ftp_kvm-x86_64.dbg
+  SCSTRIP app-ftp_kvm-x86_64
+  GZ      app-ftp_kvm-x86_64.gz
+[5242880, 5242945, 5243904]
+[5243904, 5244079, 5244928]
+[5244928, 5244968, 5245952]
+[5245952, 5246557, 5246976]
+[5246976, 5248000, 5248000]
+[5248000, 5249024, 5249024]
+[5249024, 5250048, 5250048]
+[5250048, 5251072, 5251072]
+[5251072, 5252096, 5252096]
+[5252096, 5253120, 5253120]
+[5253120, 5254144, 5254144]
+[5254144, 5255168, 5255168]
+[5255168, 5256192, 5256192]
+[5256192, 5257216, 5257216]
+[5257216, 5258240, 5258240]
+[5258240, 5259264, 5259264]
+[5259264, 5260288, 5260288]
+[5260288, 5260368, 5261312]
+[5261312, 5261347, 5262336]
+[5262336, 5263360, 5263360]
+[5263360, 5264384, 5264384]
+[5264384, 5264389, 5265408]
+[5265408, 5266432, 5266432]
+[5266432, 5266452, 5267456]
+[5267456, 5268480, 5268480]
+[5268480, 5268495, 5269504]
+[5269504, 5269514, 5270528]
+[5270528, 5271552, 5271552]
+[5271552, 5271602, 5272576]
+[5272576, 5272731, 5273600]
+[5273600, 5274624, 5274624]
+[5274624, 5275648, 5275648]
+[5275648, 5275838, 5276672]
+[5276672, 5276712, 5277696]
+[5277696, 5277726, 5278720]
+[5278720, 5278905, 5279744]
+[5279744, 5280768, 5280768]
+[5280768, 5280808, 5281792]
+[5281792, 5282816, 5282816]
+[5282816, 5283046, 5283840]
+[5283840, 5283855, 5284864]
+[5284864, 5285888, 5285888]
+[5285888, 5286863, 5287936]
+[5287936, 5290181, 5293312]
+[5293312, 5293422, 5298688]
+[5298688, 5303673, 5306880]
+[5306880, 5307240, 5308672]
+[5308672, 5309892, 5310464]
+[Info] - Created .ind segment from 0x500000 : 0x510800.
+make[1]: Leaving directory '/home/terrylos/Thesis/unikraft'

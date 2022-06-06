@@ -49,6 +49,7 @@ def extract_conf(openConf):
 	conf = []
 	default = 0
 	first = True
+	i = 0
 	for line in content:
 		if not line.startswith("#"):
 			words = line.split(" : ")
@@ -61,5 +62,6 @@ def extract_conf(openConf):
 				conf.append([words[0].rstrip("\n"),default])
 			else:
 				print("[Error] - line "+str(i)+" of the config file doesn't respect the format.")
+		i += 1
 	return conf
 
