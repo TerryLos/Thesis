@@ -1,0 +1,13 @@
+$(eval $(call addlib,libftp))
+
+LIBFTP_CINCLUDES-y += -I$(LIBFTP_BASE)/include
+LIBFTP_CINCLUDES += -I$(LIBFTP_SRC)
+
+
+LIBFTP_SRCS-y += $(LIBFTP_BASE)/server.h
+LIBFTP_SRCS-y += $(LIBFTP_BASE)/server.c
+LIBFTP_SRCS-y += $(LIBFTP_BASE)/siftp.h
+LIBFTP_SRCS-y += $(LIBFTP_BASE)/siftp.c
+LIBFTP_SRCS-y += $(LIBFTP_BASE)/service.h
+LIBFTP_SRCS-y += $(LIBFTP_BASE)/service.c
+#LIBFTP_SRCS-y += $(LIBFTP_BASE)/client.c

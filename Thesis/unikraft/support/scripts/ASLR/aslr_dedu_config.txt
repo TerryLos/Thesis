@@ -1,0 +1,54 @@
+#Starting adress of the table and left padding for non included lib
+0x500000 : 0x250
+#Libs order
+libukdebug : 0x200
+libkvmvirtio : 0x400
+libkvmpci : 0x200
+libkvmplat : 0x550
+lib9pfs : 0x200
+libdevfs : 0x200
+libfdt : 
+libisrlib : 0x200
+libnolibc : 
+libposix-libdl : 
+libposix-process : 0x200
+libposix-sysinfo : 
+libposix-user : 0x200
+libramfs : 0x200
+libsyscall_shim : 
+libubsan : 
+libuk9p : 0x200
+libukalloc : 0x210
+libukallocbbuddy : 0x200
+libukallocpool : 
+libukallocregion : 0x200
+libukargparse : 0x200
+libukblkdev : 
+libukboot : 0x200
+libukbus : 0x200
+libukcpio : 
+libuklibparam : 0x200
+libuklock : 0x200
+libukmmap : 
+libukmpi : 0x200
+libuknetdev : 0x1100
+libukring : 
+libukrust : 
+#libuksched : 
+#libukschedcoop : 
+#libuksglist : 
+#libuksignal : 
+libuksp : 
+libukswrand : 0x200
+libuktest : 
+libuktime : 0x200
+libuktimeconv : 0x200
+likbvfscore : 0x200
+libx86_64arch : 0x200
+#External libs
+libpthread-embedded : 0x650
+liblwip : 0x4300
+libkvmvirtionet : 0x470
+libnewlibc : 0x2100
+libnewlibglue : 0x230
+libnewlibm : 0x900
